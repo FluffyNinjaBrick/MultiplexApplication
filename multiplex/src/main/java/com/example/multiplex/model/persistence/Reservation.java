@@ -1,5 +1,7 @@
 package com.example.multiplex.model.persistence;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -32,10 +34,10 @@ public class Reservation {
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
-    public User getUser() { return user; }
+    public long getUser() { return user.getId(); }
     public void setUser(User user) { this.user = user; }
 
-    public Seat getSeat() { return seat; }
+    public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
     public void setSeat(Seat seat) { this.seat = seat; }
 
 }

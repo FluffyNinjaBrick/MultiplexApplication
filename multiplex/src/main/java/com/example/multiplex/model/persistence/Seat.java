@@ -1,5 +1,7 @@
 package com.example.multiplex.model.persistence;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
