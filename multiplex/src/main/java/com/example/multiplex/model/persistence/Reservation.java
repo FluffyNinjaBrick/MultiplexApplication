@@ -20,13 +20,17 @@ public class Reservation {
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "screening_id")
+    private Screening screening;
 
     public Reservation() { super(); }
 
-    public Reservation(User user, Seat seat) {
+    public Reservation(User user, Seat seat, Screening screening) {
         super();
         this.user = user;
         this.seat = seat;
+        this.screening = screening;
     }
 
 
@@ -40,4 +44,6 @@ public class Reservation {
     public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
     public void setSeat(Seat seat) { this.seat = seat; }
 
+    public long getScreening() { return screening.getId(); }
+    public void setScreening(Screening screening) { this.screening = screening; }
 }

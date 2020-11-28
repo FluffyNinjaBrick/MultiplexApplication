@@ -23,7 +23,7 @@ public class Seat {
 
     // ----------- one to many -----------
     @OneToMany(mappedBy = "seat")
-    Set<Reservation> reservations;
+    private Set<Reservation> reservations;
 
 
     public Seat() { super(); }
