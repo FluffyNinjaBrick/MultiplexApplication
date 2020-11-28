@@ -1,11 +1,13 @@
-package com.example.multiplex.model;
+package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
 public class User {
 
+    // ----------- db fields -----------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -18,6 +20,12 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+
+    // ----------- one to many -----------
+    @OneToMany(mappedBy = "user")
+    private Set<Reservation> reservations;
+
 
     public User() {
         super();
@@ -43,5 +51,6 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-
+    public Set<Reservation> getReservations() { return reservations; }
+    public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
 }

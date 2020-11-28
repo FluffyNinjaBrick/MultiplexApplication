@@ -1,4 +1,4 @@
-package com.example.multiplex.model;
+package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
 
