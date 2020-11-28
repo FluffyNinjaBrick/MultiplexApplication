@@ -1,4 +1,4 @@
-package com.example.multiplex.model;
+package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
 
@@ -26,6 +26,8 @@ public class Movie {
         this.author = author;
         this.description = description;
     }
+
+
     // ------------- GETTERS AND SETTERS ------------- //
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
