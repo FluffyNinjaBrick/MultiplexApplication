@@ -15,7 +15,7 @@ public class ScreeningRoom {
     @Column(name = "Floor")
     private Integer floor;
 
-    @Column(name = "Maximal Capacity")
+    @Column(name = "MaximalCapacity")
     private Integer maximalCapacity;
 
     public ScreeningRoom() { super(); }
