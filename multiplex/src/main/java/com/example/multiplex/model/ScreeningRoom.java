@@ -3,7 +3,7 @@ package com.example.multiplex.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ScreeningRoom")
+@Table(name = "ScreeningRooms")
 public class ScreeningRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
