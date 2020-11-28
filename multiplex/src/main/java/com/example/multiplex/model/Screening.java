@@ -12,4 +12,9 @@ public class Screening {
     @Column(name = "ticket_cost")
     private Integer ticketCost;
 
+    //TODO - add foreign keys
+
+    public Screening() { super(); }
+
+
 }

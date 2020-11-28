@@ -15,6 +15,6 @@ public class Seat {
     @Column(name = "row_number")
     private Integer rowNumber;
 
-    public Seat(){ super(); }
+    public Seat() { super(); }
 
 }

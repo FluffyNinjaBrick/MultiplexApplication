@@ -9,10 +9,10 @@ public class ScreeningRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "Number")
+    @Column(name = "number")
     private String number;
 
-    @Column(name = "Floor")
+    @Column(name = "floor")
     private Integer floor;
 
 
