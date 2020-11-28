@@ -1,4 +1,15 @@
 package com.example.multiplex.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Screenings")
 public class Screening {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "ticket_cost")
+    private Integer ticketCost;
+
 }

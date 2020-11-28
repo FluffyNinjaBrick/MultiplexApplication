@@ -15,8 +15,6 @@ public class ScreeningRoom {
     @Column(name = "Floor")
     private Integer floor;
 
-    @Column(name = "MaximalCapacity")
-    private Integer maximalCapacity;
 
     public ScreeningRoom() { super(); }
 
@@ -24,7 +22,6 @@ public class ScreeningRoom {
         super();
         this.number = number;
         this.floor = floor;
-        this.maximalCapacity = maximalCapacity;
     }
 
     // ------------- GETTERS AND SETTERS ------------- //
@@ -36,7 +33,4 @@ public class ScreeningRoom {
 
     public Integer getFloor() { return floor; }
     public void setFloor(Integer floor) { this.floor = floor; }
-
-    public Integer getMaximalCapacity() { return maximalCapacity; }
-    public void setMaximalCapacity(Integer maximalCapacity) { this.maximalCapacity = maximalCapacity; }
 }
