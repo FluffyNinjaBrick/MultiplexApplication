@@ -8,10 +8,12 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -40,6 +42,8 @@ class ShowUsersCommand implements Runnable {
             List<User> users = mapper.readValue(response.body(), new TypeReference<List<User>>() {});
 
             System.out.println(FlipTableConverters.fromIterable(users, User.class));
+        } catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -79,7 +83,9 @@ class AddUserCommand implements Runnable {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.statusCode());
-        } catch (IOException e) {
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -120,6 +126,8 @@ class TestCommand implements Runnable {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -153,52 +161,19 @@ public class Client {
         cli.addSubcommand(new TestCommand());
         cli.addSubcommand(new ShowUsersCommand());
 
-        BufferedReader br = null;
         Scanner scanner = new Scanner(System.in);
         String cmd;
+        System.out.println("Enter command (q to quite): ");
         while(scanner.hasNextLine()){
-            System.out.println("Enter command (q to quite): ");
             cmd = scanner.nextLine();
             if("q".equalsIgnoreCase(cmd)) break;
-            cli.execute(cmd.split(" "));
             System.out.println(cmd);
-        }
-//        InputStream is = null;
-//        BufferedReader br = null;
 
-//        try {
-//
-//            is = System.in;
-//            br = new BufferedReader(new InputStreamReader(is));
-//
-//            String cmd = null;
-//            System.out.println("Enter command (q to quite): ");
-//            while ((cmd = br.readLine()) != null) {
-//
-//                if (cmd.equalsIgnoreCase("quit")) {
-//                    break;
-//                }
-//                System.out.println("Line entered : " + cmd);
-//                cli.execute(cmd.split(" "));
-//                System.out.println("Enter command (q to quite): ");
-//            }
-//
-//        }
-//        catch (IOException ioe) {
-//            System.out.println("Exception while reading input " + ioe);
-//        }
-//        finally {
-//            // close the streams using close method
-//            try {
-//                if (br != null) {
-//                    br.close();
-//                }
-//            }
-//            catch (IOException ioe) {
-//                System.out.println("Error while closing stream: " + ioe);
-//            }
-//
-//        }
+            cli.execute(cmd.split(" "));
+            System.out.println("Enter command (q to quite): ");
+
+        }
+
 
 
     }
