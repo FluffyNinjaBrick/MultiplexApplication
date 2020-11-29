@@ -28,11 +28,9 @@ public class Screening {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    /*@ManyToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "screening_room_id")
-    private ScreeningRoom screeningRoom;*/
-
-    //TODO - add movie foreign key
+    private ScreeningRoom screeningRoom;
 
     public Screening() { super(); }
 

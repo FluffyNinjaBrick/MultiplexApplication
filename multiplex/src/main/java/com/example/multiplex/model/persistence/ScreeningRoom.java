@@ -1,6 +1,7 @@
 package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,12 +18,11 @@ public class ScreeningRoom {
     private Integer floor;
 
     // ----------- one to many -----------
-
-    /*@OneToMany(mappedBy = "screening_room")
+    @OneToMany(mappedBy = "screeningRoom")
     private Set<Seat> seats;
 
-    @OneToMany(mappedBy = "screening_room")
-    private Set<Screening> screenings;*/
+    @OneToMany(mappedBy = "screeningRoom")
+    private Set<Screening> screenings;
 
     public ScreeningRoom() { super(); }
 

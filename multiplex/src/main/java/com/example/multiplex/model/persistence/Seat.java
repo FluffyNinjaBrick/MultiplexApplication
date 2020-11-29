@@ -25,10 +25,9 @@ public class Seat {
     @OneToMany(mappedBy = "seat")
     private Set<Reservation> reservations;
 
-
-    /*@ManyToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "screening_room_id")
-    private ScreeningRoom screeningRoom;*/
+    private ScreeningRoom screeningRoom;
 
     public Seat() { super(); }
 
