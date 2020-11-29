@@ -1,19 +1,17 @@
+package cli;
+
 import Model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jakewharton.fliptables.FlipTableConverters;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -155,16 +153,52 @@ public class Client {
         cli.addSubcommand(new TestCommand());
         cli.addSubcommand(new ShowUsersCommand());
 
-//        BufferedReader br = null;
+        BufferedReader br = null;
         Scanner scanner = new Scanner(System.in);
         String cmd;
-        while(true){
+        while(scanner.hasNextLine()){
             System.out.println("Enter command (q to quite): ");
             cmd = scanner.nextLine();
             if("q".equalsIgnoreCase(cmd)) break;
             cli.execute(cmd.split(" "));
             System.out.println(cmd);
         }
+//        InputStream is = null;
+//        BufferedReader br = null;
+
+//        try {
+//
+//            is = System.in;
+//            br = new BufferedReader(new InputStreamReader(is));
+//
+//            String cmd = null;
+//            System.out.println("Enter command (q to quite): ");
+//            while ((cmd = br.readLine()) != null) {
+//
+//                if (cmd.equalsIgnoreCase("quit")) {
+//                    break;
+//                }
+//                System.out.println("Line entered : " + cmd);
+//                cli.execute(cmd.split(" "));
+//                System.out.println("Enter command (q to quite): ");
+//            }
+//
+//        }
+//        catch (IOException ioe) {
+//            System.out.println("Exception while reading input " + ioe);
+//        }
+//        finally {
+//            // close the streams using close method
+//            try {
+//                if (br != null) {
+//                    br.close();
+//                }
+//            }
+//            catch (IOException ioe) {
+//                System.out.println("Error while closing stream: " + ioe);
+//            }
+//
+//        }
 
 
     }
