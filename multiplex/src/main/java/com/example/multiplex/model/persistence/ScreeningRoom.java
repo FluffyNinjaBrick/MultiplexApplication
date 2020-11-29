@@ -1,6 +1,7 @@
 package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "ScreeningRooms")
@@ -15,6 +16,13 @@ public class ScreeningRoom {
     @Column(name = "floor")
     private Integer floor;
 
+    // ----------- one to many -----------
+
+    /*@OneToMany(mappedBy = "screening_room")
+    private Set<Seat> seats;
+
+    @OneToMany(mappedBy = "screening_room")
+    private Set<Screening> screenings;*/
 
     public ScreeningRoom() { super(); }
 

@@ -1,6 +1,7 @@
 package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Movies")
@@ -17,6 +18,10 @@ public class Movie {
 
     @Column(name = "description")
     private String description;
+
+    // ----------- one to many -----------
+    @OneToMany(mappedBy = "movie")
+    private Set<Screening> screenings;
 
     public Movie() { super(); }
 
@@ -39,6 +44,5 @@ public class Movie {
     public void setAuthor(String author) { this.author = author; }
 
     public String getDescription() { return description; }
-
     public void setDescription(String description) { this.description = description; }
 }
