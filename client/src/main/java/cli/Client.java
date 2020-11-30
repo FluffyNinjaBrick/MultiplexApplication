@@ -2,6 +2,7 @@ package cli;
 
 import Model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jakewharton.fliptables.FlipTable;
 import com.jakewharton.fliptables.FlipTableConverters;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -17,6 +18,8 @@ import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Command(
@@ -40,8 +43,15 @@ class ShowUsersCommand implements Runnable {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             List<User> users = mapper.readValue(response.body(), new TypeReference<List<User>>() {});
-
-            System.out.println(FlipTableConverters.fromIterable(users, User.class));
+            String[][] usersToDisplay = users.stream().map(user -> {
+                String[] data = new String[4];
+                data[0] = Long.toString(user.getId());
+                data[1] = user.getFirstName();
+                data[2] = user.getLastName();
+                data[3] = user.getEmail();
+                return data;
+            }).toArray(size -> new String[size][4]);
+            System.out.println(FlipTable.of(new String[]{"id", "first name", "last name", "email"}, usersToDisplay));
         } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
@@ -66,9 +76,7 @@ class AddUserCommand implements Runnable {
     private String email;
     @Override
     public void run() {
-//        String firstName = "karol";
-//        String lastName = "Hamielec";
-//        String email = "SSSS";
+
         System.out.println("Adding user..." + firstName + " " + lastName + " " + email);
         String request_body = String.format("{\"firstName\": \"%s\", \"lastName\": \"%s\", \"email\": \"%s\"}", firstName, lastName, email);
         HttpClient client = HttpClient.newHttpClient();
@@ -96,15 +104,37 @@ class AddUserCommand implements Runnable {
         name = "add-screening-room"
 )
 class AddScreeningRoomCommand implements Runnable {
-    @Parameters(index = "0", description = "letter")
-    private char letter;
-    @Parameters(index = "1", description = "description")
-    private String description;
-    @Parameters(index = "2", description = "floor")
+    private static final String apiURL = "http://localhost:8080/api/rooms";
+
+    @Parameters(index = "0", description = "number")
+    private String number;
+
+    @Parameters(index = "1", description = "floor")
     private int floor;
     @Override
     public void run() {
-        System.out.println("Adding room..." + letter+ ", floor: " + floor + " - " + description);
+
+        System.out.println("Adding room..." + number+ ", floor: " + floor);
+        String request_body = String.format("{\"number\": \"%s\", \"floor\": \"%d\"}", number, floor);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 @Command(
@@ -178,3 +208,7 @@ public class Client {
 
     }
 }
+/*
+TODO: HttpClient one instance
+TODO: proper exception handling
+ */
