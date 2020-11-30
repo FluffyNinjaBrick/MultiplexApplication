@@ -208,3 +208,7 @@ public class Client {
 
     }
 }
+/*
+TODO: HttpClient one instance
+TODO: proper exception handling
+ */
