@@ -1,6 +1,8 @@
 package Model;
 
 
+import java.util.Set;
+
 public class User {
 
 
@@ -11,6 +13,8 @@ public class User {
     private String lastName;
 
     private String email;
+
+    private Set<Reservation> reservations;
 
     public User() {
         super();
@@ -37,6 +41,8 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    public Set<Reservation> getReservations() { return reservations; }
+    public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
     @Override
     public String toString() {
         return "User{" +
