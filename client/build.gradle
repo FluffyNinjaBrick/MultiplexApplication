@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -14,4 +15,8 @@ dependencies {
     implementation 'info.picocli:picocli:4.5.2'
     implementation 'com.jakewharton.fliptables:fliptables:1.1.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+}
+application {
+    mainClass = 'cli.Client'
+
 }
