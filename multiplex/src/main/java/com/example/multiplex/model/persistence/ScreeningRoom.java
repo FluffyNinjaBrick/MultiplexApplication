@@ -1,7 +1,6 @@
 package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity

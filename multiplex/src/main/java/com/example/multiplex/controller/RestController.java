@@ -19,22 +19,10 @@ import java.util.Set;
 @RequestMapping("/api")
 public class RestController {
 
-    private final UserRepository userRepository;
-    private final ScreeningRoomRepository roomRepository;
-    private final ReservationRepository reservationRepository;
-    private final SeatRepository seatRepository;
-    private final ScreeningRepository screeningRepository;
-    private final MovieRepository movieRepository;
     private final MultiplexRepository repository;
 
     @Autowired
-    public RestController(UserRepository userRepository, ScreeningRoomRepository roomRepository, ReservationRepository reservationRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository, MovieRepository movieRepository, MultiplexRepository repository) {
-        this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
-        this.reservationRepository = reservationRepository;
-        this.seatRepository = seatRepository;
-        this.screeningRepository = screeningRepository;
-        this.movieRepository = movieRepository;
+    public RestController(MultiplexRepository repository) {
         this.repository = repository;
     }
 
@@ -72,7 +60,7 @@ public class RestController {
 
     @PostMapping("/rooms")
     public ScreeningRoom createScreeningRoom(@RequestBody ScreeningRoom room) {
-        return this.roomRepository.save(room);
+        return this.repository.addRoom(room);
     }
 
 
@@ -81,18 +69,15 @@ public class RestController {
     @PostMapping("/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
 
-        User user = this.userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + request.getUserId()));
+        User user = this.repository.getUserByID(request.getUserId());
 
-        Seat seat = this.seatRepository.findById(request.getSeatId())
-                .orElseThrow(() -> new ResourceNotFoundException("No seat exists with ID " + request.getSeatId()));
+        Seat seat = this.repository.getSeatByID(request.getSeatId());
 
-        Screening screening = this.screeningRepository.findById(request.getScreeningId())
-                .orElseThrow(() -> new ResourceNotFoundException("No screening exists with ID " + request.getScreeningId()));
+        Screening screening = this.repository.getScreeningByID(request.getScreeningId());
 
         Reservation reservation = new Reservation(user, seat, screening);
 
-        return this.reservationRepository.save(reservation);
+        return this.repository.addReservation(reservation);
     }
 
     @GetMapping("reservations/forUser/{id}")
@@ -106,11 +91,10 @@ public class RestController {
     @PostMapping("/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
 
-        ScreeningRoom room = this.roomRepository.findById(helper.getRoomID())
-                .orElseThrow(() -> new ResourceNotFoundException("No screening room exists with ID " + helper.getRoomID()));
+        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
 
         Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
-        return this.seatRepository.save(seat);
+        return this.repository.addSeat(seat);
     }
 
 
@@ -119,20 +103,16 @@ public class RestController {
     @PostMapping("/screenings")
     public Screening createScreeningRoom(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
 
-        ScreeningRoom room = this.roomRepository.findById(helper.getRoomID())
-                .orElseThrow(() -> new ResourceNotFoundException("No screening room exists with ID " + helper.getRoomID()));
+        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
 
-        Movie movie = this.movieRepository.findById(helper.getMovieID())
-                .orElseThrow(() -> new ResourceNotFoundException("No movie exists with ID " + helper.getMovieID()));
+        Movie movie = this.repository.getMovieByID(helper.getMovieID());
 
         Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
-        return this.screeningRepository.save(screening);
+        return this.repository.addScreening(screening);
     }
 
     // ---------- MOVIE ---------- //
     @PostMapping("/movies")
-    public Movie createMovie(@RequestBody Movie movie) {
-        return this.movieRepository.save(movie);
-    }
+    public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
 
 }
