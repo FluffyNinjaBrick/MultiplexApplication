@@ -2,7 +2,6 @@ package com.example.multiplex.model.persistence;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Set;
 
 @Entity
@@ -34,8 +33,11 @@ public class Screening {
 
     public Screening() { super(); }
 
-    public Screening(Integer ticketCost) {
+    public Screening(Integer ticketCost, Date date, Movie movie, ScreeningRoom screeningRoom) {
         this.ticketCost = ticketCost;
+        this.date = date;
+        this.movie = movie;
+        this.screeningRoom = screeningRoom;
     }
 
 

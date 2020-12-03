@@ -1,7 +1,5 @@
 package com.example.multiplex.model.persistence;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -31,9 +29,10 @@ public class Seat {
 
     public Seat() { super(); }
 
-    public Seat(Integer seatNumber, Integer rowNumber) {
+    public Seat(Integer seatNumber, Integer rowNumber, ScreeningRoom screeningRoom) {
         this.seatNumber = seatNumber;
         this.rowNumber = rowNumber;
+        this.screeningRoom = screeningRoom;
     }
 
 
