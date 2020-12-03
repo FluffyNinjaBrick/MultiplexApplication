@@ -1,4 +1,4 @@
-package com.example.multiplex.repository;
+package com.example.multiplex.repository.jpaRepos;
 
 import com.example.multiplex.model.persistence.Screening;
 import org.springframework.data.jpa.repository.JpaRepository;
