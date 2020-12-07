@@ -1,7 +1,5 @@
 package com.example.multiplex.model.persistence;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 
 @Entity

@@ -2,6 +2,8 @@ package com.example.multiplex.controller;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
+import com.example.multiplex.model.util.AddScreeningHelper;
+import com.example.multiplex.model.util.AddSeatHelper;
 import com.example.multiplex.model.util.ReservationRequest;
 import com.example.multiplex.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,24 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
 public class RestController {
 
-    private final UserRepository userRepository;
-    private final ScreeningRoomRepository roomRepository;
-    private final ReservationRepository reservationRepository;
-    private final SeatRepository seatRepository;
-    private final ScreeningRepository screeningRepository;
+    private final MultiplexRepository repository;
 
     @Autowired
-    public RestController(UserRepository userRepository, ScreeningRoomRepository roomRepository, ReservationRepository reservationRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository) {
-        this.userRepository = userRepository;
-        this.roomRepository = roomRepository;
-        this.reservationRepository = reservationRepository;
-        this.seatRepository = seatRepository;
-        this.screeningRepository = screeningRepository;
+    public RestController(MultiplexRepository repository) {
+        this.repository = repository;
     }
 
 
@@ -36,30 +31,24 @@ public class RestController {
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return this.userRepository.findAll();
+        return this.repository.getAllUsers();
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException{
-
-       User user = this.userRepository.findById(id)
-               .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + id));
-
+       User user = this.repository.getUserByID(id);
        return ResponseEntity.ok().body(user);
     }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
-        return this.userRepository.save(user);
+        return this.repository.addUser(user);
     }
 
     @DeleteMapping("/users/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable long id) throws ResourceNotFoundException {
 
-        User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + id));
-
-        this.userRepository.delete(user);
+        this.repository.deleteUserByID(id);
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", true);
@@ -71,7 +60,7 @@ public class RestController {
 
     @PostMapping("/rooms")
     public ScreeningRoom createScreeningRoom(@RequestBody ScreeningRoom room) {
-        return this.roomRepository.save(room);
+        return this.repository.addRoom(room);
     }
 
 
@@ -80,33 +69,50 @@ public class RestController {
     @PostMapping("/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
 
-        User user = this.userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + request.getUserId()));
+        User user = this.repository.getUserByID(request.getUserId());
 
-        Seat seat = this.seatRepository.findById(request.getSeatId())
-                .orElseThrow(() -> new ResourceNotFoundException("No seat exists with ID " + request.getSeatId()));
+        Seat seat = this.repository.getSeatByID(request.getSeatId());
 
-        Screening screening = this.screeningRepository.findById(request.getScreeningId())
-                .orElseThrow(() -> new ResourceNotFoundException("No seat exists with ID " + request.getScreeningId()));
+        Screening screening = this.repository.getScreeningByID(request.getScreeningId());
 
         Reservation reservation = new Reservation(user, seat, screening);
 
-        return this.reservationRepository.save(reservation);
+        return this.repository.addReservation(reservation);
+    }
+
+    @GetMapping("reservations/forUser/{id}")
+    public Set<Reservation> getReservationsForUser(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.getReservationsForUser(id);
     }
 
 
     // ---------- SEAT ---------- //
 
     @PostMapping("/seats")
-    public Seat createSeat(@RequestBody Seat seat) {
-        return this.seatRepository.save(seat);
+    public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
+
+        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
+
+        Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
+        return this.repository.addSeat(seat);
     }
 
 
-    // ---------- SCREENING ----------
+    // ---------- SCREENING ---------- //
 
     @PostMapping("/screenings")
-    public Screening createScreeningRoom(@RequestBody Screening screening) {
-        return this.screeningRepository.save(screening);
+    public Screening createScreeningRoom(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+
+        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
+
+        Movie movie = this.repository.getMovieByID(helper.getMovieID());
+
+        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
+        return this.repository.addScreening(screening);
     }
+
+    // ---------- MOVIE ---------- //
+    @PostMapping("/movies")
+    public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
+
 }
