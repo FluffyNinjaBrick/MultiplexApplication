@@ -101,14 +101,8 @@ public class RestController {
     // ---------- SCREENING ---------- //
 
     @PostMapping("/screenings")
-    public Screening createScreeningRoom(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
-
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Movie movie = this.repository.getMovieByID(helper.getMovieID());
-
-        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
-        return this.repository.addScreening(screening);
+    public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+        return this.repository.addScreening(helper);
     }
 
     // ---------- MOVIE ---------- //

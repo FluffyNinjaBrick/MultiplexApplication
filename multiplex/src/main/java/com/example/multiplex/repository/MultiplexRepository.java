@@ -2,6 +2,7 @@ package com.example.multiplex.repository;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
+import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -109,6 +110,36 @@ public class MultiplexRepository implements IMultiplexRepository {
 
     @Override
     public Screening addScreening(Screening screening) {
+        return this.screeningRepository.save(screening);
+    }
+
+    @Override
+    public Screening addScreening(AddScreeningHelper helper) throws ResourceNotFoundException {
+        String movieTitle = helper.getMovieTitle();
+        String roomNumber = helper.getRoomNumber();
+        Movie movie = null;
+        ScreeningRoom room = null;
+
+        // find requested movie
+        for (Movie m: this.movieRepository.findAll()) {
+            if (m.getTitle().equals(movieTitle)) {
+                movie = m;
+                break;
+            }
+        }
+        if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + movieTitle);
+
+        // find requested room
+        for (ScreeningRoom r: this.roomRepository.findAll()) {
+            if (r.getNumber().equals(roomNumber)) {
+                room = r;
+                break;
+            }
+        }
+        if (room == null) throw new ResourceNotFoundException("Error: no room exists with number " + roomNumber);
+
+        // create and save screening
+        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
         return this.screeningRepository.save(screening);
     }
 
