@@ -3,6 +3,7 @@ package com.example.multiplex.repository;
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
+import com.example.multiplex.model.util.AddSeatHelper;
 
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ public interface IMultiplexRepository {
     // ----------- SEAT -----------
     Seat getSeatByID(long seatID) throws ResourceNotFoundException;
     Seat addSeat(Seat seat);
+    Seat addSeat(AddSeatHelper helper) throws ResourceNotFoundException;
 
 
     // ----------- SCREENING -----------

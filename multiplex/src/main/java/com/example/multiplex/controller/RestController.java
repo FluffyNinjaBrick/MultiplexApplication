@@ -90,11 +90,7 @@ public class RestController {
 
     @PostMapping("/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
-
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
-        return this.repository.addSeat(seat);
+        return this.repository.addSeat(helper);
     }
 
 
