@@ -190,9 +190,39 @@ class AddMovieCommand implements Runnable {
 class AddReservationsCommand implements Runnable{
     private static final String apiURL = "http://localhost:8080/api/reservations";
 
-    @Override
-    public void run(){
+    @Parameters(index = "0", description = "userID")
+    private int userID;
 
+    @Parameters(index = "1", description = "screeningID")
+    private int screeningID;
+
+    @Parameters(index = "2", description = "seatID")
+    private int seatID;
+
+    @Override
+    public void run() {
+
+        System.out.println("Adding reservation..." + userID+ ", screeningID: " + screeningID+", seatID: "+seatID);
+        String request_body = String.format("{\"userId\": \"%d\", \"seatId\": \"%d\", \"screeningId\": \"%d\"}", userID, seatID, screeningID);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -203,10 +233,39 @@ class AddReservationsCommand implements Runnable{
 class AddSeatCommand implements Runnable{
     private static final String apiURL = "http://localhost:8080/api/seats";
 
-    //chyba lepiej podać liczbę rzędów i kolumn
-    @Override
-    public void run(){
+    @Parameters(index = "0", description = "roomId")
+    private int roomId;
 
+    @Parameters(index = "1", description = "number")
+    private int number;
+
+    @Parameters(index = "2", description = "row")
+    private int row;
+
+    @Override
+    public void run() {
+
+        System.out.println("Adding seat..." + number+ ", row: " + row+", room: "+roomId);
+        String request_body = String.format("{\"number\": \"%d\", \"row\": \"%d\", \"roomID\": \"%d\"}", number, row, roomId);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -216,9 +275,47 @@ class AddSeatCommand implements Runnable{
 class AddScreeningCommand implements Runnable{
     private static final String apiURL = "http://localhost:8080/api/screenings";
 
-    @Override
-    public void run(){
+    /*    private Integer ticketCost;
+    private Date date;
+    private long movieID;
+    private long roomID;*/
 
+    @Parameters(index = "0", description = "ticketCost")
+    private int ticketCost;
+
+    @Parameters(index = "1", description = "date")
+    private String date;
+
+    @Parameters(index = "2", description = "movieID")
+    private int movieID;
+
+    @Parameters(index = "3", description = "roomID")
+    private int roomID;
+
+    @Override
+    public void run() {
+
+        System.out.println("Adding screenig to room..." + roomID+ ", movieID: " + movieID+", date: "+date+", ticketCost"+ticketCost);
+        String request_body = String.format("{\"ticketCost\": \"%d\", \"date\": \"%s\", \"movieID\": \"%d\", \"roomID\": \"%d\"}", ticketCost, date, movieID, roomID);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
