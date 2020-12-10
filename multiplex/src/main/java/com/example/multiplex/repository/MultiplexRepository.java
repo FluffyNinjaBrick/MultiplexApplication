@@ -104,7 +104,7 @@ public class MultiplexRepository implements IMultiplexRepository {
                 .orElseThrow(() -> new ResourceNotFoundException("No screening exists with ID " + request.getScreeningId()));
 
         long screeningRoomID = screening.getScreeningRoom();
-        Seat seat = this.getSeatByNumRowRoom(request.getSeatRow(), request.getSeatCol(), screeningRoomID);
+        Seat seat = this.getSeatByNumRowRoom(request.getSeatNumber(), request.getRowNumber(), screeningRoomID);
 
         Reservation reservation = new Reservation(user, seat, screening);
         return this.reservationRepository.save(reservation);
