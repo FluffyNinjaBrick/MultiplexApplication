@@ -2,15 +2,16 @@ package com.example.multiplex.model.util;
 
 public class ReservationRequest {
     private long userId;
-    private long seatId;
+    private int seatNumber;
+    private int rowNumber;
     private long screeningId;
 
     public ReservationRequest() { super(); }
 
-    public ReservationRequest(long userId, long seatId, long screeningId) {
-        super();
+    public ReservationRequest(long userId, int seatNumber, int rowNumber, long screeningId) {
         this.userId = userId;
-        this.seatId = seatId;
+        this.seatNumber = seatNumber;
+        this.rowNumber = rowNumber;
         this.screeningId = screeningId;
     }
 
@@ -18,8 +19,11 @@ public class ReservationRequest {
     public long getUserId() { return userId; }
     public void setUserId(long userId) { this.userId = userId; }
 
-    public long getSeatId() { return seatId; }
-    public void setSeatId(long seatId) { this.seatId = seatId; }
+    public int getSeatRow() { return seatNumber; }
+    public void setSeatRow(int seatRow) { this.seatNumber = seatRow; }
+
+    public int getSeatCol() { return rowNumber; }
+    public void setSeatCol(int seatCol) { this.rowNumber = seatCol; }
 
     public long getScreeningId() { return screeningId; }
     public void setScreeningId(long screeningId) { this.screeningId = screeningId; }

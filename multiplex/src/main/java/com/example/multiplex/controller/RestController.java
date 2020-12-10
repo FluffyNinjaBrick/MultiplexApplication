@@ -68,16 +68,7 @@ public class RestController {
 
     @PostMapping("/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
-
-        User user = this.repository.getUserByID(request.getUserId());
-
-        Seat seat = this.repository.getSeatByID(request.getSeatId());
-
-        Screening screening = this.repository.getScreeningByID(request.getScreeningId());
-
-        Reservation reservation = new Reservation(user, seat, screening);
-
-        return this.repository.addReservation(reservation);
+        return this.repository.addReservation(request);
     }
 
     @GetMapping("reservations/forUser/{id}")

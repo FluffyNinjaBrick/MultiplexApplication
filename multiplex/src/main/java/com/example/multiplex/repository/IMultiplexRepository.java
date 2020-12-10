@@ -4,6 +4,7 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.ReservationRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ public interface IMultiplexRepository {
 
     // ----------- RESERVATION -----------
     Reservation addReservation(Reservation reservation);
+    Reservation addReservation(ReservationRequest request) throws ResourceNotFoundException;
     Set<Reservation> getReservationsForUser(long userID) throws ResourceNotFoundException;
 
 

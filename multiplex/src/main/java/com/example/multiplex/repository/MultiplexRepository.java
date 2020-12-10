@@ -4,6 +4,7 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.ReservationRequest;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -96,6 +97,20 @@ public class MultiplexRepository implements IMultiplexRepository {
     }
 
     @Override
+    public Reservation addReservation(ReservationRequest request) throws ResourceNotFoundException {
+        User user = this.userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + request.getUserId()));
+        Screening screening = this.screeningRepository.findById(request.getScreeningId())
+                .orElseThrow(() -> new ResourceNotFoundException("No screening exists with ID " + request.getScreeningId()));
+
+        long screeningRoomID = screening.getScreeningRoom();
+        Seat seat = this.getSeatByNumRowRoom(request.getSeatRow(), request.getSeatCol(), screeningRoomID);
+
+        Reservation reservation = new Reservation(user, seat, screening);
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
     public Set<Reservation> getReservationsForUser(long userID) throws ResourceNotFoundException {
         User user = this.userRepository.findById(userID)
                 .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + userID));
@@ -120,6 +135,13 @@ public class MultiplexRepository implements IMultiplexRepository {
         ScreeningRoom room = this.getRoomByNumber(helper.getRoomNumber());
         Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
         return this.seatRepository.save(seat);
+    }
+
+    private Seat getSeatByNumRowRoom(int number, int row, long roomID) throws ResourceNotFoundException {
+        for (Seat s: this.seatRepository.findAll())
+            if (s.getSeatNumber() == number && s.getRowNumber() == row && s.getScreeningRoom() == roomID)
+                return s;
+        throw new ResourceNotFoundException("No such seat exists");
     }
 
 
