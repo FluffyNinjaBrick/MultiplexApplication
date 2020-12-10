@@ -137,6 +137,91 @@ class AddScreeningRoomCommand implements Runnable {
         }
     }
 }
+
+@Command(
+        name = "add-movie"
+)
+class AddMovieCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080/api/movies";
+
+    @Parameters(index = "0", description = "title")
+    private String title;
+
+    @Parameters(index = "1", description = "author")
+    private String author;
+
+    @Parameters(index = "2", description = "genre")
+    private String genre;
+
+    @Parameters(index = "3", description = "description")
+    private String description;
+
+    @Override
+    public void run() {
+
+        System.out.println("Adding movie..." + title+ ", author: " + author+", genre: "+genre+", description: "+description);
+
+        String request_body = String.format("{\"title\": \"%s\", \"author\": \"%s\", \"genre\": \"%s\", \"description\": \"%s\"}", title, author, genre, description);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+@Command(
+        name = "add-reservations"
+)
+class AddReservationsCommand implements Runnable{
+    private static final String apiURL = "http://localhost:8080/api/reservations";
+
+    @Override
+    public void run(){
+
+    }
+}
+
+@Command(
+        name = "add-seats"
+)
+
+class AddSeatCommand implements Runnable{
+    private static final String apiURL = "http://localhost:8080/api/seats";
+
+    //chyba lepiej podać liczbę rzędów i kolumn
+    @Override
+    public void run(){
+
+    }
+}
+
+@Command(
+        name = "add-screening"
+)
+class AddScreeningCommand implements Runnable{
+    private static final String apiURL = "http://localhost:8080/api/screenings";
+
+    @Override
+    public void run(){
+
+    }
+}
+
 @Command(
         name = "test-api"
 )
@@ -188,6 +273,10 @@ public class Client {
         CommandLine cli = new CommandLine(new MultiplexCli());
         cli.addSubcommand(new AddScreeningRoomCommand());
         cli.addSubcommand(new AddUserCommand());
+        cli.addSubcommand(new AddMovieCommand());
+        cli.addSubcommand(new AddReservationsCommand());
+        cli.addSubcommand(new AddSeatCommand());
+        cli.addSubcommand(new AddScreeningCommand());
         cli.addSubcommand(new TestCommand());
         cli.addSubcommand(new ShowUsersCommand());
 
@@ -203,12 +292,24 @@ public class Client {
             System.out.println("Enter command (q to quite): ");
 
         }
-
-
-
     }
 }
 /*
 TODO: HttpClient one instance
 TODO: proper exception handling
+ */
+
+/*
+TODO: (funkcje użytkownika) ->
+    {
+       wyświetlanie swoich rezerwacji;
+       podliczanie swoich rezerwacji;
+       wyświetlanie rezerwacji na danych film;
+       wyświetlanie pustych miejsc na film;
+       wyświetlanie aktualnej listy seansów/filmów;
+       wyświetlanie listy seansów od najbardziej zapełnionych do najmniej;
+       wyświetlanie listy najbardziej aktywnych klientów;
+       wyświetlanie proponowanych filmów dla siebie
+       ### jakieś jeszcze? ###
+    }
  */
