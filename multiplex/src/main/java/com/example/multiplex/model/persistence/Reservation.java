@@ -33,6 +33,8 @@ public class Reservation {
 
 
     // ------------- GETTERS AND SETTERS ------------- //
+    // note: these might occasionally return IDs, not the actual structure.
+    //       This is done to avoid infinite recursion in http responses.
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

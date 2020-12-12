@@ -3,14 +3,14 @@ package com.example.multiplex.model.util;
 public class AddSeatHelper {
     private Integer number;
     private Integer row;
-    private long roomID;
+    private String roomNumber;
 
     public AddSeatHelper() { super(); }
 
-    public AddSeatHelper(Integer number, Integer row, long roomID) {
+    public AddSeatHelper(Integer number, Integer row, String roomNumber) {
         this.number = number;
         this.row = row;
-        this.roomID = roomID;
+        this.roomNumber = roomNumber;
     }
 
 
@@ -21,6 +21,6 @@ public class AddSeatHelper {
     public Integer getRow() { return row; }
     public void setRow(Integer row) { this.row = row; }
 
-    public long getRoomID() { return roomID; }
-    public void setRoomID(long roomID) { this.roomID = roomID; }
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 }

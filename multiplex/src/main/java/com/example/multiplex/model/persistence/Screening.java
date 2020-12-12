@@ -42,9 +42,17 @@ public class Screening {
 
 
     // ------------- GETTERS AND SETTERS ------------- //
+    // note: these might occasionally return IDs, not the actual structure.
+    //       This is done to avoid infinite recursion in http responses.
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
     public Integer getTicketCost() { return ticketCost; }
     public void setTicketCost(Integer ticketCost) { this.ticketCost = ticketCost; }
+
+    public Movie getMovie() { return movie; }
+    public void setMovie(Movie movie) { this.movie = movie; }
+
+    public long getScreeningRoom() { return screeningRoom.getId(); }
+    public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
 }

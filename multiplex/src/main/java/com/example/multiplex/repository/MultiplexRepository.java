@@ -2,6 +2,9 @@ package com.example.multiplex.repository;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
+import com.example.multiplex.model.util.AddScreeningHelper;
+import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.ReservationRequest;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -72,10 +75,38 @@ public class MultiplexRepository implements IMultiplexRepository {
         return this.roomRepository.save(room);
     }
 
+    private ScreeningRoom getRoomByNumber(String roomNumber) throws ResourceNotFoundException {
+        ScreeningRoom room = null;
+
+        for (ScreeningRoom r: this.roomRepository.findAll()) {
+            if (r.getNumber().equals(roomNumber)) {
+                room = r;
+                break;
+            }
+        }
+
+        if (room == null) throw new ResourceNotFoundException("Error: no room exists with number " + roomNumber);
+        return room;
+    }
+
 
     // ----------- RESERVATION -----------
     @Override
     public Reservation addReservation(Reservation reservation) {
+        return this.reservationRepository.save(reservation);
+    }
+
+    @Override
+    public Reservation addReservation(ReservationRequest request) throws ResourceNotFoundException {
+        User user = this.userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + request.getUserId()));
+        Screening screening = this.screeningRepository.findById(request.getScreeningId())
+                .orElseThrow(() -> new ResourceNotFoundException("No screening exists with ID " + request.getScreeningId()));
+
+        long screeningRoomID = screening.getScreeningRoom();
+        Seat seat = this.getSeatByNumRowRoom(request.getSeatNumber(), request.getRowNumber(), screeningRoomID);
+
+        Reservation reservation = new Reservation(user, seat, screening);
         return this.reservationRepository.save(reservation);
     }
 
@@ -99,6 +130,20 @@ public class MultiplexRepository implements IMultiplexRepository {
         return this.seatRepository.save(seat);
     }
 
+    @Override
+    public Seat addSeat(AddSeatHelper helper) throws ResourceNotFoundException {
+        ScreeningRoom room = this.getRoomByNumber(helper.getRoomNumber());
+        Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
+        return this.seatRepository.save(seat);
+    }
+
+    private Seat getSeatByNumRowRoom(int number, int row, long roomID) throws ResourceNotFoundException {
+        for (Seat s: this.seatRepository.findAll())
+            if (s.getSeatNumber() == number && s.getRowNumber() == row && s.getScreeningRoom() == roomID)
+                return s;
+        throw new ResourceNotFoundException("No such seat exists");
+    }
+
 
     // ----------- SCREENING -----------
     @Override
@@ -109,6 +154,20 @@ public class MultiplexRepository implements IMultiplexRepository {
 
     @Override
     public Screening addScreening(Screening screening) {
+        return this.screeningRepository.save(screening);
+    }
+
+    @Override
+    public Screening addScreening(AddScreeningHelper helper) throws ResourceNotFoundException {
+        String movieTitle = helper.getMovieTitle();
+        String roomNumber = helper.getRoomNumber();
+
+        // find requested movie and room
+        Movie movie = this.getMovieByTitle(movieTitle);
+        ScreeningRoom room = this.getRoomByNumber(roomNumber);
+
+        // create and save screening
+        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
         return this.screeningRepository.save(screening);
     }
 
@@ -123,6 +182,20 @@ public class MultiplexRepository implements IMultiplexRepository {
     @Override
     public Movie addMovie(Movie movie) {
         return this.movieRepository.save(movie);
+    }
+
+    private Movie getMovieByTitle(String title) throws ResourceNotFoundException {
+        Movie movie = null;
+
+        for (Movie m: this.movieRepository.findAll()) {
+            if (m.getTitle().equals(title)) {
+                movie = m;
+                break;
+            }
+        }
+
+        if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
+        return movie;
     }
 
 

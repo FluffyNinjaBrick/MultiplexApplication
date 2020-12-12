@@ -68,16 +68,7 @@ public class RestController {
 
     @PostMapping("/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
-
-        User user = this.repository.getUserByID(request.getUserId());
-
-        Seat seat = this.repository.getSeatByID(request.getSeatId());
-
-        Screening screening = this.repository.getScreeningByID(request.getScreeningId());
-
-        Reservation reservation = new Reservation(user, seat, screening);
-
-        return this.repository.addReservation(reservation);
+        return this.repository.addReservation(request);
     }
 
     @GetMapping("reservations/forUser/{id}")
@@ -90,25 +81,15 @@ public class RestController {
 
     @PostMapping("/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
-
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
-        return this.repository.addSeat(seat);
+        return this.repository.addSeat(helper);
     }
 
 
     // ---------- SCREENING ---------- //
 
     @PostMapping("/screenings")
-    public Screening createScreeningRoom(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
-
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Movie movie = this.repository.getMovieByID(helper.getMovieID());
-
-        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
-        return this.repository.addScreening(screening);
+    public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+        return this.repository.addScreening(helper);
     }
 
     // ---------- MOVIE ---------- //
