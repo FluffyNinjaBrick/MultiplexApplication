@@ -117,6 +117,16 @@ public class MultiplexRepository implements IMultiplexRepository {
         return user.getReservations();
     }
 
+    @Override
+    public Integer calculateReservation(long screening_id, long user_id){
+        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
+    }
+
+    @Override
+    public Integer calculateAllReservations(long user_id) throws ResourceNotFoundException {
+        return this.reservationRepository.calculateTotalReservationCost(user_id);
+    }
+
 
     // ----------- SEAT -----------
     @Override
@@ -135,6 +145,11 @@ public class MultiplexRepository implements IMultiplexRepository {
         ScreeningRoom room = this.getRoomByNumber(helper.getRoomNumber());
         Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
         return this.seatRepository.save(seat);
+    }
+
+    @Override
+    public List<Seat> showEmptySeatsForScreening(long screening_id){
+        return this.seatRepository.showEmptySeats(screening_id);
     }
 
     private Seat getSeatByNumRowRoom(int number, int row, long roomID) throws ResourceNotFoundException {
@@ -200,18 +215,6 @@ public class MultiplexRepository implements IMultiplexRepository {
     public void myFunction(){
 //        User user = this.userRepository.myFunction("pop");
 //        System.out.println(user.getEmail());
-    }
-
-
-    public Integer calculateReservation(int screening_id, int user_id){
-        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
-    }
-
-    public Integer calculateAllReservations(int user_id){
-        return this.reservationRepository.calculateTotalReservationCost(user_id);
-    }
-    public List<Seat> showSeats(int screening_id){
-        return this.seatRepository.showEmptySeats(screening_id);
     }
 
 }

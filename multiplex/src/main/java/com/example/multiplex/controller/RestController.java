@@ -77,12 +77,27 @@ public class RestController {
         return this.repository.getReservationsForUser(id);
     }
 
+    @GetMapping("reservations/forUser/{id}/total")
+    public Integer sumReservationCostForUser(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.calculateAllReservations(id);
+    }
+
+    @GetMapping("reservations/forUser/{userId}/forScreening/{screeningId}")
+    public Integer sumReservationCostForUserAndScreening(@PathVariable long userId, @PathVariable long screeningId) {
+        return this.repository.calculateReservation(userId, screeningId);
+    }
+
 
     // ---------- SEAT ---------- //
 
     @PostMapping("/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
         return this.repository.addSeat(helper);
+    }
+
+    @GetMapping("seats/forScreening/{id}")
+    public List<Seat> showEmptySeatsForScreening(@PathVariable long id) {
+        return this.repository.showEmptySeatsForScreening(id);
     }
 
 
