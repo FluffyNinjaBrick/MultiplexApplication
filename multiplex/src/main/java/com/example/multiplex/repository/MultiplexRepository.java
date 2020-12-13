@@ -206,7 +206,7 @@ public class MultiplexRepository implements IMultiplexRepository {
 
     @Override
     public List<Movie> getMoviesOnOffer() {
-        return this.movieRepository.getMoviesOnOffer();
+        return this.movieRepository.getMoviesOnOffer(new Date());
     }
 
     private Movie getMovieByTitle(String title) throws ResourceNotFoundException {
