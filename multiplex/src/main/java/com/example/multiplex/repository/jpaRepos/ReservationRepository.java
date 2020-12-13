@@ -12,10 +12,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(
             value= "select sum(ticket_cost) from reservations r inner join screenings s on r.screening_id = s.id where screening_id = :screening_id and user_id = :user_id",
             nativeQuery = true)
-    Integer calculateTotalReservationCost(@Param("screening_id") int screening_id, @Param("user_id") int user_id);
+    Integer calculateTotalReservationCost(@Param("screening_id") long screening_id, @Param("user_id") long user_id);
 
     @Query(
             value= "select sum(ticket_cost) from reservations r inner join screenings s on r.screening_id = s.id where user_id = :user_id",
             nativeQuery = true)
-    Integer calculateTotalReservationCost(@Param("user_id") int user_id);
+    Integer calculateTotalReservationCost(@Param("user_id") long user_id);
 }
