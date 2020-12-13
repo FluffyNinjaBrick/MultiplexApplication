@@ -32,6 +32,7 @@ public class RestController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return this.repository.getAllUsers();
+
     }
 
     @GetMapping("/users/{id}")

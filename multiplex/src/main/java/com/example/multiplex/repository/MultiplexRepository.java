@@ -4,13 +4,15 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
 
 @Repository("HibernateRepository")
-public class MultiplexRepository implements IMultiplexRepository {
+public class MultiplexRepository implements IMultiplexRepository{
 
     private final UserRepository userRepository;
     private final ScreeningRoomRepository roomRepository;
@@ -123,6 +125,23 @@ public class MultiplexRepository implements IMultiplexRepository {
     @Override
     public Movie addMovie(Movie movie) {
         return this.movieRepository.save(movie);
+    }
+
+    public void myFunction(){
+//        User user = this.userRepository.myFunction("pop");
+//        System.out.println(user.getEmail());
+    }
+
+
+    public Integer calculateReservation(int screening_id, int user_id){
+        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
+    }
+
+    public Integer calculateAllReservations(int user_id){
+        return this.reservationRepository.calculateTotalReservationCost(user_id);
+    }
+    public List<Seat> showSeats(int screening_id){
+        return this.seatRepository.showEmptySeats(screening_id);
     }
 
 

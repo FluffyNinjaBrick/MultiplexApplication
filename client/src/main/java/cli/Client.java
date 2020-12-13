@@ -399,11 +399,12 @@ TODO: proper exception handling
 /*
 TODO: (funkcje użytkownika) ->
     {
-       wyświetlanie swoich rezerwacji;
-       podliczanie swoich rezerwacji;
-       wyświetlanie rezerwacji na danych film;
-       wyświetlanie pustych miejsc na film;
-       wyświetlanie aktualnej listy seansów/filmów;
+       ##wyświetlanie swoich rezerwacji;
+       !!!podliczanie swoich rezerwacji;
+       ##wyświetlanie rezerwacji na danych film;
+       !!wyświetlanie pustych miejsc na film;
+       ##wyświetlanie aktualnej listy seansów/filmów;
+
        wyświetlanie listy seansów od najbardziej zapełnionych do najmniej;
        wyświetlanie listy najbardziej aktywnych klientów;
        wyświetlanie proponowanych filmów dla siebie
