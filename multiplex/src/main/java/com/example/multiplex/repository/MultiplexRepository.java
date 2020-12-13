@@ -197,6 +197,21 @@ public class MultiplexRepository implements IMultiplexRepository {
         if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
         return movie;
     }
+    public void myFunction(){
+//        User user = this.userRepository.myFunction("pop");
+//        System.out.println(user.getEmail());
+    }
 
+
+    public Integer calculateReservation(int screening_id, int user_id){
+        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
+    }
+
+    public Integer calculateAllReservations(int user_id){
+        return this.reservationRepository.calculateTotalReservationCost(user_id);
+    }
+    public List<Seat> showSeats(int screening_id){
+        return this.seatRepository.showEmptySeats(screening_id);
+    }
 
 }
