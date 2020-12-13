@@ -40,6 +40,7 @@ public interface IMultiplexRepository {
     Screening getScreeningByID(long screeningID) throws ResourceNotFoundException;
     Screening addScreening(Screening screening);
     Screening addScreening(AddScreeningHelper helper) throws ResourceNotFoundException;
+    List<Screening> getScreeningsOnOffer();
 
 
     // ---------- MOVIE ---------- //

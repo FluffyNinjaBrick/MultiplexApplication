@@ -108,6 +108,11 @@ public class RestController {
         return this.repository.addScreening(helper);
     }
 
+    @GetMapping("/screenings")
+    public List<Screening> getScreeningsOnOffer() {
+        return this.repository.getScreeningsOnOffer();
+    }
+
     // ---------- MOVIE ---------- //
     @PostMapping("/movies")
     public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }

@@ -9,6 +9,7 @@ import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -186,6 +187,10 @@ public class MultiplexRepository implements IMultiplexRepository {
         return this.screeningRepository.save(screening);
     }
 
+    @Override
+    public List<Screening> getScreeningsOnOffer() {
+        return this.screeningRepository.getScreeningsOnOffer(new Date());
+    }
 
     // ----------- MOVIE -----------
     @Override
@@ -217,9 +222,4 @@ public class MultiplexRepository implements IMultiplexRepository {
         if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
         return movie;
     }
-    public void myFunction(){
-//        User user = this.userRepository.myFunction("pop");
-//        System.out.println(user.getEmail());
-    }
-
 }
