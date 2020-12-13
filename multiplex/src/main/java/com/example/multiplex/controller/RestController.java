@@ -112,4 +112,9 @@ public class RestController {
     @PostMapping("/movies")
     public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
 
+    @GetMapping("/movies")
+    public List<Movie> getMoviesOnOffer() {
+        return this.repository.getMoviesOnOffer();
+    }
+
 }

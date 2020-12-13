@@ -45,4 +45,5 @@ public interface IMultiplexRepository {
     // ---------- MOVIE ---------- //
     Movie getMovieByID(long movieID) throws ResourceNotFoundException;
     Movie addMovie(Movie movie);
+    List<Movie> getMoviesOnOffer();
 }

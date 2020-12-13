@@ -199,6 +199,11 @@ public class MultiplexRepository implements IMultiplexRepository {
         return this.movieRepository.save(movie);
     }
 
+    @Override
+    public List<Movie> getMoviesOnOffer() {
+        return this.movieRepository.getMoviesOnOffer();
+    }
+
     private Movie getMovieByTitle(String title) throws ResourceNotFoundException {
         Movie movie = null;
 
