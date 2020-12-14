@@ -319,6 +319,247 @@ class AddScreeningCommand implements Runnable{
     }
 }
 
+/*#####################################################################*/
+@Command(
+        name = "get-user-by-id"
+)
+class GetUserByIdCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "delete-user"
+)
+class DeleteUserCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "get-user-reservations"
+)
+class GetUserReservationsCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "single-reservation-cost"
+)
+class SumSingleReservationCostCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "all-reservations-cost"
+)
+class SumAllReservationsCostCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "show-empty-seats"
+)
+class ShowEmptySeatsCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "get-screenings-offer"
+)
+class GetScreeningsOfferCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+@Command(
+        name = "get-movies-offer"
+)
+class GetMoviesOfferCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080";
+
+    @Override
+    public void run() {
+        System.out.println("TEST command");
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+/*##########################################################################################*/
 @Command(
         name = "test-api"
 )
