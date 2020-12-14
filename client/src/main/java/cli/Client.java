@@ -15,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -319,24 +320,36 @@ class AddScreeningCommand implements Runnable{
         name = "get-user-by-id"
 )
 class GetUserByIdCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/users/{id}";
+    private final String apiURL = "http://localhost:8080/api/users/";
 
     @Parameters(index = "0", description = "userId")
-    private int userId;
+    private long userId;
 
     @Override
     public void run() {
-        System.out.println("TEST command");
+        System.out.println("Getting user with id: "+userId);
+        String request_body = String.format("{\"userId\": \"%d\"}", userId);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create(apiURL+this.userId))
                 .build();
-
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
+            User user = mapper.readValue(response.body(), new TypeReference<User>(){});
+            String[][] data = new String[1][4];
+            data[0][0] = Long.toString(user.getId());
+            data[0][1] = user.getFirstName();
+            data[0][2] = user.getLastName();
+            data[0][3] = user.getEmail();
+            System.out.println(FlipTable.of(new String[]{"id", "first name", "last name", "email"}, data));
+
+
+            //System.out.println(response.body());
         }  catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
@@ -347,7 +360,6 @@ class GetUserByIdCommand implements Runnable {
 
     }
 }
-
 @Command(
         name = "delete-user"
 )
