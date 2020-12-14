@@ -47,6 +47,7 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
     @Override

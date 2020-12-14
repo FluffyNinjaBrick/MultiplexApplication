@@ -364,29 +364,34 @@ class GetUserByIdCommand implements Runnable {
         name = "delete-user"
 )
 class DeleteUserCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    private final String apiURL = "http://localhost:8080/api/users/";
+
+    @Parameters(index = "0", description = "userId")
+    private long userId;
 
     @Override
     public void run() {
-        System.out.println("TEST command");
+        System.out.println("Deleting user with id: "+userId);
+        String request_body = String.format("{\"userId\": \"%d\"}", userId);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .GET()
+                .DELETE()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create(apiURL+this.userId))
                 .build();
-
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
+            System.out.println(response.statusCode());
         }  catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
 
@@ -424,29 +429,37 @@ class GetUserReservationsCommand implements Runnable {
         name = "single-reservation-cost"
 )
 class SumSingleReservationCostCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    @Parameters(index = "0", description = "userId")
+    private long userId;
+
+    @Parameters(index = "1", description = "screeningId")
+    private long screeningId;
 
     @Override
     public void run() {
-        System.out.println("TEST command");
+        System.out.println("Getting users: "+userId+" cost of one screenings: "+screeningId);
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create("http://localhost:8080/api/reservations/forUser/"+this.userId+"/forScreening/"+this.screeningId))
                 .build();
-
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
+            String cost = response.body();
+            String[][] data = new String[1][1];
+            data[0][0] = cost;
+            System.out.println(FlipTable.of(new String[]{"cost"}, data));
         }  catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
 
@@ -454,29 +467,35 @@ class SumSingleReservationCostCommand implements Runnable {
         name = "all-reservations-cost"
 )
 class SumAllReservationsCostCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    @Parameters(index = "0", description = "userId")
+    private long userId;
+
 
     @Override
     public void run() {
-        System.out.println("TEST command");
+        System.out.println("Getting users: "+userId+" total costs");
+
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create("http://localhost:8080/api/reservations/forUser/"+this.userId+"/total"))
                 .build();
-
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
+            String cost = response.body();
+            String[][] data = new String[1][1];
+            data[0][0] = cost;
+            System.out.println(FlipTable.of(new String[]{"cost"}, data));
         }  catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
 
