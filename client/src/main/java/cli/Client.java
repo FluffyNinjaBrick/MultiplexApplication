@@ -275,11 +275,6 @@ class AddSeatCommand implements Runnable{
 class AddScreeningCommand implements Runnable{
     private static final String apiURL = "http://localhost:8080/api/screenings";
 
-    /*    private Integer ticketCost;
-    private Date date;
-    private long movieID;
-    private long roomID;*/
-
     @Parameters(index = "0", description = "ticketCost")
     private int ticketCost;
 
@@ -324,7 +319,10 @@ class AddScreeningCommand implements Runnable{
         name = "get-user-by-id"
 )
 class GetUserByIdCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    private static final String apiURL = "http://localhost:8080/users/{id}";
+
+    @Parameters(index = "0", description = "userId")
+    private int userId;
 
     @Override
     public void run() {
@@ -615,6 +613,14 @@ public class Client {
         cli.addSubcommand(new AddReservationsCommand());
         cli.addSubcommand(new AddSeatCommand());
         cli.addSubcommand(new AddScreeningCommand());
+        cli.addSubcommand(new DeleteUserCommand());
+        cli.addSubcommand(new GetMoviesOfferCommand());
+        cli.addSubcommand(new GetScreeningsOfferCommand());
+        cli.addSubcommand(new GetUserByIdCommand());
+        cli.addSubcommand(new GetUserReservationsCommand());
+        cli.addSubcommand(new ShowEmptySeatsCommand());
+        cli.addSubcommand(new SumAllReservationsCostCommand());
+        cli.addSubcommand(new SumSingleReservationCostCommand());
         cli.addSubcommand(new TestCommand());
         cli.addSubcommand(new ShowUsersCommand());
 
