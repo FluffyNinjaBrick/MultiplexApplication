@@ -1,5 +1,8 @@
 package Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+//@JsonIgnoreProperties({"seat"})
 
 public class Reservation {
 
@@ -15,6 +18,10 @@ public class Reservation {
     private Screening screening;
 
     public Reservation() { super(); }
+//    public Reservation(int id) {
+//        super();
+//        this.id = id;
+//    }
 
     public Reservation(User user, Seat seat, Screening screening) {
         super();
@@ -32,7 +39,16 @@ public class Reservation {
     public void setUser(User user) { this.user = user; }
 
     public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
-    public void setSeat(Seat seat) { this.seat = seat; }
+//    public void setSeat(Seat seat) { this.seat = seat; }
+    public void setSeat(String seatInput) {
+        this.seat = new Seat();
+        String[] props = seatInput.split(",");
+        this.seat.setRowNumber(Integer.valueOf(props[0].split(":")[1].substring(1)));
+        this.seat.setSeatNumber(Integer.valueOf(props[1].split(":")[1].substring(1)));
+        System.out.println("row" + this.seat.getSeatNumber());
+
+
+    }
 
     public long getScreening() { return screening.getId(); }
     public void setScreening(Screening screening) { this.screening = screening; }
