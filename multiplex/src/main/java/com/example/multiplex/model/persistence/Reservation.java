@@ -18,8 +18,9 @@ public class Reservation {
     @JoinColumn(name = "seat_id")
     private Seat seat;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "screening_id")
+
     private Screening screening;
 
     public Reservation() { super(); }

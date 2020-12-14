@@ -117,7 +117,13 @@ public class MultiplexRepository implements IMultiplexRepository {
                 .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + userID));
         return user.getReservations();
     }
-
+    public Set<Reservation> getReservationsForUserWithTitle(long userID) throws ResourceNotFoundException {
+        User user = this.userRepository.getUserReservationsWithTitle(userID);
+//        user.getReservations().forEach((r) -> {
+//            System.out.println(r.getScreening().getMovie())
+//        });
+        return user.getReservations();
+    }
 
     // ----------- SEAT -----------
     @Override

@@ -1,8 +1,9 @@
 package Model;
 
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Set;
 public class ScreeningRoom {
     private long id;
 
@@ -15,6 +16,10 @@ public class ScreeningRoom {
     private Set<Screening> screenings;
 
     public ScreeningRoom() { super(); }
+    public ScreeningRoom(int id) {
+        super();
+        this.id = id;
+    }
 
     public ScreeningRoom(String number, Integer floor, Integer maximalCapacity){
         super();

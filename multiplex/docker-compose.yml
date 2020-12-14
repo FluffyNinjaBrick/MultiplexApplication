@@ -1,14 +1,14 @@
  version: '3.3'
  services:
-    app:
-        container_name: app
-        image: app
-        build: ./
-        ports:
-            - "8080:8080"
-        depends_on:
-            - mypostgres
-        network_mode: "host"
+         #    app:
+         #        container_name: app
+         #        image: app
+         #        build: ./
+         #        ports:
+         #            - "8080:8080"
+         #        depends_on:
+         #            - mypostgres
+         #        network_mode: "host"
     mypostgres:
         image: postgres
         ports:
