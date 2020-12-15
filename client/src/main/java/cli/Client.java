@@ -1,6 +1,6 @@
 package cli;
 
-import Model.User;
+import Model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jakewharton.fliptables.FlipTable;
 import com.jakewharton.fliptables.FlipTableConverters;
@@ -394,13 +394,14 @@ class DeleteUserCommand implements Runnable {
         }
     }
 }
-
+//NOT WORKING YER
 @Command(
         name = "get-user-reservations"
 )
 class GetUserReservationsCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
-
+    private static final String apiURL = "http://localhost:8080/api";
+    @Parameters(index = "0", description = "userId")
+    private long userId;
     @Override
     public void run() {
         System.out.println("TEST command");
@@ -408,13 +409,37 @@ class GetUserReservationsCommand implements Runnable {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create(apiURL+"/reservations/forUser/"+this.userId))
                 .build();
-
+        HttpRequest requestScreening = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL+"/screenings"))
+                .build();
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        }  catch (java.net.ConnectException e){
+            HttpResponse<String> responseScreening = client.send(requestScreening, HttpResponse.BodyHandlers.ofString());
+            List<Screening> screenings = mapper.readValue(responseScreening.body(), new TypeReference<List<Screening>>(){});
+            List<Reservation> reservations = mapper.readValue(response.body(), new TypeReference<List<Reservation>>() {});
+            String[][] dataToDisplay = reservations.stream().map(res -> {
+                Screening scr = screenings.stream().filter((screening -> {
+                    return screening.getId() == res.getScreening();
+                })).findFirst().get();
+                String[] data = new String[7];
+                data[0] = String.valueOf(res.getId());
+                data[1] = scr.getDate().toString();
+                data[2] = scr.getMovie().getTitle();
+                data[3] = scr.getMovie().getAuthor();
+                data[4] = scr.getTicketCost().toString();
+                data[5] = String.valueOf(scr.getScreeningRoom());
+                data[6] = res.getSeat();
+
+                return data;
+            }).toArray(size -> new String[size][2]);
+            System.out.println(FlipTable.of(new String[]{"ID", "date", "movie title", "movie author", "ticket cost", "screening room", "seat"}, dataToDisplay));
+        } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -503,22 +528,32 @@ class SumAllReservationsCostCommand implements Runnable {
         name = "show-empty-seats"
 )
 class ShowEmptySeatsCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    private static final String apiURL = "http://localhost:8080/api";
 
+    @Parameters(index = "0", description = "screening id")
+    private long screening_id;
     @Override
     public void run() {
-        System.out.println("TEST command");
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create(apiURL+"/seats/forScreening/"+this.screening_id))
                 .build();
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        }  catch (java.net.ConnectException e){
+            List<Seat> seats = mapper.readValue(response.body(), new TypeReference<List<Seat>>() {});
+            String[][] dataToDisplay = seats.stream().map(seat -> {
+                String[] data = new String[2];
+                data[0] = String.valueOf(seat.getRowNumber());
+                data[1] = String.valueOf(seat.getSeatNumber());
+                return data;
+            }).toArray(size -> new String[size][2]);
+            System.out.println(FlipTable.of(new String[]{"row", "seat"}, dataToDisplay));
+        } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -537,18 +572,29 @@ class GetScreeningsOfferCommand implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("TEST command");
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create(apiURL))
+                .uri(URI.create(apiURL+"/api/screenings"))
                 .build();
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        }  catch (java.net.ConnectException e){
+            List<Screening> screenings = mapper.readValue(response.body(), new TypeReference<List<Screening>>() {});
+            String[][] moviesToDisplay = screenings.stream().map(screening -> {
+                String[] data = new String[5];
+                data[0] = String.valueOf(screening.getId());
+                data[1] = screening.getDate().toString();
+                data[2] = screening.getTicketCost().toString();
+                data[3] = screening.getMovie().getTitle();
+                data[4] = screening.getMovie().getAuthor();
+                return data;
+            }).toArray(size -> new String[size][5]);
+            System.out.println(FlipTable.of(new String[]{"id", "date", "ticket cost", "title", "author"}, moviesToDisplay));
+        } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -563,11 +609,10 @@ class GetScreeningsOfferCommand implements Runnable {
         name = "get-movies-offer"
 )
 class GetMoviesOfferCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    private static final String apiURL = "http://localhost:8080/api/movies";
 
     @Override
     public void run() {
-        System.out.println("TEST command");
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -576,16 +621,26 @@ class GetMoviesOfferCommand implements Runnable {
                 .build();
 
         try {
+            ObjectMapper mapper = new ObjectMapper();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        }  catch (java.net.ConnectException e){
+            List<Movie> movies = mapper.readValue(response.body(), new TypeReference<List<Movie>>() {});
+            String[][] usersToDisplay = movies.stream().map(movie -> {
+                String[] data = new String[4];
+                data[0] = String.valueOf(movie.getId());
+                data[1] = movie.getTitle();
+                data[2] = movie.getAuthor();
+                data[3] = movie.getDescription();
+                return data;
+            }).toArray(size -> new String[size][4]);
+            System.out.println(FlipTable.of(new String[]{"id", "title", "author", "description"}, usersToDisplay));
+        } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
 /*##########################################################################################*/

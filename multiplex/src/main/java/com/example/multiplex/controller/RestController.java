@@ -24,6 +24,7 @@ public class RestController {
     @Autowired
     public RestController(MultiplexRepository repository) {
         this.repository = repository;
+
     }
 
 
@@ -75,6 +76,10 @@ public class RestController {
     @GetMapping("reservations/forUser/{id}")
     public Set<Reservation> getReservationsForUser(@PathVariable long id) throws ResourceNotFoundException {
         return this.repository.getReservationsForUser(id);
+    }
+    @GetMapping("reservations/forUserWithTitle/{id}")
+    public Set<Reservation> getReservationsForUserWithTitle(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.getReservationsForUserWithTitle(id);
     }
 
     @GetMapping("reservations/forUser/{id}/total")

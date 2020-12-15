@@ -15,5 +15,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
                     "inner join movies m on s.movie_id = m.id " +
                     "where s.date > :now",
             nativeQuery = true)
+//    @Query( value = "select m from Movie m join ")
     List<Movie> getMoviesOnOffer(@Param("now") Date now);
+
 }

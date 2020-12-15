@@ -1,6 +1,7 @@
 package Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 //@JsonIgnoreProperties({"seat"})
 
@@ -42,11 +43,14 @@ public class Reservation {
 //    public void setSeat(Seat seat) { this.seat = seat; }
     public void setSeat(String seatInput) {
         this.seat = new Seat();
-        String[] props = seatInput.split(",");
-        this.seat.setRowNumber(Integer.valueOf(props[0].split(":")[1].substring(1)));
-        this.seat.setSeatNumber(Integer.valueOf(props[1].split(":")[1].substring(1)));
-        System.out.println("row" + this.seat.getSeatNumber());
 
+        try {
+            String[] props = seatInput.split(",");
+            this.seat.setRowNumber(Integer.valueOf(props[0].split(":")[1].substring(1)));
+            this.seat.setSeatNumber(Integer.valueOf(props[1].split(":")[1].substring(1)));
+        }catch(NumberFormatException e){
+            System.out.println("couldn't set proper seat number");
+        }
 
     }
 
