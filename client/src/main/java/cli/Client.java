@@ -186,7 +186,7 @@ class AddMovieCommand implements Runnable {
 }
 
 @Command(
-        name = "add-reservations"
+        name = "add-reservation"
 )
 class AddReservationsCommand implements Runnable{
     private static final String apiURL = "http://localhost:8080/api/reservations";
@@ -228,7 +228,7 @@ class AddReservationsCommand implements Runnable{
 }
 
 @Command(
-        name = "add-seats"
+        name = "add-seat"
 )
 
 class AddSeatCommand implements Runnable{
@@ -315,7 +315,7 @@ class AddScreeningCommand implements Runnable{
     }
 }
 
-/*#####################################################################*/
+
 @Command(
         name = "get-user-by-id"
 )
@@ -487,7 +487,7 @@ class SumSingleReservationCostCommand implements Runnable {
         }
     }
 }
-
+/*#####################################################################*/
 @Command(
         name = "all-reservations-cost"
 )
@@ -732,12 +732,6 @@ TODO: proper exception handling
 /*
 TODO: (funkcje użytkownika) ->
     {
-       ##wyświetlanie swoich rezerwacji;
-       !!!podliczanie swoich rezerwacji;
-       ##wyświetlanie rezerwacji na danych film;
-       !!wyświetlanie pustych miejsc na film;
-       ##wyświetlanie aktualnej listy seansów/filmów;
-
        wyświetlanie listy seansów od najbardziej zapełnionych do najmniej;
        wyświetlanie listy najbardziej aktywnych klientów;
        wyświetlanie proponowanych filmów dla siebie
