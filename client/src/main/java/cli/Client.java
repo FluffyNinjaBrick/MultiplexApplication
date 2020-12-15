@@ -399,7 +399,7 @@ class DeleteUserCommand implements Runnable {
         name = "get-user-reservations"
 )
 class GetUserReservationsCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080";
+    private static final String apiURL = "http://localhost:8080/api";
     @Parameters(index = "0", description = "userId")
     private long userId;
     @Override
@@ -411,24 +411,34 @@ class GetUserReservationsCommand implements Runnable {
                 .header("accept", "application/json")
                 .uri(URI.create(apiURL+"/reservations/forUser/"+this.userId))
                 .build();
-
+        HttpRequest requestScreening = HttpRequest.newBuilder()
+                .GET()
+                .header("accept", "application/json")
+                .uri(URI.create(apiURL+"/screenings"))
+                .build();
         try {
             ObjectMapper mapper = new ObjectMapper();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> responseScreening = client.send(requestScreening, HttpResponse.BodyHandlers.ofString());
+            List<Screening> screenings = mapper.readValue(responseScreening.body(), new TypeReference<List<Screening>>(){});
             List<Reservation> reservations = mapper.readValue(response.body(), new TypeReference<List<Reservation>>() {});
             String[][] dataToDisplay = reservations.stream().map(res -> {
-                String[] data = new String[4];
+                Screening scr = screenings.stream().filter((screening -> {
+                    return screening.getId() == res.getScreening();
+                })).findFirst().get();
+                String[] data = new String[7];
                 data[0] = String.valueOf(res.getId());
+                data[1] = scr.getDate().toString();
+                data[2] = scr.getMovie().getTitle();
+                data[3] = scr.getMovie().getAuthor();
+                data[4] = scr.getTicketCost().toString();
+                data[5] = String.valueOf(scr.getScreeningRoom());
+                data[6] = res.getSeat();
 
-                HttpRequest request_screening = HttpRequest.newBuilder()
-                        .GET()
-                        .header("accept", "application/json")
-                        .uri(URI.create(apiURL+"/screening"))
-                        .build();
                 return data;
             }).toArray(size -> new String[size][2]);
-            System.out.println(FlipTable.of(new String[]{"row", "seat"}, dataToDisplay));
+            System.out.println(FlipTable.of(new String[]{"ID", "date", "movie title", "movie author", "ticket cost", "screening room", "seat"}, dataToDisplay));
         } catch (java.net.ConnectException e){
             System.out.println("ERROR: Couldn't connect with server.");
         } catch (IOException e) {
