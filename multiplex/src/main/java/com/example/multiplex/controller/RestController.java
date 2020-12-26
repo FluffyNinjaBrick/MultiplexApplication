@@ -2,12 +2,16 @@ package com.example.multiplex.controller;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
-import com.example.multiplex.model.util.AddScreeningHelper;
-import com.example.multiplex.model.util.AddSeatHelper;
-import com.example.multiplex.model.util.ReservationRequest;
+import com.example.multiplex.model.util.*;
 import com.example.multiplex.repository.*;
+import com.example.multiplex.security.JwtUtil;
+import com.example.multiplex.security.MultiplexUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,9 +25,16 @@ public class RestController {
 
     private final MultiplexRepository repository;
 
+    private final AuthenticationManager authManager;
+    private final MultiplexUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
+
     @Autowired
-    public RestController(MultiplexRepository repository) {
+    public RestController(MultiplexRepository repository, AuthenticationManager authManager, MultiplexUserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.repository = repository;
+        this.authManager = authManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
     }
 
     // ---------- AUTH TEST ----------
@@ -41,6 +52,24 @@ public class RestController {
     @GetMapping("/user")
     public String homeUser() {
         return "<h1>Welcome user<h1>";
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
+        try {
+            authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(authRequest.getUsername());
+
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
     // ---------- USER ---------- //
