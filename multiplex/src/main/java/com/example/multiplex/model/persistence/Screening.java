@@ -50,6 +50,9 @@ public class Screening {
     public Integer getTicketCost() { return ticketCost; }
     public void setTicketCost(Integer ticketCost) { this.ticketCost = ticketCost; }
 
+    public Date getDate() { return date; }
+    public void setDate(Date date) { this.date = date; }
+
     public Movie getMovie() { return movie; }
     public void setMovie(Movie movie) { this.movie = movie; }
 

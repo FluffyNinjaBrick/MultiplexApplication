@@ -1,8 +1,9 @@
 package Model;
 
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Set;
 public class User {
 
 
@@ -19,6 +20,11 @@ public class User {
     public User() {
         super();
     }
+    public User(int id) {
+        super();
+        this.id = id;
+    }
+
 
 
 
@@ -41,6 +47,7 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
     @Override

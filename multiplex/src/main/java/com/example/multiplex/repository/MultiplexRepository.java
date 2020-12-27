@@ -10,6 +10,7 @@ import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -135,7 +136,13 @@ public class MultiplexRepository implements IMultiplexRepository {
                 .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + userID));
         return user.getReservations();
     }
-
+    public Set<Reservation> getReservationsForUserWithTitle(long userID) throws ResourceNotFoundException {
+        User user = this.userRepository.getUserReservationsWithTitle(userID);
+//        user.getReservations().forEach((r) -> {
+//            System.out.println(r.getScreening().getMovie())
+//        });
+        return user.getReservations();
+    }
 
     // ----------- SEAT -----------
     @Override
@@ -202,7 +209,10 @@ public class MultiplexRepository implements IMultiplexRepository {
     public Movie addMovie(Movie movie) {
         return this.movieRepository.save(movie);
     }
-
+    @Override
+    public List<Screening> getScreeningsOnOffer() {
+        return this.screeningRepository.getScreeningsOnOffer(new Date());
+    }
     private Movie getMovieByTitle(String title) throws ResourceNotFoundException {
         Movie movie = null;
 
@@ -216,20 +226,24 @@ public class MultiplexRepository implements IMultiplexRepository {
         if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
         return movie;
     }
+    @Override
+    public List<Movie> getMoviesOnOffer() {
+        return this.movieRepository.getMoviesOnOffer(new Date());
+    }
     public void myFunction(){
 //        User user = this.userRepository.myFunction("pop");
 //        System.out.println(user.getEmail());
     }
 
 
-    public Integer calculateReservation(int screening_id, int user_id){
+    public Integer calculateReservation(long screening_id, long user_id){
         return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
     }
 
-    public Integer calculateAllReservations(int user_id){
+    public Integer calculateAllReservations(long user_id){
         return this.reservationRepository.calculateTotalReservationCost(user_id);
     }
-    public List<Seat> showSeats(int screening_id){
+    public List<Seat> showEmptySeatsForScreening(long screening_id){
         return this.seatRepository.showEmptySeats(screening_id);
     }
 
