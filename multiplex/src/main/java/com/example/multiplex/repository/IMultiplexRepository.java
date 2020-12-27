@@ -14,6 +14,7 @@ public interface IMultiplexRepository {
     // ----------- USER -----------
     List<User> getAllUsers();
     User getUserByID(long userID) throws ResourceNotFoundException;
+    User getUserByUsername(String username) throws ResourceNotFoundException;
     User addUser(User user);
     void deleteUserByID(long userID) throws ResourceNotFoundException;
 

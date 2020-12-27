@@ -1,6 +1,10 @@
 package com.example.multiplex.security;
 
+import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.User;
+import com.example.multiplex.repository.MultiplexRepository;
+import com.example.multiplex.repository.jpaRepos.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +19,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class MultiplexUserDetailsService implements UserDetailsService {
 
+    @Autowired
+    private MultiplexRepository repository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User("Test", "Teston", "test@test.com", "test", "123");
+        try {
+            UserDetails userDetails = this.repository.getUserByUsername(username);
+            return userDetails;
+        } catch (ResourceNotFoundException e) {
+            throw new UsernameNotFoundException(e.getMessage());
+        }
     }
 }

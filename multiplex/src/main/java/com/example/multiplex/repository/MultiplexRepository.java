@@ -51,6 +51,13 @@ public class MultiplexRepository implements IMultiplexRepository {
     }
 
     @Override
+    public User getUserByUsername(String username) throws ResourceNotFoundException {
+        List<User> allUsers = this.getAllUsers();
+        for (User u: allUsers) if (u.getUsername().equals(username)) return u;
+        throw new ResourceNotFoundException("No user exists with username " + username);
+    }
+
+    @Override
     public User addUser(User user) {
         return this.userRepository.save(user);
     }

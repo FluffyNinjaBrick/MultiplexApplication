@@ -72,26 +72,19 @@ public class RestController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
-    // ---------- USER ---------- //
-
-    @GetMapping("/users")
+    // ------------------------------ USER ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @GetMapping("/admin/users")
     public List<User> getAllUsers() {
         return this.repository.getAllUsers();
-
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException{
-       User user = this.repository.getUserByID(id);
-       return ResponseEntity.ok().body(user);
-    }
-
-    @PostMapping("/users")
+    @PostMapping("/admin/users")
     public User createUser(@RequestBody User user) {
         return this.repository.addUser(user);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable long id) throws ResourceNotFoundException {
 
         this.repository.deleteUserByID(id);
@@ -101,45 +94,57 @@ public class RestController {
         return response;
     }
 
+    // ---------- user-available ---------- //
+    // TODO - figure out a way so that a user can only query his own information
+    @GetMapping("user/users/{id}")
+    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException{
+       User user = this.repository.getUserByID(id);
+       return ResponseEntity.ok().body(user);
+    }
 
-    // ---------- SCREENING ROOM ---------- //
 
-    @PostMapping("/rooms")
+    // ------------------------------ SCREENING ROOM ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/rooms")
     public ScreeningRoom createScreeningRoom(@RequestBody ScreeningRoom room) {
         return this.repository.addRoom(room);
     }
 
 
-    // ---------- RESERVATION ---------- //
-
-    @PostMapping("/reservations")
+    // ------------------------------ RESERVATION ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
         return this.repository.addReservation(request);
     }
 
-    @GetMapping("reservations/forUser/{id}")
+    // ---------- user-available ---------- //
+    // TODO - figure out a way so that a user can only query his own information
+    @GetMapping("/user/reservations/forUser/{id}")
     public Set<Reservation> getReservationsForUser(@PathVariable long id) throws ResourceNotFoundException {
         return this.repository.getReservationsForUser(id);
     }
 
 
-    // ---------- SEAT ---------- //
-
-    @PostMapping("/seats")
+    // ------------------------------ SEAT ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
         return this.repository.addSeat(helper);
     }
 
 
-    // ---------- SCREENING ---------- //
-
-    @PostMapping("/screenings")
+    // ------------------------------ SCREENING ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/screenings")
     public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
         return this.repository.addScreening(helper);
     }
 
-    // ---------- MOVIE ---------- //
-    @PostMapping("/movies")
+
+    // ------------------------------ MOVIE ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/movies")
     public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
 
 }

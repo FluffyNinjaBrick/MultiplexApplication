@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private Set<Reservation> reservations;
 
     // ----------- many to many -----------
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "User_Roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -59,6 +59,10 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     // ------------- GETTERS AND SETTERS ------------- //
     // note: these might occasionally return IDs, not the actual structure.
     //       This is done to avoid infinite recursion in http responses.
@@ -76,6 +80,9 @@ public class User implements UserDetails {
 
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
+
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
 
 
     // ------------- SPRING SECURITY ------------- //
