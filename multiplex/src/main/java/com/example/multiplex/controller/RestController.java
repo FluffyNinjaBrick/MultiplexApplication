@@ -97,9 +97,10 @@ public class RestController {
        return ResponseEntity.ok().body(user);
     }
 
+    // ---------- open ---------- //
     // a user without an account must be able to register, so this is unprotected
     @PostMapping("/users")
-    public User createUser(@RequestBody AddUserHelper helper) {
+    public User addUser(@RequestBody AddUserHelper helper) {
         return this.repository.addUser(helper);
     }
 
@@ -107,7 +108,7 @@ public class RestController {
     // ------------------------------ SCREENING ROOM ------------------------------ //
     // ---------- admin-restricted ---------- //
     @PostMapping("/admin/rooms")
-    public ScreeningRoom createScreeningRoom(@RequestBody ScreeningRoom room) {
+    public ScreeningRoom addScreeningRoom(@RequestBody ScreeningRoom room) {
         return this.repository.addRoom(room);
     }
 
@@ -115,7 +116,7 @@ public class RestController {
     // ------------------------------ RESERVATION ------------------------------ //
     // ---------- admin-restricted ---------- //
     @PostMapping("/admin/reservations")
-    public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
+    public Reservation addReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
         return this.repository.addReservation(request);
     }
 
@@ -126,26 +127,59 @@ public class RestController {
         return this.repository.getReservationsForUser(id);
     }
 
+    @GetMapping("/user/reservations/cost/forUser/{id}")
+    public Integer sumReservationsForUser(@PathVariable long id) {
+        return this.repository.calculateAllReservations(id);
+    }
+
+    @GetMapping("/user/reservations/cost/forUser/{userId}/forScreening/{screeningId}")
+    public Integer sumReservationsForUserAndScreening(@PathVariable long userId, @PathVariable long screeningId) {
+        return this.repository.calculateReservation(screeningId, userId);
+    }
+
 
     // ------------------------------ SEAT ------------------------------ //
     // ---------- admin-restricted ---------- //
     @PostMapping("/admin/seats")
-    public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
+    public Seat addSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
         return this.repository.addSeat(helper);
+    }
+
+    // ---------- user-available ---------- //
+    @GetMapping("/user/seats/{id}")
+    public List<Seat> getFreeSeatsForScreening(@PathVariable long id) {
+        return this.repository.showEmptySeatsForScreening(id);
     }
 
 
     // ------------------------------ SCREENING ------------------------------ //
     // ---------- admin-restricted ---------- //
     @PostMapping("/admin/screenings")
-    public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+    public Screening addScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
         return this.repository.addScreening(helper);
+    }
+
+    // ---------- open ---------- //
+    @GetMapping("/screenings")
+    public List<Screening> getScreeningsOnOffer() {
+        return this.repository.getScreeningsOnOffer();
     }
 
 
     // ------------------------------ MOVIE ------------------------------ //
     // ---------- admin-restricted ---------- //
     @PostMapping("/admin/movies")
-    public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
+    public Movie addMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
+
+    // ---------- open ---------- //
+    @GetMapping("/movies")
+    public List<Movie> getMoviesOnOffer() {
+        return this.repository.getMoviesOnOffer();
+    }
+
+    @GetMapping("/movies/{id}")
+    public Movie getMovieDetails(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.getMovieByID(id);
+    }
 
 }
