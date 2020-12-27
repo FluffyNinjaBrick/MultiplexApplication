@@ -5,16 +5,16 @@ import java.util.Date;
 public class AddScreeningHelper {
     private Integer ticketCost;
     private Date date;
-    private long movieID;
-    private long roomID;
+    private String movieTitle;
+    private String roomNumber;
 
     public AddScreeningHelper() { super(); }
 
-    public AddScreeningHelper(Integer ticketCost, Date date, long movieID, long roomID) {
+    public AddScreeningHelper(Integer ticketCost, Date date, String movieTitle, String roomNumber) {
         this.ticketCost = ticketCost;
         this.date = date;
-        this.movieID = movieID;
-        this.roomID = roomID;
+        this.movieTitle = movieTitle;
+        this.roomNumber = roomNumber;
     }
 
 
@@ -26,10 +26,10 @@ public class AddScreeningHelper {
     public Date getDate() { return date; }
     public void setDate(Date date) { this.date = date; }
 
-    public long getMovieID() { return movieID; }
-    public void setMovieID(long movieID) { this.movieID = movieID; }
+    public String getMovieTitle() { return movieTitle; }
+    public void setMovieTitle(String movieTitle) { this.movieTitle = movieTitle; }
 
-    public long getRoomID() { return roomID; }
-    public void setRoomID(long roomID) { this.roomID = roomID; }
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
 
 }

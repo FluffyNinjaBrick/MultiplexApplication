@@ -37,9 +37,15 @@ public class Seat {
 
 
     // ------------- GETTERS AND SETTERS ------------- //
+    // note: these might occasionally return IDs, not the actual structure.
+    //       This is done to avoid infinite recursion in http responses.
     public Integer getSeatNumber() { return seatNumber; }
     public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
 
     public Integer getRowNumber() { return rowNumber; }
     public void setRowNumber(Integer rowNumber) { this.rowNumber = rowNumber; }
+
+    public long getScreeningRoom() { return screeningRoom.getId(); }
+
+    public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
 }

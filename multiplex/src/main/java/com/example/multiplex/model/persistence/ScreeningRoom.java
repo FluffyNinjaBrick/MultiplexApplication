@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "ScreeningRooms")
+@Table(name = "Screening_Rooms")
 public class ScreeningRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,8 @@ public class ScreeningRoom {
     }
 
     // ------------- GETTERS AND SETTERS ------------- //
+    // note: these might occasionally return IDs, not the actual structure.
+    //       This is done to avoid infinite recursion in http responses.
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

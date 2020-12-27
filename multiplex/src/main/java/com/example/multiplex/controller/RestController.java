@@ -24,6 +24,7 @@ public class RestController {
     @Autowired
     public RestController(MultiplexRepository repository) {
         this.repository = repository;
+
     }
 
 
@@ -32,6 +33,7 @@ public class RestController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return this.repository.getAllUsers();
+
     }
 
     @GetMapping("/users/{id}")
@@ -68,21 +70,26 @@ public class RestController {
 
     @PostMapping("/reservations")
     public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
-
-        User user = this.repository.getUserByID(request.getUserId());
-
-        Seat seat = this.repository.getSeatByID(request.getSeatId());
-
-        Screening screening = this.repository.getScreeningByID(request.getScreeningId());
-
-        Reservation reservation = new Reservation(user, seat, screening);
-
-        return this.repository.addReservation(reservation);
+        return this.repository.addReservation(request);
     }
 
     @GetMapping("reservations/forUser/{id}")
     public Set<Reservation> getReservationsForUser(@PathVariable long id) throws ResourceNotFoundException {
         return this.repository.getReservationsForUser(id);
+    }
+    @GetMapping("reservations/forUserWithTitle/{id}")
+    public Set<Reservation> getReservationsForUserWithTitle(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.getReservationsForUserWithTitle(id);
+    }
+
+    @GetMapping("reservations/forUser/{id}/total")
+    public Integer sumReservationCostForUser(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.calculateAllReservations(id);
+    }
+
+    @GetMapping("reservations/forUser/{userId}/forScreening/{screeningId}")
+    public Integer sumReservationCostForUserAndScreening(@PathVariable long userId, @PathVariable long screeningId) {
+        return this.repository.calculateReservation(userId, screeningId);
     }
 
 
@@ -90,29 +97,34 @@ public class RestController {
 
     @PostMapping("/seats")
     public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
+        return this.repository.addSeat(helper);
+    }
 
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
-        return this.repository.addSeat(seat);
+    @GetMapping("seats/forScreening/{id}")
+    public List<Seat> showEmptySeatsForScreening(@PathVariable long id) {
+        return this.repository.showEmptySeatsForScreening(id);
     }
 
 
     // ---------- SCREENING ---------- //
 
     @PostMapping("/screenings")
-    public Screening createScreeningRoom(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+    public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+        return this.repository.addScreening(helper);
+    }
 
-        ScreeningRoom room = this.repository.getRoomByID(helper.getRoomID());
-
-        Movie movie = this.repository.getMovieByID(helper.getMovieID());
-
-        Screening screening = new Screening(helper.getTicketCost(), helper.getDate(), movie, room);
-        return this.repository.addScreening(screening);
+    @GetMapping("/screenings")
+    public List<Screening> getScreeningsOnOffer() {
+        return this.repository.getScreeningsOnOffer();
     }
 
     // ---------- MOVIE ---------- //
     @PostMapping("/movies")
     public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
+
+    @GetMapping("/movies")
+    public List<Movie> getMoviesOnOffer() {
+        return this.repository.getMoviesOnOffer();
+    }
 
 }
