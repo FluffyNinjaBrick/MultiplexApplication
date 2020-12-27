@@ -1,9 +1,7 @@
 package com.example.multiplex.security;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
-import com.example.multiplex.model.persistence.User;
 import com.example.multiplex.repository.MultiplexRepository;
-import com.example.multiplex.repository.jpaRepos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

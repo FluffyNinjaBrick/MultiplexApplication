@@ -79,11 +79,6 @@ public class RestController {
         return this.repository.getAllUsers();
     }
 
-    @PostMapping("/admin/users")
-    public User createUser(@RequestBody User user) {
-        return this.repository.addUser(user);
-    }
-
     @DeleteMapping("/admin/users/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable long id) throws ResourceNotFoundException {
 
@@ -97,9 +92,15 @@ public class RestController {
     // ---------- user-available ---------- //
     // TODO - figure out a way so that a user can only query his own information
     @GetMapping("user/users/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException{
+    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException {
        User user = this.repository.getUserByID(id);
        return ResponseEntity.ok().body(user);
+    }
+
+    // a user without an account must be able to register, so this is unprotected
+    @PostMapping("/users")
+    public User createUser(@RequestBody AddUserHelper helper) {
+        return this.repository.addUser(helper);
     }
 
 

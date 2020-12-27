@@ -4,12 +4,14 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.AddUserHelper;
 import com.example.multiplex.model.util.ReservationRequest;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository("HibernateRepository")
@@ -21,19 +23,21 @@ public class MultiplexRepository implements IMultiplexRepository {
     private final SeatRepository seatRepository;
     private final ScreeningRepository screeningRepository;
     private final MovieRepository movieRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public MultiplexRepository(UserRepository userRepository,
                                ScreeningRoomRepository roomRepository,
                                ReservationRepository reservationRepository,
                                SeatRepository seatRepository,
-                               ScreeningRepository screeningRepository, MovieRepository movieRepository) {
+                               ScreeningRepository screeningRepository, MovieRepository movieRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
         this.reservationRepository = reservationRepository;
         this.seatRepository = seatRepository;
         this.screeningRepository = screeningRepository;
         this.movieRepository = movieRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -58,7 +62,15 @@ public class MultiplexRepository implements IMultiplexRepository {
     }
 
     @Override
-    public User addUser(User user) {
+    public User addUser(AddUserHelper helper) {
+        User user = new User(
+                helper.getFirstName(),
+                helper.getLastName(),
+                helper.getEmail(),
+                helper.getUsername(),
+                helper.getPassword()
+        );
+        user.addRole(this.roleRepository.findById("USER").get());
         return this.userRepository.save(user);
     }
 

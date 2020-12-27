@@ -4,6 +4,7 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.AddUserHelper;
 import com.example.multiplex.model.util.ReservationRequest;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface IMultiplexRepository {
     List<User> getAllUsers();
     User getUserByID(long userID) throws ResourceNotFoundException;
     User getUserByUsername(String username) throws ResourceNotFoundException;
-    User addUser(User user);
+    User addUser(AddUserHelper helper);
     void deleteUserByID(long userID) throws ResourceNotFoundException;
 
 
