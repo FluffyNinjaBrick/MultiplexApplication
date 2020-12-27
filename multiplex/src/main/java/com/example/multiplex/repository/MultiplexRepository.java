@@ -135,6 +135,18 @@ public class MultiplexRepository implements IMultiplexRepository {
                 .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + userID));
         return user.getReservations();
     }
+
+    @Override
+    public Integer calculateReservation(long screening_id, long user_id) {
+        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
+    }
+
+    @Override
+    public Integer calculateAllReservations(long user_id){
+        return this.reservationRepository.calculateTotalReservationCost(user_id);
+    }
+
+    // guys, what is this?
     public Set<Reservation> getReservationsForUserWithTitle(long userID) throws ResourceNotFoundException {
         User user = this.userRepository.getUserReservationsWithTitle(userID);
 //        user.getReservations().forEach((r) -> {
@@ -160,6 +172,11 @@ public class MultiplexRepository implements IMultiplexRepository {
         ScreeningRoom room = this.getRoomByNumber(helper.getRoomNumber());
         Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
         return this.seatRepository.save(seat);
+    }
+
+    @Override
+    public List<Seat> showEmptySeatsForScreening(long screening_id){
+        return this.seatRepository.showEmptySeats(screening_id);
     }
 
     private Seat getSeatByNumRowRoom(int number, int row, long roomID) throws ResourceNotFoundException {
@@ -225,25 +242,10 @@ public class MultiplexRepository implements IMultiplexRepository {
         if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
         return movie;
     }
+
     @Override
     public List<Movie> getMoviesOnOffer() {
         return this.movieRepository.getMoviesOnOffer(new Date());
-    }
-    public void myFunction(){
-//        User user = this.userRepository.myFunction("pop");
-//        System.out.println(user.getEmail());
-    }
-
-
-    public Integer calculateReservation(long screening_id, long user_id){
-        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
-    }
-
-    public Integer calculateAllReservations(long user_id){
-        return this.reservationRepository.calculateTotalReservationCost(user_id);
-    }
-    public List<Seat> showEmptySeatsForScreening(long screening_id){
-        return this.seatRepository.showEmptySeats(screening_id);
     }
 
 }

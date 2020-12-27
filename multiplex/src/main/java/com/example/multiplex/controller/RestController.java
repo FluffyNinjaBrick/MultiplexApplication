@@ -57,6 +57,7 @@ public class RestController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+
     // ------------------------------ USER ------------------------------ //
     // ---------- admin-restricted ---------- //
     @GetMapping("/admin/users")

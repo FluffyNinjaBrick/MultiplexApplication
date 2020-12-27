@@ -32,11 +32,13 @@ public interface IMultiplexRepository {
     Integer calculateReservation(long screening_id, long user_id);
     Integer calculateAllReservations(long user_id) throws ResourceNotFoundException;
 
+
     // ----------- SEAT -----------
     Seat getSeatByID(long seatID) throws ResourceNotFoundException;
     Seat addSeat(Seat seat);
     Seat addSeat(AddSeatHelper helper) throws ResourceNotFoundException;
     List<Seat> showEmptySeatsForScreening(long screening_id);
+
 
     // ----------- SCREENING -----------
     Screening getScreeningByID(long screeningID) throws ResourceNotFoundException;
@@ -49,4 +51,5 @@ public interface IMultiplexRepository {
     Movie getMovieByID(long movieID) throws ResourceNotFoundException;
     Movie addMovie(Movie movie);
     List<Movie> getMoviesOnOffer();
+
 }

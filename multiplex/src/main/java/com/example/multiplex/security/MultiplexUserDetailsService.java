@@ -8,12 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * This is a mock user supplier. It will need to be replaced with an actual supplier
- * that uses the database.
- *
- * This class is used in the REST controller and in the filter.
- */
+// This class supplies Security with user information
 @Service
 public class MultiplexUserDetailsService implements UserDetailsService {
 
