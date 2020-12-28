@@ -77,7 +77,7 @@ public class RestController {
 
     // ---------- user-available ---------- //
     // TODO - figure out a way so that a user can only query his own information
-    @GetMapping("user/users/{id}")
+    @GetMapping("/user/users/{id}")
     public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException {
        User user = this.repository.getUserByID(id);
        return ResponseEntity.ok().body(user);
