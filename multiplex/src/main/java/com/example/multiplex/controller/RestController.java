@@ -101,7 +101,7 @@ public class RestController {
 
     // ------------------------------ RESERVATION ------------------------------ //
     // ---------- admin-restricted ---------- //
-    @PostMapping("/admin/reservations")
+    @PostMapping("/reservations")
     public Reservation addReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
         return this.repository.addReservation(request);
     }
