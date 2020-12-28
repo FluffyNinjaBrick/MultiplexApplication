@@ -2,12 +2,16 @@ package com.example.multiplex.controller;
 
 import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
-import com.example.multiplex.model.util.AddScreeningHelper;
-import com.example.multiplex.model.util.AddSeatHelper;
-import com.example.multiplex.model.util.ReservationRequest;
+import com.example.multiplex.model.util.*;
 import com.example.multiplex.repository.*;
+import com.example.multiplex.security.JwtUtil;
+import com.example.multiplex.security.MultiplexUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,33 +25,47 @@ public class RestController {
 
     private final MultiplexRepository repository;
 
-    @Autowired
-    public RestController(MultiplexRepository repository) {
-        this.repository = repository;
+    private final AuthenticationManager authManager;
+    private final MultiplexUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
+    @Autowired
+    public RestController(MultiplexRepository repository, AuthenticationManager authManager, MultiplexUserDetailsService userDetailsService, JwtUtil jwtUtil) {
+        this.repository = repository;
+        this.authManager = authManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
+
+    // ------------------------------ AUTH ------------------------------
+    // ---------- open ---------- //
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
+        try {
+            authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(authRequest.getUsername());
+
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
 
-    // ---------- USER ---------- //
-
-    @GetMapping("/users")
+    // ------------------------------ USER ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @GetMapping("/admin/users")
     public List<User> getAllUsers() {
         return this.repository.getAllUsers();
-
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException{
-       User user = this.repository.getUserByID(id);
-       return ResponseEntity.ok().body(user);
-    }
-
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        return this.repository.addUser(user);
-    }
-
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable long id) throws ResourceNotFoundException {
 
         this.repository.deleteUserByID(id);
@@ -57,74 +75,97 @@ public class RestController {
         return response;
     }
 
+    // ---------- user-available ---------- //
+    // TODO - figure out a way so that a user can only query his own information
+    @GetMapping("/user/users/{id}")
+    public ResponseEntity<User> getUserByID(@PathVariable long id) throws ResourceNotFoundException {
+       User user = this.repository.getUserByID(id);
+       return ResponseEntity.ok().body(user);
+    }
 
-    // ---------- SCREENING ROOM ---------- //
+    // ---------- open ---------- //
+    // a user without an account must be able to register, so this is unprotected
+    @PostMapping("/users")
+    public User addUser(@RequestBody AddUserHelper helper) {
+        return this.repository.addUser(helper);
+    }
 
-    @PostMapping("/rooms")
-    public ScreeningRoom createScreeningRoom(@RequestBody ScreeningRoom room) {
+
+    // ------------------------------ SCREENING ROOM ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/rooms")
+    public ScreeningRoom addScreeningRoom(@RequestBody ScreeningRoom room) {
         return this.repository.addRoom(room);
     }
 
 
-    // ---------- RESERVATION ---------- //
-
-    @PostMapping("/reservations")
-    public Reservation createReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
+    // ------------------------------ RESERVATION ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/reservations")
+    public Reservation addReservation(@RequestBody ReservationRequest request) throws ResourceNotFoundException {
         return this.repository.addReservation(request);
     }
 
-    @GetMapping("reservations/forUser/{id}")
+    // ---------- user-available ---------- //
+    // TODO - figure out a way so that a user can only query his own information
+    @GetMapping("/user/reservations/forUser/{id}")
     public Set<Reservation> getReservationsForUser(@PathVariable long id) throws ResourceNotFoundException {
         return this.repository.getReservationsForUser(id);
     }
-    @GetMapping("reservations/forUserWithTitle/{id}")
-    public Set<Reservation> getReservationsForUserWithTitle(@PathVariable long id) throws ResourceNotFoundException {
-        return this.repository.getReservationsForUserWithTitle(id);
-    }
 
-    @GetMapping("reservations/forUser/{id}/total")
-    public Integer sumReservationCostForUser(@PathVariable long id) throws ResourceNotFoundException {
+    @GetMapping("/user/reservations/cost/forUser/{id}")
+    public Integer sumReservationsForUser(@PathVariable long id) {
         return this.repository.calculateAllReservations(id);
     }
 
-    @GetMapping("reservations/forUser/{userId}/forScreening/{screeningId}")
-    public Integer sumReservationCostForUserAndScreening(@PathVariable long userId, @PathVariable long screeningId) {
-        return this.repository.calculateReservation(userId, screeningId);
+    @GetMapping("/user/reservations/cost/forUser/{userId}/forScreening/{screeningId}")
+    public Integer sumReservationsForUserAndScreening(@PathVariable long userId, @PathVariable long screeningId) {
+        return this.repository.calculateReservation(screeningId, userId);
     }
 
 
-    // ---------- SEAT ---------- //
-
-    @PostMapping("/seats")
-    public Seat createSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
+    // ------------------------------ SEAT ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/seats")
+    public Seat addSeat(@RequestBody AddSeatHelper helper) throws ResourceNotFoundException {
         return this.repository.addSeat(helper);
     }
 
-    @GetMapping("seats/forScreening/{id}")
-    public List<Seat> showEmptySeatsForScreening(@PathVariable long id) {
+    // ---------- user-available ---------- //
+    @GetMapping("/user/seats/{id}")
+    public List<Seat> getFreeSeatsForScreening(@PathVariable long id) {
         return this.repository.showEmptySeatsForScreening(id);
     }
 
 
-    // ---------- SCREENING ---------- //
-
-    @PostMapping("/screenings")
-    public Screening createScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
+    // ------------------------------ SCREENING ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/screenings")
+    public Screening addScreening(@RequestBody AddScreeningHelper helper) throws ResourceNotFoundException {
         return this.repository.addScreening(helper);
     }
 
+    // ---------- open ---------- //
     @GetMapping("/screenings")
     public List<Screening> getScreeningsOnOffer() {
         return this.repository.getScreeningsOnOffer();
     }
 
-    // ---------- MOVIE ---------- //
-    @PostMapping("/movies")
-    public Movie createMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
 
+    // ------------------------------ MOVIE ------------------------------ //
+    // ---------- admin-restricted ---------- //
+    @PostMapping("/admin/movies")
+    public Movie addMovie(@RequestBody Movie movie) { return this.repository.addMovie(movie); }
+
+    // ---------- open ---------- //
     @GetMapping("/movies")
     public List<Movie> getMoviesOnOffer() {
         return this.repository.getMoviesOnOffer();
+    }
+
+    @GetMapping("/movies/{id}")
+    public Movie getMovieDetails(@PathVariable long id) throws ResourceNotFoundException {
+        return this.repository.getMovieByID(id);
     }
 
 }
