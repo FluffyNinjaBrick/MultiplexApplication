@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.GUIRawStartController"
+            fx:controller="controller.GUIRawController"
             prefHeight="400.0" prefWidth="600.0">
     <left>
         <VBox alignment="TOP_CENTER" style="-fx-border-color: #ffa500; -fx-background-color: #000000; -fx-border-width: 5px;" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
@@ -28,12 +28,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="getMoviesOfferButton" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Pokaż filmy">
+                <Button fx:id="getMoviesOfferButton" onAction="#handleGetMoviesOfferAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Pokaż filmy">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="getScreeningsOfferButton" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż seanse">
+                <Button fx:id="getScreeningsOfferButton" onAction="#handleGetScreeningsOfferAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż seanse">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
