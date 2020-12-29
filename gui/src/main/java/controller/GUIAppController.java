@@ -55,7 +55,91 @@ public class GUIAppController {
 
     /*###############################  USER SECTION    ########################################################*/
 
-
+    public void userStartLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserStartView.fxml"));
+        showScene(loader);
+    }
+    public void userByIdLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserByIdView.fxml"));
+        showScene(loader);
+    }
+    public void userMoviesLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserMoviesView.fxml"));
+        showScene(loader);
+    }
+    public void userReservationsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserReservationsView.fxml"));
+        showScene(loader);
+    }
+    public void userScreeningsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserScreeningsView.fxml"));
+        showScene(loader);
+    }
+    public void userSeatsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserSeatsView.fxml"));
+        showScene(loader);
+    }
+    public void userSingleReservationCostLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserSingleReservationCostView.fxml"));
+        showScene(loader);
+    }
+    public void userAllReservationsCostLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../user_views/UserAllReservationsView.fxml"));
+        showScene(loader);
+    }
 
     /*###############################  ADMIN SECTION    ########################################################*/
+    public void adminStartLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminStartView.fxml"));
+        showScene(loader);
+    }
+    public void adminUserByIdLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserByIdView.fxml"));
+        showScene(loader);
+    }
+    public void adminMoviesLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminMoviesView.fxml"));
+        showScene(loader);
+    }
+    public void adminUserReservationsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserReservationsView.fxml"));
+        showScene(loader);
+    }
+    public void adminScreeningsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminScreeningsView.fxml"));
+        showScene(loader);
+    }
+    public void adminSeatsLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminSeatsView.fxml"));
+        showScene(loader);
+    }
+    public void adminSingleReservationCostLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminSingleReservationView.fxml"));
+        showScene(loader);
+    }
+    public void adminAllReservationsCostLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminAllReservationsView.fxml"));
+        showScene(loader);
+    }
+    public void adminAllUsersLayout() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUsersView.fxml"));
+        showScene(loader);
+    }
 }
