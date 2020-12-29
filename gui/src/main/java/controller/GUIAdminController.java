@@ -3,10 +3,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import model.Movie;
-import model.Reservation;
-import model.Screening;
-import model.User;
+import model.*;
 
 import java.io.IOException;
 
@@ -39,6 +36,14 @@ public class GUIAdminController implements GUIController{
 
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showAddReservationDialog(reservation)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+    @FXML
+    public void handleAddScreeningRoomAction(ActionEvent actionEvent) throws IOException {
+
+        ScreeningRoom screeningRoom = ScreeningRoom.newScreeningRoom();
+        if(guiAppController.showAddScreeningRoomDialog(screeningRoom)){
             // tu trzeba zrobić dodanie do bazy
         }
     }

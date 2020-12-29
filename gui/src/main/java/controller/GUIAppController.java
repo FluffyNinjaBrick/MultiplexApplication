@@ -40,10 +40,34 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
+    public boolean showAddScreeningRoomDialog(ScreeningRoom screeningRoom) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddScreeningRoomDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Add new screening");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AddScreeningRoomPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(screeningRoom);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean showAddScreeningDialog(Screening screening) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUIAppController.class.getResource("../operations/AddReservationDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddScreeningDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();

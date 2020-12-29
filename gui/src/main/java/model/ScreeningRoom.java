@@ -10,6 +10,7 @@ public class ScreeningRoom {
     private String number;
 
     private Integer floor;
+    private Integer capacity;
 
     private Set<Seat> seats;
 
@@ -36,4 +37,12 @@ public class ScreeningRoom {
 
     public Integer getFloor() { return floor; }
     public void setFloor(Integer floor) { this.floor = floor; }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
 }
