@@ -62,11 +62,11 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
-                </TextField>
+                </PasswordField>
                 <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />

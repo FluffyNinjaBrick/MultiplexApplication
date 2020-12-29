@@ -5,10 +5,6 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import model.User;
 
-import java.awt.*;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import javafx.scene.control.TextField;
 
 public class AddUserPresenter {

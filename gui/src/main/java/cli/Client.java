@@ -711,39 +711,6 @@ class GetMoviesOfferCommand implements Runnable {
 
 /*##########################################################################################*/
 
-@Command(
-        name = "log-in"
-)
-class LogInCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/authenticate";
-
-    @Parameters(index = "0", description = "user Name")
-    private String userName;
-    @Parameters(index = "1", description = "password")
-    private String password;
-    @Override
-    public void run() {
-
-        String request_body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", userName, password);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(request_body))
-                .header("Content-Type", "application/json")
-                .uri(URI.create(apiURL))
-                .build();
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        }  catch (java.net.ConnectException e){
-            System.out.println("ERROR: Couldn't connect with server.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-}
 
 
 /*##########################################################################################*/
