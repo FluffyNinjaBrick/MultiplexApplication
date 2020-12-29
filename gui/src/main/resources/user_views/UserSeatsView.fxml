@@ -6,9 +6,90 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="user_views.UserSeatsView"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="controller.GUIRawStartController"
+            prefHeight="500.0" prefWidth="600.0">
+    <left>
+        <VBox alignment="TOP_CENTER" style="-fx-border-color: #ffa500; -fx-background-color: #000000; -fx-border-width: 5px;" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+            <opaqueInsets>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </opaqueInsets>
+            <children>
+                <Button fx:id="logOutButton" style="-fx-background-color: #ffd700"  alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Wyloguj się">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin></Button>
+                <Button fx:id="addReservationButton" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zrób rezerwację">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="deleteUserButton" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Usuń użytkownika">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
 
-</AnchorPane>
+
+                <Button fx:id="getMoviesOfferButton" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Pokaż filmy">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="getScreeningsOfferButton" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż seanse">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="getUserById" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż użykownika">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="getUserReservations" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż rezerwacje użykownika">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="showEmptySeats" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż wolne miejsca na film">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="sumAllReservations" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz wszystkie rezerwacje">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+                <Button fx:id="sumSingleReservations" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz rezerwację">
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </Button>
+
+            </children>
+            <BorderPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </BorderPane.margin>
+        </VBox>
+    </left>
+
+    <center>
+        <TableView fx:id="moviesTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="room" prefWidth="75.0" text="Numer sali" />
+                <TableColumn fx:id="floor" prefWidth="75.0" text="Piętro" />
+                <TableColumn fx:id="row" prefWidth="75.0" text="Rząd" />
+                <TableColumn fx:id="placeInRow" prefWidth="75.0" text="Numer miejca" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </center>
+</BorderPane>

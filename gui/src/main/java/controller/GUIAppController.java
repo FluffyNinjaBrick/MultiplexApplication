@@ -18,7 +18,7 @@ public class GUIAppController {
             this.primaryStage.setTitle("Multiplex");
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserReservationsView.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../raw_views/RawStartView.fxml"));
             BorderPane rootLayout = (BorderPane) loader.load();
 
 
