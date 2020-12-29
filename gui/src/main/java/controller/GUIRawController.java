@@ -1,11 +1,12 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
+import model.User;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class GUIRawController implements GUIController{
@@ -17,16 +18,16 @@ public class GUIRawController implements GUIController{
     }
 
     @FXML
-    private Button getMoviesOfferButton;
+    public Button getMoviesOfferButton;
 
     @FXML
-    private Button getScreeningsOfferButton;
+    public Button getScreeningsOfferButton;
 
     @FXML
-    private Button logInButton;
+    public Button logInButton;
 
     @FXML
-    private Button addUserButton;
+    public Button addUserButton;
 
     @FXML
     public void handleGetScreeningsOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
@@ -36,5 +37,18 @@ public class GUIRawController implements GUIController{
     @FXML
     public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
         this.guiAppController.rawMoviesLayout();
+    }
+
+    public boolean handleLogInAction(ActionEvent actionEvent) {
+        return false;
+    }
+
+    @FXML
+    public void handleAddUserAction(ActionEvent actionEvent) throws IOException {
+        User user = User.newUser();
+
+        if(guiAppController.showAddUserDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
     }
 }

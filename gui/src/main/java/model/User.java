@@ -17,6 +17,10 @@ public class User {
 
     private String email;
 
+    private String userName;
+
+    private String password;
+
     private Set<Reservation> reservations;
 
     public User() {
@@ -52,6 +56,19 @@ public class User {
 
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
+
+    public String getUserName() {return userName;}
+
+    public void setUserName(String userName) { this.userName = userName; }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
+
+
+    public static final User newUser(){
+        return new User();
+    }
     @Override
     public String toString() {
         return "User{" +

@@ -3,7 +3,10 @@ package controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.User;
+import presenter.AddUserPresenter;
 
 import java.io.IOException;
 
@@ -34,6 +37,35 @@ public class GUIAppController {
         primaryStage.show();
     }
 
+
+
+    /*###############################  DIALOG SECTION    ########################################################*/
+
+
+    public boolean showAddUserDialog(User user) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddUserDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Add new user");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AddUserPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(user);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /*###############################  RAW SECTION    ########################################################*/
 
     public void rawStartLayout(FXMLLoader loader) throws IOException {
@@ -52,7 +84,6 @@ public class GUIAppController {
         loader.setLocation(GUIAppController.class.getResource("../raw_views/RawScreeningsView.fxml"));
         showScene(loader);
     }
-
     /*###############################  USER SECTION    ########################################################*/
 
     public void userStartLayout() throws IOException {
