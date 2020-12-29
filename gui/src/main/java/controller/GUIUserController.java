@@ -45,10 +45,18 @@ public class GUIUserController implements GUIController{
         }
     }
     @FXML
-    public void handleShowEmptySeats(ActionEvent actionEvent) throws IOException {
+    public void handleShowEmptySeatsAction(ActionEvent actionEvent) throws IOException {
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showEmptySeatsDialog(screening)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+    @FXML
+    public void handleSumAllReservationsCostAction(ActionEvent actionEvent) throws IOException {
+
+        User user = User.newUser();
+        if(guiAppController.showSumAllReservationsCostDialog(user)){
             // tu trzeba zrobić dodanie do bazy
         }
     }
