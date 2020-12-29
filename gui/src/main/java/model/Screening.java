@@ -12,16 +12,17 @@ public class Screening {
 
     private Integer ticketCost;
 
-    private Date date;
+    private String date;
 
     // ----------- one to many -----------
     private Set<Reservation> reservations;
 
 
     private Movie movie;
-
+    private long movieId;
 
     private ScreeningRoom screeningRoom;
+    private long screeningRoomId;
 
     public Screening() { super(); }
     public Screening(int id) {
@@ -29,7 +30,7 @@ public class Screening {
         this.id = id;
     }
 
-    public Screening(Integer ticketCost, Date date, Movie movie, ScreeningRoom screeningRoom) {
+    public Screening(Integer ticketCost, String date, Movie movie, ScreeningRoom screeningRoom) {
         this.ticketCost = ticketCost;
         this.date = date;
         this.movie = movie;
@@ -46,12 +47,28 @@ public class Screening {
     public Integer getTicketCost() { return ticketCost; }
     public void setTicketCost(Integer ticketCost) { this.ticketCost = ticketCost; }
 
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
     public Movie getMovie() { return movie; }
     public void setMovie(Movie movie) { this.movie = movie; }
 
     public long getScreeningRoom() { return screeningRoom.getId(); }
     public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
+
+    public long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
+    }
+
+    public long getScreeningRoomId() {
+        return screeningRoomId;
+    }
+
+    public void setScreeningRoomId(long screeningRoomId) {
+        this.screeningRoomId = screeningRoomId;
+    }
 }

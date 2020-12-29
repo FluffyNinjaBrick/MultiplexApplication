@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import model.Movie;
 import model.Reservation;
+import model.Screening;
 import model.User;
 
 import java.io.IOException;
@@ -25,7 +26,14 @@ public class GUIAdminController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+    @FXML
+    public void handleAddScreeningAction(ActionEvent actionEvent) throws IOException {
 
+        Screening screening = Screening.newScreening();
+        if(guiAppController.showAddScreeningDialog(screening)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
     @FXML
     public void handleAddReservationAction(ActionEvent actionEvent) throws IOException {
 
