@@ -64,4 +64,12 @@ public class GUIAdminController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+    @FXML
+    public void handleGetUserByIdAction(ActionEvent actionEvent) throws IOException {
+
+        User user = User.newUser();
+        if(guiAppController.showGetUserByIdDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
 }

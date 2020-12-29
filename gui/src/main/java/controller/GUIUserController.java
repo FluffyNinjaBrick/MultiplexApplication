@@ -4,6 +4,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import model.Reservation;
+import model.User;
 
 import java.io.IOException;
 
@@ -22,6 +23,15 @@ public class GUIUserController implements GUIController{
 
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showAddReservationDialog(reservation)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+
+    @FXML
+    public void handleGetUserByIdAction(ActionEvent actionEvent) throws IOException {
+
+        User user = User.newUser();
+        if(guiAppController.showGetUserByIdDialog(user)){
             // tu trzeba zrobić dodanie do bazy
         }
     }
