@@ -26,7 +26,7 @@ public class Seat {
         this.rowNumber = rowNumber;
         this.screeningRoom = screeningRoom;
     }
-
+    public static final Seat newSeat(){ return new Seat(); }
 
     // ------------- GETTERS AND SETTERS ------------- //
     // note: these might occasionally return IDs, not the actual structure.

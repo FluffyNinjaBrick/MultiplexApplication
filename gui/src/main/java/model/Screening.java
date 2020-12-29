@@ -35,7 +35,7 @@ public class Screening {
         this.movie = movie;
         this.screeningRoom = screeningRoom;
     }
-
+    public static final Screening newScreening(){ return new Screening(); }
 
     // ------------- GETTERS AND SETTERS ------------- //
     // note: these might occasionally return IDs, not the actual structure.

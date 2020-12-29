@@ -11,12 +11,13 @@ public class Reservation {
     private long id;
 
     private User user;
-
+    private long userId;
 
     private Seat seat;
-
+    private long seatId;
 
     private Screening screening;
+    private long screeningId;
 
     public Reservation() { super(); }
 //    public Reservation(int id) {
@@ -38,7 +39,7 @@ public class Reservation {
 
     public long getUser() { return user.getId(); }
     public void setUser(User user) { this.user = user; }
-
+    public static final Reservation newReservation(){ return new Reservation(); }
     public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
     //    public void setSeat(Seat seat) { this.seat = seat; }
     public void setSeat(String seatInput) {
@@ -56,5 +57,29 @@ public class Reservation {
 
     public long getScreening() { return screening.getId(); }
     public void setScreening(Screening screening) { this.screening = screening; }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setSeatId(long seatId) {
+        this.seatId = seatId;
+    }
+
+    public void setScreeningId(long screeningId) {
+        this.screeningId = screeningId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public long getSeatId() {
+        return seatId;
+    }
+
+    public long getScreeningId() {
+        return screeningId;
+    }
 }
 

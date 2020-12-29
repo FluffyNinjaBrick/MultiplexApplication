@@ -40,7 +40,29 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
+    public boolean showAddReservationDialog(Reservation reservation) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddReservationDialog.fxml"));
 
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Add new reservation");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AddReservationPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(reservation);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public boolean showAddUserDialog(User user) throws IOException {
         try {
@@ -65,6 +87,7 @@ public class GUIAppController {
             return false;
         }
     }
+
     public boolean showAddMovieDialog(Movie movie) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
