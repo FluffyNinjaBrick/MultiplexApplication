@@ -81,4 +81,13 @@ public class GUIAdminController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+
+    @FXML
+    public void handleShowEmptySeats(ActionEvent actionEvent) throws IOException {
+
+        Screening screening = Screening.newScreening();
+        if(guiAppController.showEmptySeatsDialog(screening)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
 }

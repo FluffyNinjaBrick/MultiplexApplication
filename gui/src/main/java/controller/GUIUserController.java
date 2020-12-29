@@ -4,6 +4,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import model.Reservation;
+import model.Screening;
 import model.User;
 
 import java.io.IOException;
@@ -40,6 +41,14 @@ public class GUIUserController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showGetUserReservationsDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+    @FXML
+    public void handleShowEmptySeats(ActionEvent actionEvent) throws IOException {
+
+        Screening screening = Screening.newScreening();
+        if(guiAppController.showEmptySeatsDialog(screening)){
             // tu trzeba zrobić dodanie do bazy
         }
     }
