@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -38,38 +36,38 @@
                 </Label>
                 <Label text="Hasło" GridPane.rowIndex="3">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
                 <Label text="Email" GridPane.rowIndex="4">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
 
                 <TextField fx:id="firstNameField" GridPane.columnIndex="1">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
                 <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
                 <TextField fx:id="loginField" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
                 <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </PasswordField>
                 <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
-                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets  left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
 
@@ -90,7 +88,7 @@
                     </HBox.margin></Button>
             </children>
             <BorderPane.margin>
-                <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                <Insets  left="5.0" right="5.0" top="5.0" />
             </BorderPane.margin>
         </HBox>
     </bottom>

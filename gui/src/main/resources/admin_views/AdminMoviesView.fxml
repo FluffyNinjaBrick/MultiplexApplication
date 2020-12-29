@@ -12,7 +12,7 @@
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.GUIRawController"
+            fx:controller="controller.GUIAdminController"
             prefHeight="500.0" prefWidth="600.0">
     <left>
         <VBox alignment="TOP_CENTER" style="-fx-border-color: #ffa500; -fx-background-color: #000000; -fx-border-width: 5px;" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
@@ -30,7 +30,7 @@
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="addMovieButton" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Dodaj film">
+                <Button fx:id="addMovieButton" onAction="#handleAddMovieAction" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Dodaj film">
                     <VBox.margin>
                         <Insets bottom="1.0" left="5.0" right="5.0" top="1.0" />
                     </VBox.margin>

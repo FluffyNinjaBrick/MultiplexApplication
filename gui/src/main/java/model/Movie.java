@@ -16,7 +16,7 @@ public class Movie {
     private Set<Screening> screenings;
 
     public Movie() { super(); }
-
+    public static final Movie newMovie(){ return new Movie(); }
     public Movie(String title, String author, String description){
         super();
         this.title = title;
