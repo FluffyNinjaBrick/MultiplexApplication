@@ -60,4 +60,12 @@ public class GUIUserController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+    @FXML
+    public void handleSumSingleReservationsCostAction(ActionEvent actionEvent) throws IOException {
+
+        Reservation reservation = Reservation.newReservation();
+        if(guiAppController.showSumSingleReservationsCostDialog(reservation)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
 }

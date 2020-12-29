@@ -40,6 +40,31 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
+
+    public boolean showSumSingleReservationsCostDialog(Reservation reservation) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/SumSingleReservationsCostDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Single cost");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            SumSingleReservationCostPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(reservation);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean showSumAllReservationsCostDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -47,7 +72,7 @@ public class GUIAppController {
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Empty seats");
+            dialogStage.setTitle("All costs");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
