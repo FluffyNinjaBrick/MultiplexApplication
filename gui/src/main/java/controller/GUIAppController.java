@@ -40,14 +40,14 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
-    public boolean showGetUserByIdDialog(User user) throws IOException {
+    public boolean showGetUserReservationsDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(GUIAppController.class.getResource("../operations/GetUserByIdDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/GetUserReservationsDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Delete user");
+            dialogStage.setTitle("Get user reservations");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -63,6 +63,31 @@ public class GUIAppController {
             return false;
         }
     }
+
+    public boolean showGetUserByIdDialog(User user) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/GetUserByIdDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Get user by Id");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            DeleteUserPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(user);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean showDeleteDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
