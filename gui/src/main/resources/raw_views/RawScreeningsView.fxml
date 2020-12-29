@@ -44,12 +44,18 @@
             </BorderPane.margin>
         </VBox>
     </left>
-
     <center>
-        <AnchorPane id="AnchorPane" fx:id="createPersonAnchor" prefHeight="247.0" prefWidth="285.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-            <children>
-                <Label text="Witamy w kinie Multiplex!"><font><Font size ="30.0"/></font></Label>
-            </children>
-        </AnchorPane>
+        <TableView fx:id="screeningsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn fx:id="title" prefWidth="75.0" text="Film" />
+                <TableColumn fx:id="cost" prefWidth="75.0" text="Cena biletu" />
+                <TableColumn fx:id="date" prefWidth="75.0" text="Czas seansu" />
+                <TableColumn fx:id="room" prefWidth="75.0" text="Numer sali" />
+                <TableColumn fx:id="floor" prefWidth="75.0" text="Piętro" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
     </center>
 </BorderPane>
