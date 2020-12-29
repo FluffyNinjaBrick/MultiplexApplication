@@ -39,8 +39,12 @@ public class GUIRawController implements GUIController{
         this.guiAppController.rawMoviesLayout();
     }
 
-    public boolean handleLogInAction(ActionEvent actionEvent) {
-        return false;
+    @FXML
+    public void handleLogInAction(ActionEvent actionEvent) throws IOException {
+        User user = User.newUser();
+        if(guiAppController.showLogInDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
     }
 
     @FXML

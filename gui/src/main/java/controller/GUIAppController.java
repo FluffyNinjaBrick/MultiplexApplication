@@ -40,6 +40,30 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
+    public boolean showLogInDialog(User user) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/LogInDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Log in");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            LogInPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(user);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean showGetUserReservationsDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -53,7 +77,7 @@ public class GUIAppController {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
-            DeleteUserPresenter presenter = loader.getController();
+            GetUserReservationsPresenter presenter = loader.getController();
             presenter.setDialogStage(dialogStage);
             presenter.setData(user);
             dialogStage.showAndWait();
@@ -77,7 +101,7 @@ public class GUIAppController {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
-            DeleteUserPresenter presenter = loader.getController();
+            GetUserByIdPresenter presenter = loader.getController();
             presenter.setDialogStage(dialogStage);
             presenter.setData(user);
             dialogStage.showAndWait();
