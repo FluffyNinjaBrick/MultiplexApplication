@@ -52,11 +52,11 @@ public class AddScreeningPresenter {
     @FXML
     private void handleOkAction(ActionEvent event) {
         if(isNumeric(movieIdField.getText()) && isNumeric(roomIdField.getText()) && isNumeric(costField.getText())){
-            approved = false;
+            updateModel();
+            approved = true;
             dialogStage.close();
         }
-        updateModel();
-        approved = true;
+        approved = false;
         dialogStage.close();
     }
 

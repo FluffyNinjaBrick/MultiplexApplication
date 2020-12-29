@@ -41,11 +41,11 @@ public class AddReservationPresenter {
     @FXML
     private void handleOkAction(ActionEvent event) {
         if(isNumeric(userIdField.getText()) && isNumeric(screeningIdField.getText()) && isNumeric(seatIdField.getText())){
-            approved = false;
+            updateModel();
+            approved = true;
             dialogStage.close();
         }
-        updateModel();
-        approved = true;
+        approved = false;
         dialogStage.close();
     }
 
