@@ -2,6 +2,9 @@ package cli;
 
 import Model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.jakewharton.fliptables.FlipTable;
 import com.jakewharton.fliptables.FlipTableConverters;
 import picocli.CommandLine;
@@ -17,17 +20,77 @@ import java.net.http.HttpResponse;
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+
+@Command(
+        name = "login"
+)
+class LoginCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080/api/authenticate";
+    @Inject
+    private Authentication authInfo;
+
+//    public LoginCommand(Authentication authInfo) {
+//        super();
+//        this.authInfo = authInfo;
+//    }
+
+    @Parameters(index = "0", description = "username")
+    private String username;
+
+    @Parameters(index = "1", description = "password")
+    private String password;
+    @Override
+    public void run() {
+
+//        System.out.println("Adding room..." + number+ ", floor: " + floor);
+        String request_body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+            Map<String, String> body = mapper.readValue(response.body(), new TypeReference<Map<String, String>>() {});
+            System.out.println(body.get("jwt"));
+            authInfo.setToken(body.get("jwt"));
+
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 @Command(
         name = "show-users"
 )
 class ShowUsersCommand implements Runnable {
     private static final String apiURL = "http://localhost:8080/api/admin/users";
+
+    @Inject
+    private Authentication authInfo;
+
+//    public ShowUsersCommand(Authentication authInfo) {
+//        super();
+//        this.authInfo = authInfo;
+//    }
 
     @Override
     public void run() {
@@ -36,6 +99,7 @@ class ShowUsersCommand implements Runnable {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
+                .header("Authorization", "Bearer " + authInfo.getToken())
                 .uri(URI.create(apiURL))
                 .build();
 
@@ -730,11 +794,14 @@ class MultiplexCli implements Callable<Integer> {
 
 }
 
+
 public class Client {
     private static Authentication authentication;
 
     public static void main(String... args) {
-        authentication = new Authentication();
+        Injector injector = Guice.createInjector(new BasicModule());
+
+//        authentication = new Authentication();
 
         CommandLine cli = new CommandLine(new MultiplexCli());
         cli.addSubcommand(new AddScreeningRoomCommand());
@@ -752,7 +819,8 @@ public class Client {
         cli.addSubcommand(new SumAllReservationsCostCommand());
         cli.addSubcommand(new SumSingleReservationCostCommand());
         cli.addSubcommand(new TestCommand());
-        cli.addSubcommand(new ShowUsersCommand());
+        cli.addSubcommand(injector.getInstance(ShowUsersCommand.class));
+        cli.addSubcommand(injector.getInstance(LoginCommand.class));
 
         Scanner scanner = new Scanner(System.in);
         String cmd;

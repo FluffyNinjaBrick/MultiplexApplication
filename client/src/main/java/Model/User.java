@@ -4,6 +4,8 @@ package Model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Set;
+
+@JsonIgnoreProperties({"username", "password", "roles", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
 public class User {
 
 
