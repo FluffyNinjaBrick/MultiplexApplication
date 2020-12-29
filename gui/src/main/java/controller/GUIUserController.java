@@ -3,6 +3,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import model.Reservation;
 import model.Screening;
 import model.User;
@@ -11,6 +12,38 @@ import java.io.IOException;
 
 public class GUIUserController implements GUIController{
     private GUIAppController guiAppController;
+
+    @FXML
+    public Button getMoviesOfferButton;
+
+    @FXML
+    public Button getScreeningsOfferButton;
+
+    @FXML
+    public Button logOutButton;
+
+
+    @FXML
+    public Button addReservationButton;
+
+    @FXML
+    public Button getUserById;
+
+    @FXML
+    public Button getUserReservations;
+
+    @FXML
+    public Button showEmptySeats;
+
+    @FXML
+    public Button sumAllReservations;
+
+    @FXML
+    public Button sumSingleReservations;
+
+
+
+
 
     @Override
     public void setGuiAppController(GUIAppController guiAppController) {

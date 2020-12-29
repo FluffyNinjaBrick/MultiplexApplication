@@ -3,12 +3,63 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import model.*;
 
 import java.io.IOException;
 
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
+
+    @FXML
+    public Button getMoviesOfferButton;
+
+    @FXML
+    public Button getScreeningsOfferButton;
+
+    @FXML
+    public Button logOutButton;
+
+    @FXML
+    public Button addUserButton;
+
+    @FXML
+    public Button addMovieButton;
+
+    @FXML
+    public Button addReservationButton;
+
+    @FXML
+    public Button addScreeningButton;
+
+    @FXML
+    public Button addSeatButton;
+
+    @FXML
+    public Button deleteUserButton;
+
+    @FXML
+    public Button addScreeningRoomButton;
+
+    @FXML
+    public Button getUserById;
+
+    @FXML
+    public Button getUserReservations;
+
+    @FXML
+    public Button showEmptySeats;
+
+    @FXML
+    public Button sumAllReservations;
+
+    @FXML
+    public Button sumSingleReservations;
+
+    @FXML
+    public Button showUsers;
+
+
 
     @Override
     public void setGuiAppController(GUIAppController guiAppController) {
