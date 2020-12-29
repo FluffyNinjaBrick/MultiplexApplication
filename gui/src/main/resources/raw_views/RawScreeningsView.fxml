@@ -19,11 +19,11 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </opaqueInsets>
             <children>
-                <Button fx:id="logInButton" style="-fx-background-color: #ffd700"  alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zaloguj się">
+                <Button fx:id="logInButton" onAction="#handleLogInAction" style="-fx-background-color: #ffd700"  alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zaloguj się">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin></Button>
-                <Button fx:id="addUserButton" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zarejestruj się">
+                <Button fx:id="addUserButton" onAction="#handleAddUserAction" style="-fx-background-color: #fffacd" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Zarejestruj się">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>

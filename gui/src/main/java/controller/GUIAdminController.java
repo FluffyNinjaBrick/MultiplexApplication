@@ -108,4 +108,30 @@ public class GUIAdminController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+    @FXML
+    public void handleLogOutAction(ActionEvent actionEvent) throws IOException {
+
+    }
+    @FXML
+    public void handleAddUserAction(ActionEvent actionEvent) throws IOException {
+        User user = User.newUser();
+
+        if(guiAppController.showAddUserDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+    @FXML
+    public void handleGetScreeningsOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
+        this.guiAppController.adminScreeningsLayout();
+    }
+
+    @FXML
+    public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
+        this.guiAppController.adminMoviesLayout();
+    }
+
+    @FXML
+    public void handleShowUsersAction(javafx.event.ActionEvent actionEvent) throws IOException {
+        this.guiAppController.rawMoviesLayout();
+    }
 }

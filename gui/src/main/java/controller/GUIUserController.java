@@ -17,8 +17,6 @@ public class GUIUserController implements GUIController{
         this.guiAppController = guiAppController;
     }
 
-
-
     @FXML
     public void handleAddReservationAction(ActionEvent actionEvent) throws IOException {
 
@@ -67,5 +65,27 @@ public class GUIUserController implements GUIController{
         if(guiAppController.showSumSingleReservationsCostDialog(reservation)){
             // tu trzeba zrobić dodanie do bazy
         }
+    }
+
+    @FXML
+    public void handleLogOutAction(ActionEvent actionEvent) throws IOException {
+
+    }
+    @FXML
+    public void handleAddUserAction(ActionEvent actionEvent) throws IOException {
+        User user = User.newUser();
+
+        if(guiAppController.showAddUserDialog(user)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
+    @FXML
+    public void handleGetScreeningsOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
+        this.guiAppController.userScreeningsLayout();
+    }
+
+    @FXML
+    public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
+        this.guiAppController.userMoviesLayout();
     }
 }
