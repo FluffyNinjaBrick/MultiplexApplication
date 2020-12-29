@@ -47,4 +47,12 @@ public class GUIAdminController implements GUIController{
             // tu trzeba zrobić dodanie do bazy
         }
     }
+    @FXML
+    public void handleAddSeatAction(ActionEvent actionEvent) throws IOException {
+
+        Seat seat = Seat.newSeat();
+        if(guiAppController.showAddSeatDialog(seat)){
+            // tu trzeba zrobić dodanie do bazy
+        }
+    }
 }

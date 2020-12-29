@@ -40,6 +40,32 @@ public class GUIAppController {
 
 
     /*###############################  DIALOG SECTION    ########################################################*/
+
+
+    public boolean showAddSeatDialog(Seat seat) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddSeatDialog.fxml"));
+
+            BorderPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Add new seat");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            AddSeatPresenter presenter = loader.getController();
+            presenter.setDialogStage(dialogStage);
+            presenter.setData(seat);
+            dialogStage.showAndWait();
+            return presenter.isApproved();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean showAddScreeningRoomDialog(ScreeningRoom screeningRoom) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
