@@ -15,6 +15,15 @@ repositories {
 application {
     mainClassName = 'GUIApp'
 }
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'info.picocli:picocli:4.5.2'
+    implementation 'com.jakewharton.fliptables:fliptables:1.1.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+    // https://mvnrepository.com/artifact/com.google.inject/guice
+    compile group: 'com.google.inject', name: 'guice', version: '4.0'
+
+}
 java {
     sourceCompatibility = JavaVersion.VERSION_14
     targetCompatibility = JavaVersion.VERSION_14
