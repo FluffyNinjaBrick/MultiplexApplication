@@ -41,27 +41,27 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="getUserById" onAction="#handleGetUserByIdAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż użykownika">
+                <Button fx:id="getUserByIdButton" onAction="#handleGetUserByIdAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż użykownika">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="getUserReservations" onAction="#handleGetUserReservationsAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż rezerwacje użykownika">
+                <Button fx:id="getUserReservationsButton" onAction="#handleGetUserReservationsAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż rezerwacje użykownika">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="showEmptySeats" onAction="#handleShowEmptySeatsAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż wolne miejsca na film">
+                <Button fx:id="showEmptySeatsButton" onAction="#handleShowEmptySeatsAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Pokaż wolne miejsca na film">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="sumAllReservations" onAction="#handleSumAllReservationsCostAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz wszystkie rezerwacje">
+                <Button fx:id="sumAllReservationsButton" onAction="#handleSumAllReservationsCostAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz wszystkie rezerwacje">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="sumSingleReservations" onAction="#handleSumSingleReservationsCostAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz rezerwację">
+                <Button fx:id="sumSingleReservationsButton" onAction="#handleSumSingleReservationsCostAction" style="-fx-background-color: #ffa500" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false"  text="Podlicz rezerwację">
                     <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>

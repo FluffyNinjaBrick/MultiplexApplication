@@ -27,22 +27,19 @@ public class GUIUserController implements GUIController{
     public Button addReservationButton;
 
     @FXML
-    public Button getUserById;
+    public Button getUserByIdButton;
 
     @FXML
-    public Button getUserReservations;
+    public Button getUserReservationsButton;
 
     @FXML
-    public Button showEmptySeats;
+    public Button showEmptySeatsButton;
 
     @FXML
-    public Button sumAllReservations;
+    public Button sumAllReservationsButton;
 
     @FXML
-    public Button sumSingleReservations;
-
-
-
+    public Button sumSingleReservationsButton;
 
 
     @Override
