@@ -24,3 +24,20 @@ public class GUIApp extends Application{
     }
 
 }
+// TODO wylogowanie
+
+// TODO dodaj film - addMovie(Movie movie)
+// TODO Zrob rezerwajce - addReservation(Reservation reservation)
+// TODO Dodaj Seans - addScreening(Screening screening)
+// TODO add new seat - addSeat(Seat seat)
+
+// TODO add screening room - addScreeningRoom(ScreeningRoom screeningRoom)
+// TODO usun uzytkownika  - deleteUser(User user)
+// TODO pokaz uzytkownika z id - showUserById(User user)
+// TODO pokaz wolne miejsca  - showEmptySeats(Screening screening)
+// TODO pokaz wszystkich uzytkownikow  - showUsers()
+
+
+// TODO pokaz rezerwacje
+// TODO Podlicz wszystkie rezerwacje
+// TODO podlicz jedna rezerwacej uzytkownika
