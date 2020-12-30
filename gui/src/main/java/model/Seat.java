@@ -18,6 +18,7 @@ public class Seat {
 
 
     private ScreeningRoom screeningRoom;
+    private long screeningRoomId;
 
     public Seat() { super(); }
 
@@ -40,4 +41,12 @@ public class Seat {
     public long getScreeningRoom() { return screeningRoom.getId(); }
 
     public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
+
+    public long getScreeningRoomId() {
+        return screeningRoomId;
+    }
+
+    public void setScreeningRoomId(long screeningRoomId) {
+        this.screeningRoomId = screeningRoomId;
+    }
 }

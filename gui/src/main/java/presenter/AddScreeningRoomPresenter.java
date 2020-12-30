@@ -42,11 +42,11 @@ public class AddScreeningRoomPresenter {
     @FXML
     private void handleOkAction(ActionEvent event) {
         if(isNumeric(capacityField.getText())){
-            approved = false;
+            updateModel();
+            approved = true;
             dialogStage.close();
         }
-        updateModel();
-        approved = true;
+        approved = false;
         dialogStage.close();
     }
 
