@@ -55,7 +55,7 @@ public class GUIAppController {
             loader.setControllerFactory(instantiatedClass -> {
                 return injector.getInstance(instantiatedClass);
             });
-            loader.setLocation(GUIAppController.class.getResource("../operations/SumSingleReservationsCostDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/SumSingleReservationCostDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();
@@ -379,7 +379,7 @@ public class GUIAppController {
             loader.setControllerFactory(instantiatedClass -> {
                 return injector.getInstance(instantiatedClass);
             });
-            loader.setLocation(GUIAppController.class.getResource("../operations/AddUserDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/AddMovieDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();

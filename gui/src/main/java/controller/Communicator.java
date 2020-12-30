@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.jakewharton.fliptables.FlipTable;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -25,6 +26,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -53,9 +55,12 @@ public class Communicator {
             return t ;
         });
     }
+    public void execute(Runnable task){
+        exec.execute(task);
+    }
+    public Task<ObservableList<Movie>> getMovies(){
+        String apiSpecStr = "movies";
 
-    public void getMovies(EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
-        String apiSpecStr = "movies/";
 
         String apiURLfinal = apiBaseUrl + apiSpecStr;
         Task<ObservableList<Movie>> getMoviesTask = new Task<ObservableList<Movie>>(){
@@ -66,30 +71,30 @@ public class Communicator {
                 HttpRequest request = HttpRequest.newBuilder()
                         .GET()
                         .header("accept", "application/json")
-                        .header("Authorization", "Bearer " + authInfo.getToken())
+//                        .header("Authorization", "Bearer " + authInfo.getToken())
                         .uri(URI.create(apiURLfinal))
                         .build();
 
                     ObjectMapper mapper = new ObjectMapper();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    System.out.println(response.body());
                     if(response.body() == null || response.body().equals("")){
                         return new SimpleListProperty<Movie>();
                     }
-                    movies = mapper.readValue(response.body(), new TypeReference<ObservableList<Movie>>() {});
+                    List<Movie>  movieRaw= mapper.readValue(response.body(), new TypeReference<List<Movie>>() {});
+                    movies = FXCollections.observableList(movieRaw);
+
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }
                 }catch (Exception e){
+                    e.printStackTrace();
                     throw e;
                 }
 
                 return movies;
             }
         };
-        getMoviesTask.setOnSucceeded(successHandler);
-        getMoviesTask.setOnFailed(failHandler);
-        exec.execute(getMoviesTask);
+        return getMoviesTask;
 
 
     }
