@@ -4,6 +4,8 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import model.*;
 
 import java.io.IOException;
@@ -58,6 +60,23 @@ public class GUIAdminController implements GUIController{
 
     @FXML
     public Button showUsersButton;
+
+    /* #################### */
+    @FXML
+    public TableView<Movie> moviesTable;
+
+    @FXML
+    public TableColumn<Movie, String> title;
+
+    @FXML
+    public TableColumn<Movie, String> author;
+
+    @FXML
+    public TableColumn<Movie, String> description;
+
+    /* #################### */
+
+
 
 
 
@@ -178,11 +197,13 @@ public class GUIAdminController implements GUIController{
 
     @FXML
     public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
+
+
         this.guiAppController.adminMoviesLayout();
     }
 
     @FXML
     public void handleShowUsersAction(javafx.event.ActionEvent actionEvent) throws IOException {
-        this.guiAppController.rawMoviesLayout();
+        this.guiAppController.adminAllUsersLayout();
     }
 }

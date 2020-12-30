@@ -18,6 +18,7 @@ import model.Authentication;
 import model.Movie;
 
 import javafx.event.EventHandler;
+import model.Screening;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -98,6 +99,7 @@ public class Communicator {
 
 
     }
+
     public void addUser(String firstName, String lastName, String username, String password, String email,
                         EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
         String apiSpecStr = "users/";

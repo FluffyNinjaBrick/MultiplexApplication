@@ -82,7 +82,7 @@ public class GUIAppController {
             loader.setControllerFactory(instantiatedClass -> {
                 return injector.getInstance(instantiatedClass);
             });
-            loader.setLocation(GUIAppController.class.getResource("../operations/SumAllReservationsCostDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/SumAllReservationCostDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();
@@ -383,7 +383,7 @@ public class GUIAppController {
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Add new user");
+            dialogStage.setTitle("Add new movie");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
