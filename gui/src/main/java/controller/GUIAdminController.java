@@ -77,7 +77,9 @@ public class GUIAdminController implements GUIController{
     /* #################### */
 
 
+    private void logInfo(String text){
 
+    }
 
 
     @Override

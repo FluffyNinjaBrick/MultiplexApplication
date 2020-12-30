@@ -62,7 +62,9 @@ public class GUIRawController implements GUIController{
         this.guiAppController = guiAppController;
 
     }
+    private void logInfo(String text){
 
+    }
     @FXML
     private void initialize() {
         if (this.moviesTable != null) {
@@ -105,6 +107,7 @@ public class GUIRawController implements GUIController{
 
             Task<Integer> task = communicator.login(user.getUserName(), user.getPassword());
             task.setOnSucceeded(e -> {
+                        logInfo("Logged in");
                         System.out.println("Successfully logged in");
                         try {
                             guiAppController.adminStartLayout();
