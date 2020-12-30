@@ -115,9 +115,9 @@
     <center>
         <TableView fx:id="singleReservationCostTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="userID" prefWidth="75.0" text="Numer użytkownika" />
-                <TableColumn fx:id="screeningID" prefWidth="75.0" text="Numer seansu" />
-                <TableColumn fx:id="cost" prefWidth="75.0" text="Cena rezerwacji" />
+                <TableColumn fx:id="singleUserID" prefWidth="75.0" text="Numer użytkownika" />
+                <TableColumn fx:id="singleScreeningID" prefWidth="75.0" text="Numer seansu" />
+                <TableColumn fx:id="singleCost" prefWidth="75.0" text="Cena rezerwacji" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
