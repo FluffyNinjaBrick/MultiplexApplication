@@ -29,10 +29,16 @@ public class Screening {
     private ScreeningRoom screeningRoom;
     private SimpleLongProperty screeningRoomId;
 
-    public Screening() { super(); }
+    public Screening() { super();
+        this.ticketCost = new SimpleIntegerProperty();
+        this.date = new SimpleStringProperty();
+        this.screeningRoomId = new SimpleLongProperty();
+    }
     public Screening(int id) {
-        super();
+        this();
         this.id = id;
+
+
     }
 
     public Screening(Integer ticketCost, String date, Movie movie, ScreeningRoom screeningRoom) {

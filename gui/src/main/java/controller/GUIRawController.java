@@ -102,17 +102,18 @@ public class GUIRawController implements GUIController{
     public void handleLogInAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
         if(guiAppController.showLogInDialog(user)){
-            communicator.login(user.getUserName(), user.getPassword(),
-                    e -> {
-                            System.out.println("Successfully logged in");
+
+            Task<Integer> task = communicator.login(user.getUserName(), user.getPassword());
+            task.setOnSucceeded(e -> {
+                        System.out.println("Successfully logged in");
                         try {
                             guiAppController.adminStartLayout();
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
-                    },
-                    e -> System.out.println("no connection or wrong credentials"));
-            // tu trzeba zrobić dodanie do bazy
+                    });
+            task.setOnFailed( e -> System.out.println("no connection or wrong credentials"));
+            communicator.execute(task);
         }
     }
 
@@ -121,13 +122,14 @@ public class GUIRawController implements GUIController{
         User user = User.newUser();
         if(guiAppController.showAddUserDialog(user)){
 
-            communicator.addUser(user.getFirstName(),
+            Task<Integer> task = communicator.addUser(user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
                     user.getUserName(),
-                    user.getPassword(),
-                    e -> System.out.println("This success callback"),
-                    e -> System.out.println("This is failure callback") );
+                    user.getPassword());
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
             // tu trzeba zrobić dodanie do bazy
         }
     }

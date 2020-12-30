@@ -59,8 +59,9 @@ public class Communicator {
     public void execute(Runnable task){
         exec.execute(task);
     }
+
     public Task<ObservableList<Movie>> getMovies(){
-        String apiSpecStr = "movies";
+        String apiSpecStr = "movies/";
 
 
         String apiURLfinal = apiBaseUrl + apiSpecStr;
@@ -96,12 +97,9 @@ public class Communicator {
             }
         };
         return getMoviesTask;
-
-
     }
 
-    public void addUser(String firstName, String lastName, String username, String password, String email,
-                        EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
+    public Task<Integer> addUser(String firstName, String lastName, String username, String password, String email){
         String apiSpecStr = "users/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
@@ -129,14 +127,10 @@ public class Communicator {
                 }
             }
         };
-        task.setOnSucceeded(successHandler);
-        task.setOnFailed(failHandler);
-        exec.execute(task);
-
+        return task;
 
     }
-    public void login(String username, String password,
-                        EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
+    public Task<Integer> login(String username, String password){
         String apiSpecStr = "authenticate/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
@@ -167,10 +161,44 @@ public class Communicator {
                 }
             }
         };
-        task.setOnSucceeded(successHandler);
-        task.setOnFailed(failHandler);
-        exec.execute(task);
+        return task;
 
+    }
+    public Task<ObservableList<Screening>> getScreenings(){
+        String apiSpecStr = "screenings/";
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<ObservableList<Screening>> task = new Task<ObservableList<Screening>>(){
+            @Override
+            public ObservableList<Screening> call() throws Exception{
+                ObservableList<Screening> data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "application/json")
+//                        .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal))
+                            .build();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.body() == null || response.body().equals("")){
+                        return new SimpleListProperty<Screening>();
+                    }
+                    List<Screening>  dataRaw= mapper.readValue(response.body(), new TypeReference<List<Screening>>() {});
+                    data = FXCollections.observableList(dataRaw);
+
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
     }
 }
 
