@@ -16,12 +16,13 @@ import java.io.IOException;
 public class GUIAppController {
     private Stage primaryStage;
     private GUIController controller;
+    private Injector injector;
     public GUIAppController(Stage primaryStage) {
+        injector = Guice.createInjector(new BasicModule());
         this.primaryStage = primaryStage;
     }
 
     public void initRootLayout(){
-        Injector injector = Guice.createInjector(new BasicModule());
         try{
             this.primaryStage.setTitle("Multiplex");
             FXMLLoader loader = new FXMLLoader();
@@ -50,6 +51,9 @@ public class GUIAppController {
     public boolean showAddScreeningRoomDialog(ScreeningRoom screeningRoom) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddScreeningRoomDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -74,6 +78,9 @@ public class GUIAppController {
     public boolean showAddScreeningDialog(Screening screening) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddScreeningDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -98,6 +105,9 @@ public class GUIAppController {
     public boolean showAddReservationDialog(Reservation reservation) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddReservationDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -122,6 +132,9 @@ public class GUIAppController {
     public boolean showAddUserDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddUserDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -146,6 +159,9 @@ public class GUIAppController {
     public boolean showAddMovieDialog(Movie movie) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddUserDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -175,12 +191,18 @@ public class GUIAppController {
 
     public void rawMoviesLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../raw_views/RawMoviesView.fxml"));
         showScene(loader);
     }
 
     public void rawScreeningsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../raw_views/RawScreeningsView.fxml"));
         showScene(loader);
     }
@@ -188,41 +210,65 @@ public class GUIAppController {
 
     public void userStartLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserStartView.fxml"));
         showScene(loader);
     }
     public void userByIdLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserByIdView.fxml"));
         showScene(loader);
     }
     public void userMoviesLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserMoviesView.fxml"));
         showScene(loader);
     }
     public void userReservationsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserReservationsView.fxml"));
         showScene(loader);
     }
     public void userScreeningsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserScreeningsView.fxml"));
         showScene(loader);
     }
     public void userSeatsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserSeatsView.fxml"));
         showScene(loader);
     }
     public void userSingleReservationCostLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserSingleReservationCostView.fxml"));
         showScene(loader);
     }
     public void userAllReservationsCostLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../user_views/UserAllReservationsView.fxml"));
         showScene(loader);
     }
@@ -230,46 +276,73 @@ public class GUIAppController {
     /*###############################  ADMIN SECTION    ########################################################*/
     public void adminStartLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminStartView.fxml"));
         showScene(loader);
     }
     public void adminUserByIdLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserByIdView.fxml"));
         showScene(loader);
     }
     public void adminMoviesLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminMoviesView.fxml"));
         showScene(loader);
     }
     public void adminUserReservationsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserReservationsView.fxml"));
         showScene(loader);
     }
     public void adminScreeningsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminScreeningsView.fxml"));
         showScene(loader);
     }
     public void adminSeatsLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminSeatsView.fxml"));
         showScene(loader);
     }
     public void adminSingleReservationCostLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminSingleReservationView.fxml"));
         showScene(loader);
     }
     public void adminAllReservationsCostLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminAllReservationsView.fxml"));
         showScene(loader);
     }
     public void adminAllUsersLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUsersView.fxml"));
         showScene(loader);
     }

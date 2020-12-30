@@ -40,7 +40,7 @@ public class GUIRawController implements GUIController{
     @FXML
     public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
         this.guiAppController.rawMoviesLayout();
-        communicator.getMovies(e -> System.out.println("aa"),e -> System.out.println("bb"));
+
 
     }
 
@@ -52,8 +52,14 @@ public class GUIRawController implements GUIController{
     public void handleAddUserAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
         if(guiAppController.showAddUserDialog(user)){
-            communicator.addUser(user.getFirstName(), user.getLastName(), user.getEmail(),user.getUserName(),user.getPassword(),
-                    e -> System.out.println("aa"),e -> System.out.println("bb") );
+
+            communicator.addUser(user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getUserName(),
+                    user.getPassword(),
+                    e -> System.out.println("This success callback"),
+                    e -> System.out.println("This is failure callback") );
             // tu trzeba zrobić dodanie do bazy
         }
     }

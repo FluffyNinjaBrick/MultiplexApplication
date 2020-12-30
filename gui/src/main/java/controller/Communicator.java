@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.jakewharton.fliptables.FlipTable;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
@@ -23,17 +26,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public class Communicator {
 
-
-    private String apiBaseUrl = "http://localhost:8080/api/";
+//    @Inject
+//    @Named("apiBaseUrl")
+    private String apiBaseUrl = "http://localhost:8080/api/"; // TODO injection doesnt work
 
     @Inject
     Authentication authInfo;
+
     private Executor exec ;
     private HttpClient client;
 
@@ -66,17 +72,18 @@ public class Communicator {
 
                     ObjectMapper mapper = new ObjectMapper();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//                    movies = mapper.readValue(response.body(), new TypeReference<ObservableList<Movie>>() {});
-                } catch (ConnectException e){
-                    System.out.println("ERROR: Couldn't connect with server.");
-                } catch (
-                        IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (Exception e){
-                    e.printStackTrace();
+                    System.out.println(response.body());
+                    if(response.body() == null || response.body().equals("")){
+                        return new SimpleListProperty<Movie>();
+                    }
+                    movies = mapper.readValue(response.body(), new TypeReference<ObservableList<Movie>>() {});
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    throw e;
                 }
+
                 return movies;
             }
         };
@@ -91,13 +98,11 @@ public class Communicator {
         String apiSpecStr = "users/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
-        Task<ObservableList<Movie>> getMoviesTask = new Task<ObservableList<Movie>>(){
+        Task<Integer> task = new Task<Integer>(){
             @Override
-            public ObservableList<Movie> call() throws Exception{
-                ObservableList<Movie> movies = null;
+            public Integer call() throws Exception{
                 System.out.println("Adding user..." + firstName + " " + lastName + " " + email);
                 String request_body = String.format("{\"firstName\": \"%s\", \"lastName\": \"%s\", \"email\": \"%s\", \"username\": \"%s\", \"password\": \"%s\"}", firstName, lastName, email, username, password);
-                HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
                         .header("Content-Type", "application/json")
@@ -108,20 +113,55 @@ public class Communicator {
                     ObjectMapper mapper = new ObjectMapper();
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    System.out.println(response.statusCode());
-                }  catch (java.net.ConnectException e){
-                    System.out.println("ERROR: Couldn't connect with server.");
-                }  catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
                 }
-                return movies;
             }
         };
-        getMoviesTask.setOnSucceeded(successHandler);
-        getMoviesTask.setOnFailed(failHandler);
-        exec.execute(getMoviesTask);
+        task.setOnSucceeded(successHandler);
+        task.setOnFailed(failHandler);
+        exec.execute(task);
+
+
+    }
+    public void Login(String username, String password,
+                        EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
+        String apiSpecStr = "login/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("Logging in..." + username);
+                String request_body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    Map<String, String> body = mapper.readValue(response.body(), new TypeReference<Map<String, String>>() {});
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    System.out.println(body.get("jwt"));
+                    authInfo.setToken(body.get("jwt"));
+                    return  response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        task.setOnSucceeded(successHandler);
+        task.setOnFailed(failHandler);
+        exec.execute(task);
 
 
     }
