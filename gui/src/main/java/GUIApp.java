@@ -33,10 +33,6 @@ public class GUIApp extends Application{
 // TODO add screening room - addScreeningRoom(ScreeningRoom screeningRoom)
 // TODO usun uzytkownika  - deleteUser(User user)
 
-// TODO pokaz uzytkownika z id - showUserById(User user)###
-// TODO pokaz wolne miejsca  - showEmptySeats(Screening screening)###
-// TODO pokaz wszystkich uzytkownikow  - showUsers()###
-
 
 // TODO pokaz rezerwacje
 // TODO Podlicz wszystkie rezerwacje

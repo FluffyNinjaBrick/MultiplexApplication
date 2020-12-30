@@ -194,7 +194,10 @@ public class GUIAdminController implements GUIController{
         Movie movie = Movie.newMovie();
 
         if(guiAppController.showAddMovieDialog(movie)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addMovie(movie);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -202,7 +205,10 @@ public class GUIAdminController implements GUIController{
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showAddScreeningDialog(screening)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addScreening(screening);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -210,7 +216,10 @@ public class GUIAdminController implements GUIController{
 
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showAddReservationDialog(reservation)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addReservation(reservation);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -218,7 +227,10 @@ public class GUIAdminController implements GUIController{
 
         ScreeningRoom screeningRoom = ScreeningRoom.newScreeningRoom();
         if(guiAppController.showAddScreeningRoomDialog(screeningRoom)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addScreeningRoom(screeningRoom);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -226,7 +238,10 @@ public class GUIAdminController implements GUIController{
 
         Seat seat = Seat.newSeat();
         if(guiAppController.showAddSeatDialog(seat)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addSeat(seat);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
 
@@ -235,7 +250,10 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showDeleteDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.deleteUser(user);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -293,7 +311,14 @@ public class GUIAdminController implements GUIController{
         User user = User.newUser();
 
         if(guiAppController.showAddUserDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addUser(user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getUserName(),
+                    user.getPassword());
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
