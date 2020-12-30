@@ -52,6 +52,9 @@ public class GUIAppController {
     public boolean showSumSingleReservationsCostDialog(Reservation reservation) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/SumSingleReservationsCostDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -76,6 +79,9 @@ public class GUIAppController {
     public boolean showSumAllReservationsCostDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/SumAllReservationsCostDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -100,6 +106,9 @@ public class GUIAppController {
     public boolean showEmptySeatsDialog(Screening screening) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/ShowEmptySeatsDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -124,6 +133,9 @@ public class GUIAppController {
     public boolean showLogInDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/LogInDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -148,6 +160,9 @@ public class GUIAppController {
     public boolean showGetUserReservationsDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/GetUserReservationsDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -172,6 +187,9 @@ public class GUIAppController {
     public boolean showGetUserByIdDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/GetUserByIdDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -196,6 +214,9 @@ public class GUIAppController {
     public boolean showDeleteDialog(User user) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/DeleteUserDialog.fxml"));
 
             BorderPane page = loader.load();
@@ -220,6 +241,9 @@ public class GUIAppController {
     public boolean showAddSeatDialog(Seat seat) throws IOException {
         try {
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             loader.setLocation(GUIAppController.class.getResource("../operations/AddSeatDialog.fxml"));
 
             BorderPane page = loader.load();

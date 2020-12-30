@@ -128,9 +128,9 @@ public class Communicator {
 
 
     }
-    public void Login(String username, String password,
+    public void login(String username, String password,
                         EventHandler<WorkerStateEvent> successHandler, EventHandler<WorkerStateEvent> failHandler){
-        String apiSpecStr = "login/";
+        String apiSpecStr = "authenticate/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
         Task<Integer> task = new Task<Integer>(){
@@ -148,6 +148,7 @@ public class Communicator {
                     ObjectMapper mapper = new ObjectMapper();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     Map<String, String> body = mapper.readValue(response.body(), new TypeReference<Map<String, String>>() {});
+                    System.out.println(response.body());
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }
@@ -162,7 +163,6 @@ public class Communicator {
         task.setOnSucceeded(successHandler);
         task.setOnFailed(failHandler);
         exec.execute(task);
-
 
     }
 }

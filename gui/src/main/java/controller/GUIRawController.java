@@ -9,6 +9,7 @@ import model.User;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 
 public class GUIRawController implements GUIController{
     private GUIAppController guiAppController;
@@ -48,6 +49,9 @@ public class GUIRawController implements GUIController{
     public void handleLogInAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
         if(guiAppController.showLogInDialog(user)){
+            communicator.login(user.getUserName(), user.getPassword(),
+                    e -> System.out.println("Successfully logged in"),
+                    e -> System.out.println("no connection or wrong credentials"));
             // tu trzeba zrobić dodanie do bazy
         }
     }
