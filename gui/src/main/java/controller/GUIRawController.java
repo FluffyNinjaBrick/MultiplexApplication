@@ -133,7 +133,6 @@ public class GUIRawController implements GUIController{
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
             communicator.execute(task);
-            // tu trzeba zrobić dodanie do bazy
         }
     }
 }

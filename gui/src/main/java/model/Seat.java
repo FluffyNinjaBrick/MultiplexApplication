@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableStringValue;
+
 import java.util.Set;
 
 public class Seat {
@@ -7,9 +10,9 @@ public class Seat {
     // ----------- db fields -----------
 
     private long id;
-    private Integer seatNumber;
+    private SimpleIntegerProperty seatNumber;
 
-    private Integer rowNumber;
+    private SimpleIntegerProperty rowNumber;
 
 
     // ----------- one to many -----------
@@ -20,11 +23,13 @@ public class Seat {
     private ScreeningRoom screeningRoom;
     private long screeningRoomId;
 
-    public Seat() { super(); }
+    public Seat() { super();
+        this.seatNumber = new SimpleIntegerProperty();
+        this.rowNumber = new SimpleIntegerProperty();}
 
     public Seat(Integer seatNumber, Integer rowNumber, ScreeningRoom screeningRoom) {
-        this.seatNumber = seatNumber;
-        this.rowNumber = rowNumber;
+        this.seatNumber = new SimpleIntegerProperty(seatNumber);
+        this.rowNumber = new SimpleIntegerProperty(rowNumber);
         this.screeningRoom = screeningRoom;
     }
     public static final Seat newSeat(){ return new Seat(); }
@@ -32,14 +37,15 @@ public class Seat {
     // ------------- GETTERS AND SETTERS ------------- //
     // note: these might occasionally return IDs, not the actual structure.
     //       This is done to avoid infinite recursion in http responses.
-    public Integer getSeatNumber() { return seatNumber; }
-    public void setSeatNumber(Integer seatNumber) { this.seatNumber = seatNumber; }
+    public Integer getSeatNumber() { return seatNumber.getValue(); }
+    public ObservableStringValue getSeatNumberObs() { return seatNumber.asString(); }
+    public void setSeatNumber(Integer seatNumber) { this.seatNumber.set(seatNumber); }
 
-    public Integer getRowNumber() { return rowNumber; }
-    public void setRowNumber(Integer rowNumber) { this.rowNumber = rowNumber; }
+    public Integer getRowNumber() { return rowNumber.getValue(); }
+    public ObservableStringValue getSeatRowObs() { return rowNumber.asString(); }
+    public void setRowNumber(Integer rowNumber) { this.rowNumber.set(rowNumber); }
 
     public long getScreeningRoom() { return screeningRoom.getId(); }
-
     public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
 
     public long getScreeningRoomId() {

@@ -1,8 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 //@JsonIgnoreProperties({"seat"})
 
 public class Reservation {

@@ -1,9 +1,13 @@
 package controller;
 
 
+import com.google.inject.Inject;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import model.*;
@@ -12,6 +16,12 @@ import java.io.IOException;
 
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
+    private Screening screening;
+    private User user;
+    private Reservation reservation;
+
+    @Inject
+    private Communicator communicator;
 
     @FXML
     public Button getMoviesOfferButton;
@@ -75,12 +85,143 @@ public class GUIAdminController implements GUIController{
     public TableColumn<Movie, String> description;
 
     /* #################### */
+    @FXML
+    private TableView<Screening> screeningsTable;
+    @FXML
+    private TableColumn<Screening, String> titleScreening;
+    @FXML
+    private TableColumn<Screening, String> cost;
+    @FXML
+    private TableColumn<Screening, String> date;
+    @FXML
+    private TableColumn<Screening, String> room;
 
+    /* #################### */
+    @FXML
+    private TableView<User> usersTable;
+    @FXML
+    private TableColumn<User, String> usersName ;
+    @FXML
+    private TableColumn<User, String> firstsName;
+    @FXML
+    private TableColumn<User, String> lastsName;
+    @FXML
+    private TableColumn<User, String> emails;
 
+    /* #################### */
+    @FXML
+    private TableView<User> userByIdTable;
+    @FXML
+    private TableColumn<User, String> idUserName ;
+    @FXML
+    private TableColumn<User, String> idFirstName;
+    @FXML
+    private TableColumn<User, String> idLastName;
+    @FXML
+    private TableColumn<User, String> idEmail;
+
+    /* #################### */
+    @FXML
+    private TableView<Seat> seatsTable;
+    @FXML
+    private TableColumn<Seat, String> seatRow ;
+    @FXML
+    private TableColumn<Seat, String> placeInRow;
+
+    /* #################### */
+    @FXML
+    private TableView<User> allReservationsCostTable;
+    @FXML
+    private TableColumn<User, String> userAllID;
+    @FXML
+    private TableColumn<Integer, String> allCost;
+    /* #################### */
+    @FXML
+    private TableView<User> singleReservationCostTable;
+    @FXML
+    private TableColumn<Integer, String> singleUserID;
+    @FXML
+    private TableColumn<Integer, String> singleScreeningID;
+    @FXML
+    private TableColumn<Integer, String> singleCost;
+
+    /* #################### */
+
+    /* Najgorsze zło */
+
+    /* #################### */
     private void logInfo(String text){
 
     }
+    @FXML
+    private void initialize() {
+        if (this.moviesTable != null) {
+            moviesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            title.setCellValueFactory(movie -> movie.getValue().getTitleObs());
+            author.setCellValueFactory(movie -> movie.getValue().getAuthorObs());
+            description.setCellValueFactory(movie -> movie.getValue().getDescriptionObs());
+            Task<ObservableList<Movie>> task = this.communicator.getMovies();
+            task.setOnSucceeded(event -> moviesTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.screeningsTable != null) {
+            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
+            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
+            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
+            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
+            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.usersTable != null) {
+            usersTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            usersName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+            firstsName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+            lastsName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+            emails.setCellValueFactory(user -> user.getValue().getEmailObs());
+            Task<ObservableList<Screening>> task = this.communicator.showUsers();
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.userByIdTable != null) {
+            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
+            Task<ObservableList<Screening>> task = this.communicator.showUserById(this.user);
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.seatsTable != null) {
+            seatsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            placeInRow.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
+            seatRow.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
+            Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
 
+        if (this.singleReservationCostTable != null) {
+            singleReservationCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            // tak zrobic jakos singleUserID.setCellValueFactory(this.reservation.getUserId());
+            // tak zrobic jakos singleScreeningID.setCellValueFactory(this.reservation.getScreeningId());
+            // tu pobrac wlasciwego strignasingleCost.setCellValueFactory();
+            //Task<ObservableList<Screening>> task = this.communicator.singleReservationCost(this.screening);
+            //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            //communicator.execute(task);
+        }
+        if (this.allReservationsCostTable != null) {
+            allReservationsCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            // tu zrobić podobnie jak wyżej
+            //userAllID.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
+            //allCost.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
+            //Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
+            //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            //communicator.execute(task);
+        }
+    }
 
     @Override
     public void setGuiAppController(GUIAppController guiAppController) {
@@ -92,7 +233,10 @@ public class GUIAdminController implements GUIController{
         Movie movie = Movie.newMovie();
 
         if(guiAppController.showAddMovieDialog(movie)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addMovie(movie);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -100,7 +244,10 @@ public class GUIAdminController implements GUIController{
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showAddScreeningDialog(screening)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addScreening(screening);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -108,7 +255,10 @@ public class GUIAdminController implements GUIController{
 
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showAddReservationDialog(reservation)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addReservation(reservation);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -116,7 +266,10 @@ public class GUIAdminController implements GUIController{
 
         ScreeningRoom screeningRoom = ScreeningRoom.newScreeningRoom();
         if(guiAppController.showAddScreeningRoomDialog(screeningRoom)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addScreeningRoom(screeningRoom);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -124,7 +277,10 @@ public class GUIAdminController implements GUIController{
 
         Seat seat = Seat.newSeat();
         if(guiAppController.showAddSeatDialog(seat)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addSeat(seat);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
 
@@ -133,7 +289,10 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showDeleteDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.deleteUser(user);
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -141,7 +300,8 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showGetUserByIdDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            this.user = user;
+            this.guiAppController.adminUserByIdLayout();
         }
     }
 
@@ -150,6 +310,7 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showGetUserReservationsDialog(user)){
+            this.guiAppController.adminUserReservationsLayout();
             // tu trzeba zrobić dodanie do bazy
         }
     }
@@ -159,7 +320,8 @@ public class GUIAdminController implements GUIController{
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showEmptySeatsDialog(screening)){
-            // tu trzeba zrobić dodanie do bazy
+            this.screening = screening;
+            this.guiAppController.adminSeatsLayout();
         }
     }
 
@@ -168,7 +330,8 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showSumAllReservationsCostDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            this.user = user;
+            this.guiAppController.adminAllReservationsCostLayout();
         }
     }
 
@@ -177,7 +340,8 @@ public class GUIAdminController implements GUIController{
 
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showSumSingleReservationsCostDialog(reservation)){
-            // tu trzeba zrobić dodanie do bazy
+            this.reservation = reservation;
+            this.guiAppController.adminSingleReservationCostLayout();
         }
     }
     @FXML
@@ -189,7 +353,14 @@ public class GUIAdminController implements GUIController{
         User user = User.newUser();
 
         if(guiAppController.showAddUserDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            Task<Integer> task = communicator.addUser(user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getUserName(),
+                    user.getPassword());
+            task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
+            task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
+            communicator.execute(task);
         }
     }
     @FXML
@@ -199,8 +370,6 @@ public class GUIAdminController implements GUIController{
 
     @FXML
     public void handleGetMoviesOfferAction(javafx.event.ActionEvent actionEvent) throws IOException {
-
-
         this.guiAppController.adminMoviesLayout();
     }
 
