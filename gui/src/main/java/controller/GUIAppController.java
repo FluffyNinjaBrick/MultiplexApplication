@@ -1,5 +1,8 @@
 package controller;
 
+import cli.BasicModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -18,9 +21,13 @@ public class GUIAppController {
     }
 
     public void initRootLayout(){
+        Injector injector = Guice.createInjector(new BasicModule());
         try{
             this.primaryStage.setTitle("Multiplex");
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(instantiatedClass -> {
+                return injector.getInstance(instantiatedClass);
+            });
             rawStartLayout(loader);
         } catch (IOException exception) {
             exception.printStackTrace();
