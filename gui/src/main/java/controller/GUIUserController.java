@@ -41,9 +41,7 @@ public class GUIUserController implements GUIController{
     @FXML
     public Button sumSingleReservationsButton;
 
-    private void logInfo(String text){
 
-    }
     @Override
     public void setGuiAppController(GUIAppController guiAppController) {
         this.guiAppController = guiAppController;

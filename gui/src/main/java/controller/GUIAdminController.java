@@ -1,9 +1,13 @@
 package controller;
 
 
+import com.google.inject.Inject;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import model.*;
@@ -12,6 +16,11 @@ import java.io.IOException;
 
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
+    private Screening screening;
+
+
+    @Inject
+    private Communicator communicator;
 
     @FXML
     public Button getMoviesOfferButton;
@@ -75,12 +84,105 @@ public class GUIAdminController implements GUIController{
     public TableColumn<Movie, String> description;
 
     /* #################### */
+    @FXML
+    private TableView<Screening> screeningsTable;
+    @FXML
+    private TableColumn<Screening, String> titleScreening;
+    @FXML
+    private TableColumn<Screening, String> cost;
+    @FXML
+    private TableColumn<Screening, String> date;
+    @FXML
+    private TableColumn<Screening, String> room;
 
+    /* #################### */
+    @FXML
+    private TableView<User> usersTable;
+    @FXML
+    private TableColumn<Screening, String> usersName ;
+    @FXML
+    private TableColumn<Screening, String> firstsName;
+    @FXML
+    private TableColumn<Screening, String> lastsName;
+    @FXML
+    private TableColumn<Screening, String> emails;
+
+    /* #################### */
+    @FXML
+    private TableView<User> userByIdTable;
+    @FXML
+    private TableColumn<User, String> idUserName ;
+    @FXML
+    private TableColumn<User, String> idFirstName;
+    @FXML
+    private TableColumn<User, String> idLastName;
+    @FXML
+    private TableColumn<User, String> idEmail;
+
+    /* #################### */
+    @FXML
+    private TableView<Seat> seatsTable;
+    @FXML
+    private TableColumn<Seat, String> seatRow ;
+    @FXML
+    private TableColumn<Seat, String> placeInRow;
+
+    /* #################### */
 
     private void logInfo(String text){
 
     }
+    @FXML
+    private void initialize() {
+        if (this.moviesTable != null) {
+            moviesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            title.setCellValueFactory(movie -> movie.getValue().getTitleObs());
+            author.setCellValueFactory(movie -> movie.getValue().getAuthorObs());
+            description.setCellValueFactory(movie -> movie.getValue().getDescriptionObs());
+            Task<ObservableList<Movie>> task = this.communicator.getMovies();
+            task.setOnSucceeded(event -> moviesTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.screeningsTable != null) {
+            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
+            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
+            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
+            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
+            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.usersTable != null) {
+            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
+            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
+            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
+            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
+            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.userByIdTable != null) {
+            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
+            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
+            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
+            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
+            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
+        if (this.seatsTable != null) {
+            seatsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            placeInRow.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
+            seatRow.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
+            Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
+            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            communicator.execute(task);
+        }
 
+    }
 
     @Override
     public void setGuiAppController(GUIAppController guiAppController) {
@@ -159,7 +261,8 @@ public class GUIAdminController implements GUIController{
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showEmptySeatsDialog(screening)){
-            // tu trzeba zrobić dodanie do bazy
+            this.screening = screening;
+            this.guiAppController.adminSeatsLayout();
         }
     }
 

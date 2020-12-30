@@ -113,11 +113,9 @@
     </left>
 
     <center>
-        <TableView fx:id="moviesTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="seatsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="room" prefWidth="75.0" text="Numer sali" />
-                <TableColumn fx:id="floor" prefWidth="75.0" text="Piętro" />
-                <TableColumn fx:id="row" prefWidth="75.0" text="Rząd" />
+                <TableColumn fx:id="seatRow" prefWidth="75.0" text="Rząd" />
                 <TableColumn fx:id="placeInRow" prefWidth="75.0" text="Numer miejca" />
             </columns>
             <columnResizePolicy>
