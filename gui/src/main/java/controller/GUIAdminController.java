@@ -17,7 +17,7 @@ import java.io.IOException;
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
     private Screening screening;
-
+    private User user;
 
     @Inject
     private Communicator communicator;
@@ -99,13 +99,13 @@ public class GUIAdminController implements GUIController{
     @FXML
     private TableView<User> usersTable;
     @FXML
-    private TableColumn<Screening, String> usersName ;
+    private TableColumn<User, String> usersName ;
     @FXML
-    private TableColumn<Screening, String> firstsName;
+    private TableColumn<User, String> firstsName;
     @FXML
-    private TableColumn<Screening, String> lastsName;
+    private TableColumn<User, String> lastsName;
     @FXML
-    private TableColumn<Screening, String> emails;
+    private TableColumn<User, String> emails;
 
     /* #################### */
     @FXML
@@ -154,22 +154,22 @@ public class GUIAdminController implements GUIController{
             communicator.execute(task);
         }
         if (this.usersTable != null) {
-            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
-            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
-            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
-            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
-            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            usersTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            usersName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+            firstsName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+            lastsName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+            emails.setCellValueFactory(user -> user.getValue().getEmailObs());
+            Task<ObservableList<Screening>> task = this.communicator.showUsers();
             task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
             communicator.execute(task);
         }
         if (this.userByIdTable != null) {
-            screeningsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            titleScreening.setCellValueFactory(screening -> screening.getValue().getMovie().getTitleObs());
-            cost.setCellValueFactory(screening -> screening.getValue().getCostObs());
-            date.setCellValueFactory(screening -> screening.getValue().getDateObs());
-            room.setCellValueFactory(screening -> screening.getValue().getRoomObs());
-            Task<ObservableList<Screening>> task = this.communicator.getScreenings();
+            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
+            Task<ObservableList<Screening>> task = this.communicator.showUserById(this.user);
             task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
             communicator.execute(task);
         }
@@ -243,7 +243,8 @@ public class GUIAdminController implements GUIController{
 
         User user = User.newUser();
         if(guiAppController.showGetUserByIdDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            this.user = user;
+            this.guiAppController.adminUserByIdLayout();
         }
     }
 
