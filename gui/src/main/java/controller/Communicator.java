@@ -14,11 +14,9 @@ import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
-import model.Authentication;
-import model.Movie;
+import model.*;
 
 import javafx.event.EventHandler;
-import model.Screening;
 import picocli.CommandLine;
 
 import java.io.IOException;
@@ -185,6 +183,266 @@ public class Communicator {
                         return new SimpleListProperty<Screening>();
                     }
                     List<Screening>  dataRaw= mapper.readValue(response.body(), new TypeReference<List<Screening>>() {});
+                    data = FXCollections.observableList(dataRaw);
+
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<Integer> addMovie(Movie movie){
+        String apiSpecStr = "admin/movies/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("Adding movie..." + movie.getTitle() );
+                String request_body = String.format("{\"title\": \"%s\", " +
+                        "\"author\": \"%s\", " +
+                        "\"description\": \"%s\"}",
+                        movie.getTitle(), movie.getAuthor(), movie.getDescription());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
+    public Task<Integer> addReservation(Reservation reservation){
+        String apiSpecStr = "admin/reservations/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("Adding reservation.." );
+                String request_body = String.format("{" +
+                                "\"screeningId\": \"%s\", " +
+                                "\"userId\": \"%s\", " +
+                                "\"seatId\": \"%s\"" +
+                                "}",
+                        reservation.getScreeningId(),
+                        reservation.getUserId(),
+                        reservation.getSeatId());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
+    public Task<Integer> addSeat(Seat seat){
+        String apiSpecStr = "admin/seats/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("Adding seat.." );
+                String request_body = String.format("{" +
+                                "\"number\": \"%s\", " +
+                                "\"row\": \"%s\", " +
+                                "\"roomID\": \"%s\"" +
+                                "}",
+                        seat.getSeatNumber(),
+                        seat.getRowNumber(),
+                        seat.getScreeningRoomId());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
+
+    public Task<Integer> addScreeningRoom(ScreeningRoom screeningRoom){
+        String apiSpecStr = "admin/screeningRooms/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("Adding screeningRoom.." );
+                String request_body = String.format("{" +
+                                "\"number\": \"%s\", " +
+                                "\"floor\": \"%s\", " +
+                                "}",
+                        screeningRoom.getNumber(),
+                        screeningRoom.getFloor());
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
+    public Task<User> showUserById(User user){
+        String apiSpecStr = "user/users/";
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<User> task = new Task<User>(){
+            @Override
+            public User call() throws Exception{
+                User data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "application/json")
+//                        .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal + user.getId()))
+                            .build();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.body() == null || response.body().equals("")){
+                        return new User();
+                    }
+                    User  dataRaw= mapper.readValue(response.body(), new TypeReference<User>() {});
+                    data = dataRaw;
+
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<ObservableList<Seat>> showEmptySeats(Screening screening){
+        String apiSpecStr = "screenings/"; // TODO
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<ObservableList<Seat>> task = new Task<ObservableList<Seat>>(){
+            @Override
+            public ObservableList<Seat> call() throws Exception{
+                ObservableList<Seat> data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "application/json")
+                            .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal))
+                            .build();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.body() == null || response.body().equals("")){
+                        return new SimpleListProperty<Seat>();
+                    }
+                    List<Seat>  dataRaw= mapper.readValue(response.body(), new TypeReference<List<Seat>>() {});
+                    data = FXCollections.observableList(dataRaw);
+
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<ObservableList<User>> showEmptySeats(User screening){
+        String apiSpecStr = "admin/users/"; // TODO
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<ObservableList<User>> task = new Task<ObservableList<User>>(){
+            @Override
+            public ObservableList<User> call() throws Exception{
+                ObservableList<User> data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "application/json")
+                            .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal))
+                            .build();
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.body() == null || response.body().equals("")){
+                        return new SimpleListProperty<User>();
+                    }
+                    List<User>  dataRaw= mapper.readValue(response.body(), new TypeReference<List<User>>() {});
                     data = FXCollections.observableList(dataRaw);
 
                     if(response.statusCode() != 200){
