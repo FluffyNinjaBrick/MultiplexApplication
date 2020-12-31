@@ -25,9 +25,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
@@ -110,6 +110,38 @@ public class Communicator {
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
                         .header("Content-Type", "application/json")
                         .uri(URI.create(apiURL))
+                        .build();
+
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
+    public Task<Integer> deleteUser(User user){
+        String apiSpecStr = "users/";
+
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                System.out.println("delete user..." + user.getId());
+                String request_body = String.format("{\"userId\": \"%d\"}", user.getId());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .DELETE()
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL + user.getId()))
                         .build();
 
                 try {
@@ -311,7 +343,51 @@ public class Communicator {
         return task;
 
     }
+    public Task<Integer> addScreening(Screening screening){
+        String apiSpecStr = "admin/screenings/";
+        String apiURL = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                // Conversion
+                try {
 
+                    System.out.println(screening.getDate().toString());
+                System.out.println("Adding screening.." );
+                String request_body = String.format("{" +
+                                "\"ticketCost\": \"%d\", " +
+                                "\"date\": \"%s\", " +
+                                "\"movieId\": \"%d\"" +
+                                "\"roomId\": \"%d\"" +
+                                "}",
+                        screening.getTicketCost(),
+                        screening.getDate(),
+                        screening.getMovieId(),
+                        screening.getScreeningRoomId());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .uri(URI.create(apiURL))
+                        .build();
+
+
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                    return response.statusCode();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+            }
+        };
+        return task;
+
+    }
     public Task<Integer> addScreeningRoom(ScreeningRoom screeningRoom){
         String apiSpecStr = "admin/screeningRooms/";
 
@@ -422,7 +498,7 @@ public class Communicator {
         };
         return task;
     }
-    public Task<ObservableList<User>> showEmptySeats(User screening){
+    public Task<ObservableList<User>> showUsers(){
         String apiSpecStr = "admin/users/"; // TODO
         String apiURLfinal = apiBaseUrl + apiSpecStr;
         Task<ObservableList<User>> task = new Task<ObservableList<User>>(){

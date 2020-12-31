@@ -26,7 +26,7 @@ public class User {
     private Set<Reservation> reservations;
 
     public User() {
-        super();
+        this(0);
     }
     public User(int id) {
         super();
@@ -34,6 +34,7 @@ public class User {
         this.lastName = new SimpleStringProperty("");
         this.userName = new SimpleStringProperty("");
         this.email = new SimpleStringProperty("");
+        this.password = new SimpleStringProperty("");
         this.id = id;
     }
 

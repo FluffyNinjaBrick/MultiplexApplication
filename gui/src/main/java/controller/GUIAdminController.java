@@ -180,26 +180,27 @@ public class GUIAdminController implements GUIController{
             firstsName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
             lastsName.setCellValueFactory(user -> user.getValue().getLastNameObs());
             emails.setCellValueFactory(user -> user.getValue().getEmailObs());
-            Task<ObservableList<Screening>> task = this.communicator.showUsers();
-            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            Task<ObservableList<User>> task = this.communicator.showUsers();
+            task.setOnSucceeded(event -> usersTable.setItems(task.getValue()));
             communicator.execute(task);
         }
         if (this.userByIdTable != null) {
-            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
-            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
-            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
-            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
-            Task<ObservableList<Screening>> task = this.communicator.showUserById(this.user);
-            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
-            communicator.execute(task);
+            //TODO
+//            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+//            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+//            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+//            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
+//            Task<ObservableList<User>> task = this.communicator.showUserById(this.user);
+//            task.setOnSucceeded(event -> userByIdTable.setItems(task.getValue()));
+//            communicator.execute(task);
         }
         if (this.seatsTable != null) {
             seatsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             placeInRow.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
             seatRow.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
-            Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
-            task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
+            Task<ObservableList<Seat>> task = this.communicator.showEmptySeats(this.screening);
+            task.setOnSucceeded(event -> seatsTable.setItems(task.getValue()));
             communicator.execute(task);
         }
 
@@ -244,6 +245,7 @@ public class GUIAdminController implements GUIController{
 
         Screening screening = Screening.newScreening();
         if(guiAppController.showAddScreeningDialog(screening)){
+            System.out.println("add screening");
             Task<Integer> task = communicator.addScreening(screening);
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
