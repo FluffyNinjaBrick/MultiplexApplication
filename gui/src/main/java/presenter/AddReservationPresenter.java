@@ -44,11 +44,10 @@ public class AddReservationPresenter {
             updateModel();
             approved = true;
             dialogStage.close();
-        }else{
+        }else {
             approved = false;
             dialogStage.close();
         }
-
     }
 
     @FXML
