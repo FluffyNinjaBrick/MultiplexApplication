@@ -38,6 +38,12 @@ public class Reservation {
     public void setUser(User user) { this.user = user; }
     public static final Reservation newReservation(){ return new Reservation(); }
     public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
+    public String getSeatRow(){
+        return String.valueOf(seat.getRowNumber());
+    }
+    public String getSeatNumber(){
+        return String.valueOf(seat.getSeatNumber());
+    }
     //    public void setSeat(Seat seat) { this.seat = seat; }
     public void setSeat(String seatInput) {
         this.seat = new Seat();

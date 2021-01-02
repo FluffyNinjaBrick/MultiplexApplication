@@ -19,7 +19,10 @@ public class AddReservationPresenter {
     private TextField screeningIdField;
 
     @FXML
-    private TextField seatIdField;
+    private TextField seatNumberField;
+
+    @FXML
+    private TextField seatRowField;
 
     private Stage dialogStage;
 
@@ -40,7 +43,7 @@ public class AddReservationPresenter {
 
     @FXML
     private void handleOkAction(ActionEvent event) {
-        if(isNumeric(userIdField.getText()) && isNumeric(screeningIdField.getText()) && isNumeric(seatIdField.getText())){
+        if(isNumeric(userIdField.getText()) && isNumeric(screeningIdField.getText()) && isNumeric(seatNumberField.getText()) && isNumeric(seatRowField.getText())){
             updateModel();
             approved = true;
             dialogStage.close();
@@ -58,13 +61,14 @@ public class AddReservationPresenter {
     private void updateModel() {
         reservation.setUserId(Long.parseLong(userIdField.getText()));
         reservation.setScreeningId(Long.parseLong(screeningIdField.getText()));
-        reservation.setSeatId(Long.parseLong(seatIdField.getText()));
+        reservation.setSeat(seatRowField+":"+seatNumberField.getText());
     }
 
     private void updateControls() {
         userIdField.setText(String.valueOf(reservation.getUserId()));
         screeningIdField.setText(String.valueOf(reservation.getScreeningId()));
-        seatIdField.setText(String.valueOf(reservation.getSeatId()));
+        seatNumberField.setText(String.valueOf(reservation.getSeatNumber()));
+        seatRowField.setText(String.valueOf(reservation.getSeatRow()));
     }
 
     public static boolean isNumeric(String str) {

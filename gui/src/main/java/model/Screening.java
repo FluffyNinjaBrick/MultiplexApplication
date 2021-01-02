@@ -67,6 +67,7 @@ public class Screening {
     public void setMovie(Movie movie) { this.movie = movie; }
 
     public long getScreeningRoom() { return screeningRoom.getId(); }
+    public ScreeningRoom getScreeningRoomObject() { return screeningRoom; }
     public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
 
     public long getMovieId() {

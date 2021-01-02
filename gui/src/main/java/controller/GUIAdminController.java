@@ -253,6 +253,8 @@ public class GUIAdminController implements GUIController{
     public void handleAddScreeningAction(ActionEvent actionEvent) throws IOException {
 
         Screening screening = Screening.newScreening();
+        screening.setScreeningRoom(ScreeningRoom.newScreeningRoom());
+        screening.setMovie(Movie.newMovie());
         if(guiAppController.showAddScreeningDialog(screening)){
             System.out.println("add screening");
             Task<Integer> task = communicator.addScreening(screening);

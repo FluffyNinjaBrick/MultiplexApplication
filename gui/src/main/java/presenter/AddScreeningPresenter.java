@@ -18,13 +18,13 @@ public class AddScreeningPresenter {
     private TextField costField;
 
     @FXML
-    private TextField movieIdField;
+    private TextField movieTitleField;
 
     @FXML
     private TextField dateField;
 
     @FXML
-    private TextField roomIdField;
+    private TextField roomNumberField;
 
     private Stage dialogStage;
 
@@ -52,7 +52,7 @@ public class AddScreeningPresenter {
     }
     @FXML
     private void handleOkAction(ActionEvent event) {
-        if(isNumeric(movieIdField.getText()) && isNumeric(roomIdField.getText()) && isNumeric(costField.getText())){
+        if(isNumeric(costField.getText())){
             updateModel();
             approved = true;
             dialogStage.close();
@@ -71,15 +71,15 @@ public class AddScreeningPresenter {
     private void updateModel() {
         screening.setTicketCost(Integer.valueOf(costField.getText()));
         screening.setDate(dateField.getText());
-        screening.setMovieId(Long.parseLong(movieIdField.getText()));
-        screening.setScreeningRoomId(Long.parseLong(roomIdField.getText()));
+        screening.getMovie().setTitle(movieTitleField.getText());
+        screening.getScreeningRoomObject().setNumber(roomNumberField.getText());
     }
 
     private void updateControls() {
         costField.setText(String.valueOf(screening.getTicketCost()));
         dateField.setText(String.valueOf(screening.getDate()));
-        movieIdField.setText(String.valueOf(screening.getMovieId()));
-        roomIdField.setText(String.valueOf(screening.getScreeningRoomId()));
+        movieTitleField.setText(String.valueOf(screening.getMovie().getTitle()));
+        roomNumberField.setText(String.valueOf(screening.getScreeningRoomObject().getNumber()));
     }
 
     public static boolean isNumeric(String str) {

@@ -37,6 +37,11 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Label>
+                <Label text="Rząd" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </Label>
 
                 <TextField fx:id="userIdField" GridPane.columnIndex="1">
                     <GridPane.margin>
@@ -48,7 +53,12 @@
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField fx:id="seatIdField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <TextField fx:id="seatNumberField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </TextField>
+                <TextField fx:id="seatRowField" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets bottom="0.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
