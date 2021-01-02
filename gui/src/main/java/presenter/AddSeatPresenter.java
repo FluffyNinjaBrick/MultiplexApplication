@@ -44,9 +44,10 @@ public class AddSeatPresenter {
             updateModel();
             approved = true;
             dialogStage.close();
+        }else {
+            approved = false;
+            dialogStage.close();
         }
-        approved = false;
-        dialogStage.close();
     }
 
     @FXML
