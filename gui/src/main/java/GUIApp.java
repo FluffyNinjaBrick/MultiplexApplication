@@ -1,6 +1,3 @@
-import cli.BasicModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import controller.GUIAppController;

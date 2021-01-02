@@ -41,6 +41,7 @@ public class Communicator {
     @Inject
     Authentication authInfo;
 
+    private User lastUser;
     private Executor exec ;
     private HttpClient client;
 
@@ -54,6 +55,15 @@ public class Communicator {
             return t ;
         });
     }
+
+    public User getLastUser() {
+        return lastUser;
+    }
+
+    public void setLastUser(User lastUser) {
+        this.lastUser = lastUser;
+    }
+
     public void execute(Runnable task){
         exec.execute(task);
     }
@@ -266,20 +276,23 @@ public class Communicator {
 
     }
     public Task<Integer> addReservation(Reservation reservation){
-        String apiSpecStr = "admin/reservations/";
+        String apiSpecStr = "reservations/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
         Task<Integer> task = new Task<Integer>(){
             @Override
             public Integer call() throws Exception{
+                try {
                 System.out.println("Adding reservation.." );
                 String request_body = String.format("{" +
-                                "\"screeningId\": \"%s\", " +
-                                "\"userId\": \"%s\", " +
-                                "\"seatId\": \"%s\"" +
+                                "\"screeningId\": \"%d\", " +
+                                "\"userId\": \"%d\", " +
+                                "\"seatNumber\": \"%d\"" +
+                                "\"rowNumber\": \"%d\"" +
                                 "}",
                         reservation.getScreeningId(),
                         reservation.getUserId(),
+                        reservation.getSeatId(),
                         reservation.getSeatId());
                 HttpRequest request = HttpRequest.newBuilder()
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
@@ -288,7 +301,7 @@ public class Communicator {
                         .uri(URI.create(apiURL))
                         .build();
 
-                try {
+
                     ObjectMapper mapper = new ObjectMapper();
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -297,6 +310,8 @@ public class Communicator {
                     }
                     return response.statusCode();
                 }catch (Exception e){
+                    e.printStackTrace();
+
                     throw e;
                 }
             }
@@ -315,7 +330,7 @@ public class Communicator {
                 String request_body = String.format("{" +
                                 "\"number\": \"%s\", " +
                                 "\"row\": \"%s\", " +
-                                "\"roomID\": \"%s\"" +
+                                "\"roomNumber\": \"%s\"" +
                                 "}",
                         seat.getSeatNumber(),
                         seat.getRowNumber(),
@@ -357,7 +372,7 @@ public class Communicator {
                 String request_body = String.format("{" +
                                 "\"ticketCost\": \"%d\", " +
                                 "\"date\": \"%s\", " +
-                                "\"movieId\": \"%d\"" +
+                                "\"movieTitle\": \"%d\"" +
                                 "\"roomId\": \"%d\"" +
                                 "}",
                         screening.getTicketCost(),
@@ -437,7 +452,7 @@ public class Communicator {
                     HttpRequest request = HttpRequest.newBuilder()
                             .GET()
                             .header("accept", "application/json")
-//                        .header("Authorization", "Bearer " + authInfo.getToken())
+                        .header("Authorization", "Bearer " + authInfo.getToken())
                             .uri(URI.create(apiURLfinal + user.getId()))
                             .build();
 

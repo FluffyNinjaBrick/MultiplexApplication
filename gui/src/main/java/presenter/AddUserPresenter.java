@@ -59,7 +59,7 @@ public class AddUserPresenter {
     private void updateModel() {
         user.setFirstName(firstNameField.getText());
         user.setLastName(lastNameField.getText());
-        user.setUserName(loginField.getText());
+        user.setUsername(loginField.getText());
         user.setPassword(passwordField.getText());
         user.setEmail(emailField.getText());
     }
@@ -67,7 +67,7 @@ public class AddUserPresenter {
     private void updateControls() {
         firstNameField.setText(user.getFirstName());
         lastNameField.setText(user.getLastName());
-        loginField.setText(user.getUserName());
+        loginField.setText(user.getUsername());
         passwordField.setText(user.getPassword());
         emailField.setText(user.getEmail());
     }

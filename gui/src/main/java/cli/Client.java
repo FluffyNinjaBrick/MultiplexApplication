@@ -765,7 +765,7 @@ class MultiplexCli implements Callable<Integer> {
 public class Client {
     private static Authentication authentication;
     public Client(){
-        Injector injector = Guice.createInjector(new BasicModule());
+//        Injector injector = Guice.createInjector(new BasicModule());
 
 //        authentication = new Authentication();
 
@@ -785,8 +785,8 @@ public class Client {
         cli.addSubcommand(new SumAllReservationsCostCommand());
         cli.addSubcommand(new SumSingleReservationCostCommand());
         cli.addSubcommand(new TestCommand());
-        cli.addSubcommand(injector.getInstance(ShowUsersCommand.class));
-        cli.addSubcommand(injector.getInstance(LoginCommand.class));
+        cli.addSubcommand(new ShowUsersCommand());
+        cli.addSubcommand(new LoginCommand());
 
         Scanner scanner = new Scanner(System.in);
         String cmd;

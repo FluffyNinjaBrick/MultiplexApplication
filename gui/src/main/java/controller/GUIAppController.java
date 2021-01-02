@@ -1,6 +1,6 @@
 package controller;
 
-import cli.BasicModule;
+import Injectors.BasicModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
@@ -505,6 +505,7 @@ public class GUIAppController {
                 return injector.getInstance(instantiatedClass);
             });
         loader.setLocation(GUIAppController.class.getResource("../admin_views/AdminUserByIdView.fxml"));
+
         showScene(loader);
     }
     public void adminMoviesLayout() throws IOException {

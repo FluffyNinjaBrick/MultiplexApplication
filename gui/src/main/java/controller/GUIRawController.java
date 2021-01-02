@@ -1,7 +1,6 @@
 package controller;
 
 import com.google.inject.Inject;
-import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -14,10 +13,7 @@ import model.Movie;
 import model.Screening;
 import model.User;
 
-import java.awt.*;
 import java.io.IOException;
-import java.lang.ref.SoftReference;
-import java.time.LocalDate;
 
 public class GUIRawController implements GUIController{
     private GUIAppController guiAppController;
@@ -105,7 +101,7 @@ public class GUIRawController implements GUIController{
         User user = User.newUser();
         if(guiAppController.showLogInDialog(user)){
 
-            Task<Integer> task = communicator.login(user.getUserName(), user.getPassword());
+            Task<Integer> task = communicator.login(user.getUsername(), user.getPassword());
             task.setOnSucceeded(e -> {
                         logInfo("Logged in");
                         System.out.println("Successfully logged in");
@@ -128,7 +124,7 @@ public class GUIRawController implements GUIController{
             Task<Integer> task = communicator.addUser(user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getUserName(),
+                    user.getUsername(),
                     user.getPassword());
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));

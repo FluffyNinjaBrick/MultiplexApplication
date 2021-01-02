@@ -2,6 +2,9 @@ package controller;
 
 
 import com.google.inject.Inject;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -13,11 +16,13 @@ import javafx.scene.control.TableView;
 import model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
     private Screening screening;
-    private User user;
+    public User user;
     private Reservation reservation;
 
     @Inject
@@ -185,15 +190,19 @@ public class GUIAdminController implements GUIController{
             communicator.execute(task);
         }
         if (this.userByIdTable != null) {
-            //TODO
-//            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
-//            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
-//            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
-//            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
-//            Task<ObservableList<User>> task = this.communicator.showUserById(this.user);
-//            task.setOnSucceeded(event -> userByIdTable.setItems(task.getValue()));
-//            communicator.execute(task);
+            userByIdTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            idUserName.setCellValueFactory(user -> user.getValue().getUserNameObs());
+            idFirstName.setCellValueFactory(user -> user.getValue().getFirstNameObs());
+            idLastName.setCellValueFactory(user -> user.getValue().getLastNameObs());
+            idEmail.setCellValueFactory(user -> user.getValue().getEmailObs());
+            Task<User> task = this.communicator.showUserById(this.communicator.getLastUser());
+            task.setOnSucceeded(event -> {
+                List<User> list = new ArrayList<User>(1);
+                list.add(task.getValue());
+
+                userByIdTable.setItems( FXCollections.observableList(list));
+            });
+            communicator.execute(task);
         }
         if (this.seatsTable != null) {
             seatsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -208,7 +217,7 @@ public class GUIAdminController implements GUIController{
             singleReservationCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             // tak zrobic jakos singleUserID.setCellValueFactory(this.reservation.getUserId());
             // tak zrobic jakos singleScreeningID.setCellValueFactory(this.reservation.getScreeningId());
-            // tu pobrac wlasciwego strignasingleCost.setCellValueFactory();
+            // tu pobrac wlasciwego strig na singleCost.setCellValueFactory();
             //Task<ObservableList<Screening>> task = this.communicator.singleReservationCost(this.screening);
             //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
             //communicator.execute(task);
@@ -254,7 +263,6 @@ public class GUIAdminController implements GUIController{
     }
     @FXML
     public void handleAddReservationAction(ActionEvent actionEvent) throws IOException {
-
         Reservation reservation = Reservation.newReservation();
         if(guiAppController.showAddReservationDialog(reservation)){
             Task<Integer> task = communicator.addReservation(reservation);
@@ -303,7 +311,8 @@ public class GUIAdminController implements GUIController{
         User user = User.newUser();
         if(guiAppController.showGetUserByIdDialog(user)){
             this.user = user;
-            this.guiAppController.adminUserByIdLayout();
+            this.communicator.setLastUser(user);
+            this.guiAppController.adminUserByIdLayout(); // TODO
         }
     }
 
@@ -358,7 +367,7 @@ public class GUIAdminController implements GUIController{
             Task<Integer> task = communicator.addUser(user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getUserName(),
+                    user.getUsername(),
                     user.getPassword());
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));

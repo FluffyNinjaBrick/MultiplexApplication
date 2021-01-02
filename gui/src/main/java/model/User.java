@@ -7,7 +7,7 @@ import javafx.beans.value.ObservableStringValue;
 
 import java.util.Set;
 
-@JsonIgnoreProperties({"username", "password", "roles", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
+@JsonIgnoreProperties({"roles", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
 public class User {
 
 
@@ -19,7 +19,7 @@ public class User {
 
     private SimpleStringProperty email;
 
-    private SimpleStringProperty userName;
+    private SimpleStringProperty username;
 
     private SimpleStringProperty password;
 
@@ -32,7 +32,7 @@ public class User {
         super();
         this.firstName = new SimpleStringProperty("");
         this.lastName = new SimpleStringProperty("");
-        this.userName = new SimpleStringProperty("");
+        this.username = new SimpleStringProperty("");
         this.email = new SimpleStringProperty("");
         this.password = new SimpleStringProperty("");
         this.id = id;
@@ -46,7 +46,9 @@ public class User {
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.email = new SimpleStringProperty(email);
-        this.userName = new SimpleStringProperty(userName);
+        this.username = new SimpleStringProperty(userName);
+        this.password = new SimpleStringProperty("");
+
     }
 
     // ------------- GETTERS AND SETTERS ------------- //
@@ -68,9 +70,9 @@ public class User {
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
 
-    public String getUserName() {return userName.getValue();}
-    public ObservableStringValue getUserNameObs() {return userName;}
-    public void setUserName(String userName) { this.userName.set(userName); }
+    public String getUsername() {return username.getValue();}
+    public ObservableStringValue getUserNameObs() {return username;}
+    public void setUsername(String username) { this.username.set(username); }
 
     public String getPassword() { return password.getValue(); }
 

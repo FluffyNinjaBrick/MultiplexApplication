@@ -46,9 +46,9 @@ public class AddScreeningPresenter {
     @FXML
     public void initialize(){
         //"2012-03-19T07:22Z"
-        String pattern = "yyyy-MM-ddThh:mmZ"; // jakoś tak?
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        converter = new LocalDateStringConverter(formatter, formatter);
+        //String pattern = "yyyy-MM-ddThh:mmZ"; // jakoś tak?
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        //converter = new LocalDateStringConverter(formatter, formatter);
     }
     @FXML
     private void handleOkAction(ActionEvent event) {

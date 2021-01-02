@@ -1,3 +1,5 @@
+package Injectors;
+
 import com.google.inject.name.Names;
 import controller.Communicator;
 import model.Authentication;

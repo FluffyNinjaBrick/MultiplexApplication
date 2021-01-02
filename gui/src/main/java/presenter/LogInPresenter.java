@@ -6,9 +6,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
 
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-
 public class LogInPresenter {
 
     private User user;
@@ -50,12 +47,12 @@ public class LogInPresenter {
     }
 
     private void updateModel() {
-        user.setUserName(loginField.getText());
+        user.setUsername(loginField.getText());
         user.setPassword(passwordField.getText());
     }
 
     private void updateControls() {
-        loginField.setText(user.getUserName());
+        loginField.setText(user.getUsername());
         passwordField.setText(user.getPassword());
     }
 }
