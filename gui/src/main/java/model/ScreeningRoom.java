@@ -18,9 +18,13 @@ public class ScreeningRoom {
 
     private Set<Screening> screenings;
 
-    public ScreeningRoom() { super(); }
-    public ScreeningRoom(int id) {
+    public ScreeningRoom() {
         super();
+        number = new SimpleStringProperty();
+
+    }
+    public ScreeningRoom(int id) {
+        this();
         this.id = id;
     }
 
