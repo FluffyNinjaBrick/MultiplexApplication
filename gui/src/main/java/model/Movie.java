@@ -26,7 +26,7 @@ public class Movie {
     }
     public static final Movie newMovie(){ return new Movie(); }
     public Movie(String title, String author, String description){
-        super();
+        this();
         this.title = new SimpleStringProperty(title);
         this.author = new SimpleStringProperty(author);
         this.description = new SimpleStringProperty(description);

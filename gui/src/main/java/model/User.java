@@ -42,7 +42,7 @@ public class User {
 
 
     public User(String firstName, String lastName, String email, String userName) {
-        super();
+        this();
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.email = new SimpleStringProperty(email);

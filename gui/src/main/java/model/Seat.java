@@ -28,6 +28,7 @@ public class Seat {
         this.rowNumber = new SimpleIntegerProperty();}
 
     public Seat(Integer seatNumber, Integer rowNumber, ScreeningRoom screeningRoom) {
+        this();
         this.seatNumber = new SimpleIntegerProperty(seatNumber);
         this.rowNumber = new SimpleIntegerProperty(rowNumber);
         this.screeningRoom = screeningRoom;
