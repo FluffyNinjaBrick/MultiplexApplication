@@ -40,7 +40,7 @@ public class AddSeatPresenter {
 
     @FXML
     private void handleOkAction(ActionEvent event) {
-        if(isNumeric(numberField.getText()) && isNumeric(rowField.getText()) && isNumeric(roomIdField.getText())){
+        if(isNumeric(numberField.getText()) && isNumeric(rowField.getText())){
             updateModel();
             approved = true;
             dialogStage.close();
@@ -58,11 +58,11 @@ public class AddSeatPresenter {
     private void updateModel() {
         seat.setSeatNumber(Integer.parseInt(numberField.getText()));
         seat.setRowNumber(Integer.parseInt(rowField.getText()));
-        seat.setScreeningRoomId(Long.parseLong(roomIdField.getText()));
+        seat.getScreeningRoom().setNumber(roomIdField.getText());
     }
 
     private void updateControls() {
-        numberField.setText(String.valueOf(seat.getSeatNumber()));
+        numberField.setText(seat.getScreeningRoom().getNumber());
         rowField.setText(String.valueOf(seat.getRowNumber()));
         roomIdField.setText(String.valueOf(seat.getScreeningRoomId()));
     }

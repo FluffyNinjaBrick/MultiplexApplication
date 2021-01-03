@@ -16,7 +16,10 @@ public class Reservation {
     private Screening screening;
     private long screeningId;
 
-    public Reservation() { super(); }
+    public Reservation() {
+        super();
+        seat = new Seat();
+    }
 //    public Reservation(int id) {
 //        super();
 //        this.id = id;
@@ -38,6 +41,7 @@ public class Reservation {
     public void setUser(User user) { this.user = user; }
     public static final Reservation newReservation(){ return new Reservation(); }
     public String getSeat() { return "Row: " + seat.getRowNumber() + ", Number: " + seat.getSeatNumber(); }
+    public Seat getSeatObj() { return seat;}
     public String getSeatRow(){
         return String.valueOf(seat.getRowNumber());
     }

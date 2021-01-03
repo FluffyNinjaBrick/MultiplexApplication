@@ -4,6 +4,7 @@ package controller;
 import com.google.inject.Inject;
 import javafx.beans.Observable;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -27,6 +28,9 @@ public class GUIAdminController implements GUIController{
 
     @Inject
     private Communicator communicator;
+
+    @Inject
+    private Authentication authentication;
 
     @FXML
     public Button getMoviesOfferButton;
@@ -142,13 +146,13 @@ public class GUIAdminController implements GUIController{
     private TableColumn<Integer, String> allCost;
     /* #################### */
     @FXML
-    private TableView<User> singleReservationCostTable;
+    private TableView<SimpleStringProperty[]> singleReservationCostTable;
     @FXML
-    private TableColumn<Integer, String> singleUserID;
+    private TableColumn<SimpleStringProperty[], String> singleUserID;
     @FXML
-    private TableColumn<Integer, String> singleScreeningID;
+    private TableColumn<SimpleStringProperty[], String> singleScreeningID;
     @FXML
-    private TableColumn<Integer, String> singleCost;
+    private TableColumn<SimpleStringProperty[], String> singleCost;
 
     /* #################### */
 
@@ -208,19 +212,29 @@ public class GUIAdminController implements GUIController{
             seatsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             placeInRow.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
             seatRow.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
-            Task<ObservableList<Seat>> task = this.communicator.showEmptySeats(this.screening);
+            Task<ObservableList<Seat>> task = this.communicator.showEmptySeats(this.communicator.getLastScreening());
             task.setOnSucceeded(event -> seatsTable.setItems(task.getValue()));
             communicator.execute(task);
         }
 
         if (this.singleReservationCostTable != null) {
             singleReservationCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            // tak zrobic jakos singleUserID.setCellValueFactory(this.reservation.getUserId());
-            // tak zrobic jakos singleScreeningID.setCellValueFactory(this.reservation.getScreeningId());
-            // tu pobrac wlasciwego strig na singleCost.setCellValueFactory();
-            //Task<ObservableList<Screening>> task = this.communicator.singleReservationCost(this.screening);
-            //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
-            //communicator.execute(task);
+            singleUserID.setCellValueFactory(res -> res.getValue()[0]);
+            singleScreeningID.setCellValueFactory(res -> res.getValue()[1]);
+            singleCost.setCellValueFactory(res -> res.getValue()[2]);
+            Task<Integer> task = this.communicator.singleReservationCost(this.communicator.getLastReservation());
+            task.setOnSucceeded(event -> {
+                SimpleStringProperty[] arr = new SimpleStringProperty[3];
+
+                arr[0] = new SimpleStringProperty(String.valueOf(this.communicator.getLastReservation().getUserId()));
+                arr[1] = new SimpleStringProperty(String.valueOf(this.communicator.getLastReservation().getScreeningId()));
+                arr[2] = new SimpleStringProperty(String.valueOf(task.getValue()));
+                List<SimpleStringProperty[]> list = new ArrayList<SimpleStringProperty[]>(1);
+                list.add(arr);
+
+                singleReservationCostTable.setItems( FXCollections.observableList(list));
+            });
+            communicator.execute(task);
         }
         if (this.allReservationsCostTable != null) {
             allReservationsCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -334,6 +348,7 @@ public class GUIAdminController implements GUIController{
         Screening screening = Screening.newScreening();
         if(guiAppController.showEmptySeatsDialog(screening)){
             this.screening = screening;
+            this.communicator.setLastScreening(screening);
             this.guiAppController.adminSeatsLayout();
         }
     }
@@ -352,6 +367,7 @@ public class GUIAdminController implements GUIController{
     public void handleSumSingleReservationsCostAction(ActionEvent actionEvent) throws IOException {
 
         Reservation reservation = Reservation.newReservation();
+        this.communicator.setLastReservation(reservation);
         if(guiAppController.showSumSingleReservationsCostDialog(reservation)){
             this.reservation = reservation;
             this.guiAppController.adminSingleReservationCostLayout();
@@ -359,7 +375,8 @@ public class GUIAdminController implements GUIController{
     }
     @FXML
     public void handleLogOutAction(ActionEvent actionEvent) throws IOException {
-
+        this.authentication.clear();
+        this.guiAppController.rawMoviesLayout();
     }
     @FXML
     public void handleAddUserAction(ActionEvent actionEvent) throws IOException {

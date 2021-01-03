@@ -42,8 +42,15 @@ public class Communicator {
     Authentication authInfo;
 
     private User lastUser;
+    private Screening lastScreening;
+
+
+
+    private Reservation lastReservation;
     private Executor exec ;
     private HttpClient client;
+
+
 
     public Communicator() {
          client = HttpClient.newHttpClient();
@@ -55,7 +62,20 @@ public class Communicator {
             return t ;
         });
     }
+    public Reservation getLastReservation() {
+        return lastReservation;
+    }
 
+    public void setLastReservation(Reservation lastReservation) {
+        this.lastReservation = lastReservation;
+    }
+    public Screening getLastScreening() {
+        return lastScreening;
+    }
+
+    public void setLastScreening(Screening lastScreening) {
+        this.lastScreening = lastScreening;
+    }
     public User getLastUser() {
         return lastUser;
     }
@@ -139,7 +159,7 @@ public class Communicator {
 
     }
     public Task<Integer> deleteUser(User user){
-        String apiSpecStr = "users/";
+        String apiSpecStr = "admin/users/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
         Task<Integer> task = new Task<Integer>(){
@@ -163,6 +183,7 @@ public class Communicator {
                     }
                     return response.statusCode();
                 }catch (Exception e){
+                    e.printStackTrace();
                     throw e;
                 }
             }
@@ -276,7 +297,7 @@ public class Communicator {
 
     }
     public Task<Integer> addReservation(Reservation reservation){
-        String apiSpecStr = "reservations/";
+        String apiSpecStr = "admin/reservations/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
         Task<Integer> task = new Task<Integer>(){
@@ -287,13 +308,13 @@ public class Communicator {
                 String request_body = String.format("{" +
                                 "\"screeningId\": \"%d\", " +
                                 "\"userId\": \"%d\", " +
-                                "\"seatNumber\": \"%d\"" +
+                                "\"seatNumber\": \"%d\", " +
                                 "\"rowNumber\": \"%d\"" +
                                 "}",
                         reservation.getScreeningId(),
                         reservation.getUserId(),
-                        reservation.getSeatId(),
-                        reservation.getSeatId());
+                        reservation.getSeatObj().getSeatNumber(),
+                        reservation.getSeatObj().getRowNumber());
                 HttpRequest request = HttpRequest.newBuilder()
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
                         .header("Content-Type", "application/json")
@@ -305,6 +326,8 @@ public class Communicator {
                     ObjectMapper mapper = new ObjectMapper();
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println(request_body);
+                    System.out.println(response.body());
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }
@@ -334,7 +357,7 @@ public class Communicator {
                                 "}",
                         seat.getSeatNumber(),
                         seat.getRowNumber(),
-                        seat.getScreeningRoomId());
+                        seat.getScreeningRoom().getNumber());
                 HttpRequest request = HttpRequest.newBuilder()
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
                         .header("Content-Type", "application/json")
@@ -347,10 +370,12 @@ public class Communicator {
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     if(response.statusCode() != 200){
+                        System.out.println(response.body());
                         throw new ConnectException("response code: " + response.statusCode());
                     }
                     return response.statusCode();
                 }catch (Exception e){
+                    e.printStackTrace();
                     throw e;
                 }
             }
@@ -372,14 +397,15 @@ public class Communicator {
                 String request_body = String.format("{" +
                                 "\"ticketCost\": \"%d\", " +
                                 "\"date\": \"%s\", " +
-                                "\"movieTitle\": \"%d\"" +
-                                "\"roomId\": \"%d\"" +
+                                "\"movieTitle\": \"%s\", " +
+                                "\"roomNumber\": \"%s\"" +
                                 "}",
                         screening.getTicketCost(),
                         screening.getDate(),
-                        screening.getMovieId(),
-                        screening.getScreeningRoomId());
-                HttpRequest request = HttpRequest.newBuilder()
+                        screening.getMovie().getTitle(),
+                        screening.getScreeningRoomObject().getNumber());
+
+                    HttpRequest request = HttpRequest.newBuilder()
                         .POST(HttpRequest.BodyPublishers.ofString(request_body))
                         .header("Content-Type", "application/json")
                         .header("Authorization", "Bearer " + authInfo.getToken())
@@ -390,6 +416,7 @@ public class Communicator {
                     ObjectMapper mapper = new ObjectMapper();
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println(response.body());
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }
@@ -404,7 +431,7 @@ public class Communicator {
 
     }
     public Task<Integer> addScreeningRoom(ScreeningRoom screeningRoom){
-        String apiSpecStr = "admin/screeningRooms/";
+        String apiSpecStr = "admin/rooms/";
 
         String apiURL = apiBaseUrl + apiSpecStr;
         Task<Integer> task = new Task<Integer>(){
@@ -413,7 +440,7 @@ public class Communicator {
                 System.out.println("Adding screeningRoom.." );
                 String request_body = String.format("{" +
                                 "\"number\": \"%s\", " +
-                                "\"floor\": \"%s\", " +
+                                "\"floor\": \"%s\"" +
                                 "}",
                         screeningRoom.getNumber(),
                         screeningRoom.getFloor());
@@ -430,6 +457,7 @@ public class Communicator {
 
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
                     if(response.statusCode() != 200){
+                        System.out.println(response.body());
                         throw new ConnectException("response code: " + response.statusCode());
                     }
                     return response.statusCode();
@@ -478,7 +506,7 @@ public class Communicator {
         return task;
     }
     public Task<ObservableList<Seat>> showEmptySeats(Screening screening){
-        String apiSpecStr = "screenings/"; // TODO
+        String apiSpecStr = "user/seats/"; // TODO
         String apiURLfinal = apiBaseUrl + apiSpecStr;
         Task<ObservableList<Seat>> task = new Task<ObservableList<Seat>>(){
             @Override
@@ -489,11 +517,13 @@ public class Communicator {
                             .GET()
                             .header("accept", "application/json")
                             .header("Authorization", "Bearer " + authInfo.getToken())
-                            .uri(URI.create(apiURLfinal))
+                            .uri(URI.create(apiURLfinal + screening.getId()))
                             .build();
 
                     ObjectMapper mapper = new ObjectMapper();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println(response.body());
+
                     if(response.body() == null || response.body().equals("")){
                         return new SimpleListProperty<Seat>();
                     }
@@ -535,6 +565,42 @@ public class Communicator {
                     }
                     List<User>  dataRaw= mapper.readValue(response.body(), new TypeReference<List<User>>() {});
                     data = FXCollections.observableList(dataRaw);
+
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<Integer> singleReservationCost(Reservation reservation){
+        String apiSpecStr = "user/reservations/cost/forUser/"; // TODO
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                Integer data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal + reservation.getUserId() + "/forScreening/" + reservation.getScreeningId()))
+                            .build();
+                    System.out.println(apiURLfinal + reservation.getUserId() + "/forScreening/" + reservation.getScreeningId());
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("body" + response.body());
+                    if(response.body() == null || response.body().equals("")){
+                        return 0;
+                    }
+
+                    data = Integer.parseInt(response.body());
 
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());

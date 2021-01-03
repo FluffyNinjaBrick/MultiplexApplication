@@ -9,7 +9,12 @@ public class Authentication {
         Authentication.token = token;
         isLoggedIn = true;
     }
-    public static String getToken() {
+    public String getToken() {
         return token;
+    }
+
+    public void clear(){
+        this.isLoggedIn = false;
+        this.setToken("");
     }
 }

@@ -82,7 +82,7 @@ public class GUIAppController {
             loader.setControllerFactory(instantiatedClass -> {
                 return injector.getInstance(instantiatedClass);
             });
-            loader.setLocation(GUIAppController.class.getResource("../operations/SumAllReservationCostDialog.fxml"));
+            loader.setLocation(GUIAppController.class.getResource("../operations/SumAllReservationsCostDialog.fxml"));
 
             BorderPane page = loader.load();
             Stage dialogStage = new Stage();

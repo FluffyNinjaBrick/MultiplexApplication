@@ -24,6 +24,7 @@ public class Seat {
     private long screeningRoomId;
 
     public Seat() { super();
+        this.screeningRoom = new ScreeningRoom();
         this.seatNumber = new SimpleIntegerProperty();
         this.rowNumber = new SimpleIntegerProperty();}
 
@@ -46,7 +47,7 @@ public class Seat {
     public ObservableStringValue getSeatRowObs() { return rowNumber.asString(); }
     public void setRowNumber(Integer rowNumber) { this.rowNumber.set(rowNumber); }
 
-    public long getScreeningRoom() { return screeningRoom.getId(); }
+    public ScreeningRoom getScreeningRoom() { return screeningRoom; }
     public void setScreeningRoom(ScreeningRoom screeningRoom) { this.screeningRoom = screeningRoom; }
 
     public long getScreeningRoomId() {

@@ -61,7 +61,7 @@ public class AddReservationPresenter {
     private void updateModel() {
         reservation.setUserId(Long.parseLong(userIdField.getText()));
         reservation.setScreeningId(Long.parseLong(screeningIdField.getText()));
-        reservation.setSeat(seatRowField+":"+seatNumberField.getText());
+        reservation.setSeat("row:" + seatRowField.getText()+","+ "seat:"+seatNumberField.getText());
     }
 
     private void updateControls() {

@@ -21,6 +21,8 @@ public class ScreeningRoom {
     public ScreeningRoom() {
         super();
         number = new SimpleStringProperty();
+        floor = new SimpleIntegerProperty();
+        capacity = new SimpleIntegerProperty();
 
     }
     public ScreeningRoom(int id) {
