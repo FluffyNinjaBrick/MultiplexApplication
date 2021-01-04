@@ -8,6 +8,7 @@ import com.google.inject.name.Named;
 import com.jakewharton.fliptables.FlipTable;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -32,6 +33,7 @@ import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Communicator {
 
@@ -651,13 +653,16 @@ public class Communicator {
         };
         return task;
     }
-    public Task<ObservableList<Map<String, String>>> getUserReservations(User user){
+    public Task<ObservableList<Map<String, SimpleStringProperty>>> getUserReservations(User user){
         String apiSpecStr = "user/reservations/forUser/"; // TODO
         String apiURLfinal = apiBaseUrl + apiSpecStr;
-        Task<ObservableList<Map<String, String>>> task = new Task<ObservableList<Map<String, String>>>(){
+
+        Communicator communicator = this;
+
+        Task<ObservableList<Map<String, SimpleStringProperty>>> task = new Task<ObservableList<Map<String, SimpleStringProperty>>>(){
             @Override
-            public ObservableList<Map<String, String>> call() throws Exception{
-                ObservableList<Map<String, String>> data = null;
+            public ObservableList<Map<String, SimpleStringProperty>> call() throws Exception{
+                ObservableList<Map<String, SimpleStringProperty>> data = null;
                 try {
                     HttpRequest request = HttpRequest.newBuilder()
                             .GET()
@@ -665,18 +670,46 @@ public class Communicator {
                             .header("Authorization", "Bearer " + authInfo.getToken())
                             .uri(URI.create(apiURLfinal + user.getId()))
                             .build();
-                    System.out.println(apiURLfinal + user.getId());
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    System.out.println("body" + response.body());
                     if(response.body() == null || response.body().equals("")){
-                        return new SimpleListProperty<Map<String, String>>();
+                        return new SimpleListProperty<Map<String, SimpleStringProperty>>();
 
                     }
-
                     ObjectMapper mapper = new ObjectMapper();
                     List<Map<String, String>> dataRaw= mapper.readValue(response.body(), new TypeReference<List<Map<String, String>>>() {});
-                    System.out.println(dataRaw.toString());
-                    data = FXCollections.observableList(dataRaw);
+                    //get screenings
+                    Task<ObservableList<Screening>> taskScreening = communicator.getScreenings();
+                    communicator.execute(taskScreening);
+                    ObservableList<Screening> screenings = taskScreening.get();
+                    List<Map<String, SimpleStringProperty>> dataRaw2 = dataRaw.stream().map(rec -> {
+                        Map<String, SimpleStringProperty> map =  new HashMap<String, SimpleStringProperty>();
+                        for( Map.Entry<String, String> str : rec.entrySet()){
+                            map.put(str.getKey(), new SimpleStringProperty(str.getValue()));
+                        }
+                        return map;
+                    }).collect(Collectors.toList());
+                    dataRaw2 = dataRaw2.stream().map(record -> {
+                        Screening screening = screenings.stream()
+                                .filter( scr -> scr.getId() == Long.parseLong(record.get("screening").get()))
+                                .findAny().orElse(null);
+                        if(screening == null){
+                            System.out.println("error downloading screenings");
+                        }
+                        record.put("title", new SimpleStringProperty(screening.getMovie().getTitle()));
+                        record.put("date", new SimpleStringProperty(screening.getDate()));
+                        record.put("cost", new SimpleStringProperty(screening.getTicketCost().toString()));
+                        record.put("screeningRoom", new SimpleStringProperty(String.valueOf(screening.getScreeningRoomId())));
+                        String seatRow = record.get("seat").getValue().split(",")[0].split(":")[1].substring(1);
+                        String seatNumber = record.get("seat").getValue().split(",")[1].split(":")[1].substring(1);
+                        record.put("seatRow", new SimpleStringProperty(seatRow));
+                        record.put("seatNumber", new SimpleStringProperty(seatNumber));
+                        return record;
+
+                    }).collect(Collectors.toList());
+
+
+                    System.out.println(dataRaw2.toString());
+                    data = FXCollections.observableList(dataRaw2);
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }

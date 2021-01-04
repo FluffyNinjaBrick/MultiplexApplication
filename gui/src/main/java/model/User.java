@@ -5,13 +5,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableStringValue;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-@JsonIgnoreProperties({"roles", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
+@JsonIgnoreProperties({"enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities"})
 public class User {
 
 
     private long id;
+
+
+
+    private List<Map<String, String>> roles;
 
     private SimpleStringProperty firstName;
 
@@ -78,6 +84,13 @@ public class User {
 
     public void setPassword(String password) { this.password.set(password); }
 
+    public List<Map<String, String>> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Map<String, String>> roles) {
+        this.roles = roles;
+    }
 
     public static final User newUser(){
         return new User();

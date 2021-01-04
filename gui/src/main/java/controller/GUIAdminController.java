@@ -19,6 +19,7 @@ import model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GUIAdminController implements GUIController{
     private GUIAppController guiAppController;
@@ -156,23 +157,22 @@ public class GUIAdminController implements GUIController{
 
     /* #################### */
     @FXML
-    private TableView<SimpleStringProperty[]> userReservationsTable;
+    private TableView<Map<String, SimpleStringProperty>> userReservationsTable;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationUserID;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationUserID;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationMovieTitle;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationMovieTitle;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationDate;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationDate;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationCost;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationCost;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationRoom;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationRoom;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationSeatRow;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationSeatRow;
     @FXML
-    private TableColumn<SimpleStringProperty[], String> reservationSeatNumber;
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationSeatNumber;
     /* #################### */
-
     private void logInfo(String text){
 
     }
@@ -267,6 +267,22 @@ public class GUIAdminController implements GUIController{
             });
             communicator.execute(task);
         }
+
+        if (this.userReservationsTable != null) {
+            userReservationsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            reservationUserID.setCellValueFactory(res -> new SimpleStringProperty(String.valueOf(communicator.getLastUser().getId())));
+            reservationMovieTitle.setCellValueFactory(res -> res.getValue().get("title"));
+            reservationDate.setCellValueFactory(res -> res.getValue().get("date"));
+            reservationCost.setCellValueFactory(res -> res.getValue().get("cost"));
+            reservationRoom.setCellValueFactory(res -> res.getValue().get("screeningRoom"));
+            reservationSeatRow.setCellValueFactory(res -> res.getValue().get("seatRow"));
+            reservationSeatNumber.setCellValueFactory(res -> res.getValue().get("seatNumber"));
+            Task<ObservableList<Map<String, SimpleStringProperty>>> task = this.communicator.getUserReservations(this.communicator.getLastUser());
+            task.setOnSucceeded(event -> {
+                userReservationsTable.setItems( task.getValue());
+            });
+            communicator.execute(task);
+        }
     }
 
     @Override
@@ -358,12 +374,9 @@ public class GUIAdminController implements GUIController{
     public void handleGetUserReservationsAction(ActionEvent actionEvent) throws IOException {
 
         User user = User.newUser();
-        System.out.println("robi to ktos?");
+        this.communicator.setLastUser(user);
         if(guiAppController.showGetUserReservationsDialog(user)){
-            this.communicator.getUserReservations(user);
-
             this.guiAppController.adminUserReservationsLayout();
-            // tu trzeba zrobić dodanie do bazy
         }
     }
 

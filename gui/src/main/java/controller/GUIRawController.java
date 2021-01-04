@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import model.Authentication;
 import model.Movie;
 import model.Screening;
 import model.User;
@@ -20,6 +21,8 @@ public class GUIRawController implements GUIController{
 
     @Inject
     private Communicator communicator;
+    @Inject
+    private Authentication authentication;
 
     /* #################### */
     @FXML
@@ -106,8 +109,11 @@ public class GUIRawController implements GUIController{
                         logInfo("Logged in");
                         System.out.println("Successfully logged in");
                         try {
-                            guiAppController.adminStartLayout();
-                            //guiAppController.userStartLayout();
+                            if(authentication.hasRole("ADMIN")){
+                                guiAppController.adminStartLayout();
+                            }else{
+                                guiAppController.userStartLayout();
+                            }
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
