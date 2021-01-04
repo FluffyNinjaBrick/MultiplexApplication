@@ -113,16 +113,15 @@
     </left>
 
     <center>
-        <TableView fx:id="userByIdTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="userReservationsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="userName" prefWidth="75.0" text="Login" />
-                <TableColumn fx:id="movieTitle" prefWidth="75.0" text="Tytuł filmu" />
-                <TableColumn fx:id="date" prefWidth="75.0" text="Data" />
-                <TableColumn fx:id="cots" prefWidth="75.0" text="Koszt biletu" />
-                <TableColumn fx:id="room" prefWidth="75.0" text="Numer Sali" />
-                <TableColumn fx:id="floor" prefWidth="75.0" text="Piętro" />
-                <TableColumn fx:id="row" prefWidth="75.0" text="Rząd" />
-                <TableColumn fx:id="seatNumer" prefWidth="75.0" text="Miejsce" />
+                <TableColumn fx:id="reservationUserID" prefWidth="75.0" text="Numer użytkownika" />
+                <TableColumn fx:id="reservationMovieTitle" prefWidth="75.0" text="Tytuł filmu" />
+                <TableColumn fx:id="reservationDate" prefWidth="75.0" text="Data" />
+                <TableColumn fx:id="reservationCost" prefWidth="75.0" text="Koszt biletu" />
+                <TableColumn fx:id="reservationRoom" prefWidth="75.0" text="Numer Sali" />
+                <TableColumn fx:id="reservationSeatRow" prefWidth="75.0" text="Rząd" />
+                <TableColumn fx:id="reservationSeatNumber" prefWidth="75.0" text="Miejsce" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

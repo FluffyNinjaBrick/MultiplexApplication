@@ -155,10 +155,24 @@ public class GUIAdminController implements GUIController{
     private TableColumn<SimpleStringProperty[], String> singleCost;
 
     /* #################### */
-
-    /* Najgorsze zło */
-
+    @FXML
+    private TableView<SimpleStringProperty[]> userReservationsTable;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationUserID;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationMovieTitle;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationDate;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationCost;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationRoom;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationSeatRow;
+    @FXML
+    private TableColumn<SimpleStringProperty[], String> reservationSeatNumber;
     /* #################### */
+
     private void logInfo(String text){
 
     }

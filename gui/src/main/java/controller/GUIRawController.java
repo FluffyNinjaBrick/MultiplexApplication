@@ -107,6 +107,7 @@ public class GUIRawController implements GUIController{
                         System.out.println("Successfully logged in");
                         try {
                             guiAppController.adminStartLayout();
+                            //guiAppController.userStartLayout();
                         } catch (IOException ioException) {
                             ioException.printStackTrace();
                         }
