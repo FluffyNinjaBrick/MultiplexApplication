@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.jakewharton.fliptables.FlipTable;
+import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
@@ -34,9 +35,9 @@ import java.util.function.Function;
 
 public class Communicator {
 
-//    @Inject
-//    @Named("apiBaseUrl")
-    private String apiBaseUrl = "http://localhost:8080/api/"; // TODO injection doesnt work
+    @Inject
+    @Named("apiBaseUrl")
+    private String apiBaseUrl;// = "http://localhost:8080/api/";
 
     @Inject
     Authentication authInfo;
@@ -602,6 +603,80 @@ public class Communicator {
 
                     data = Integer.parseInt(response.body());
 
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<Integer> allReservationCost(User user){
+        String apiSpecStr = "user/reservations/cost/forUser/"; // TODO
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<Integer> task = new Task<Integer>(){
+            @Override
+            public Integer call() throws Exception{
+                Integer data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal + user.getId()))
+                            .build();
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("body" + response.body());
+                    if(response.body() == null || response.body().equals("")){
+                        return 0;
+                    }
+
+                    data = Integer.parseInt(response.body());
+                    System.out.println(data);
+                    if(response.statusCode() != 200){
+                        throw new ConnectException("response code: " + response.statusCode());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw e;
+                }
+
+                return data;
+            }
+        };
+        return task;
+    }
+    public Task<ObservableList<Map<String, String>>> getUserReservations(User user){
+        String apiSpecStr = "user/reservations/forUser/"; // TODO
+        String apiURLfinal = apiBaseUrl + apiSpecStr;
+        Task<ObservableList<Map<String, String>>> task = new Task<ObservableList<Map<String, String>>>(){
+            @Override
+            public ObservableList<Map<String, String>> call() throws Exception{
+                ObservableList<Map<String, String>> data = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .GET()
+                            .header("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            .header("Authorization", "Bearer " + authInfo.getToken())
+                            .uri(URI.create(apiURLfinal + user.getId()))
+                            .build();
+                    System.out.println(apiURLfinal + user.getId());
+                    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    System.out.println("body" + response.body());
+                    if(response.body() == null || response.body().equals("")){
+                        return new SimpleListProperty<Map<String, String>>();
+
+                    }
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Map<String, String>> dataRaw= mapper.readValue(response.body(), new TypeReference<List<Map<String, String>>>() {});
+                    System.out.println(dataRaw.toString());
+                    data = FXCollections.observableList(dataRaw);
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }

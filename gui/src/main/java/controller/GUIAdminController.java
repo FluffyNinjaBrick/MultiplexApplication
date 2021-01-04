@@ -139,11 +139,11 @@ public class GUIAdminController implements GUIController{
 
     /* #################### */
     @FXML
-    private TableView<User> allReservationsCostTable;
+    private TableView<SimpleStringProperty[]> allReservationsCostTable;
     @FXML
-    private TableColumn<User, String> userAllID;
+    private TableColumn<SimpleStringProperty[], String> userAllID;
     @FXML
-    private TableColumn<Integer, String> allCost;
+    private TableColumn<SimpleStringProperty[], String> allCost;
     /* #################### */
     @FXML
     private TableView<SimpleStringProperty[]> singleReservationCostTable;
@@ -239,11 +239,23 @@ public class GUIAdminController implements GUIController{
         if (this.allReservationsCostTable != null) {
             allReservationsCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             // tu zrobić podobnie jak wyżej
-            //userAllID.setCellValueFactory(seat -> seat.getValue().getSeatNumberObs());
-            //allCost.setCellValueFactory(seat -> seat.getValue().getSeatRowObs());
+            userAllID.setCellValueFactory(res -> res.getValue()[0]);
+            allCost.setCellValueFactory(res -> res.getValue()[1]);
             //Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
             //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
             //communicator.execute(task);
+            Task<Integer> task = this.communicator.allReservationCost(this.communicator.getLastUser());
+            task.setOnSucceeded(event -> {
+                SimpleStringProperty[] arr = new SimpleStringProperty[3];
+
+                arr[0] = new SimpleStringProperty(String.valueOf(this.communicator.getLastUser().getId()));
+                arr[1] = new SimpleStringProperty(String.valueOf(task.getValue()));
+                List<SimpleStringProperty[]> list = new ArrayList<SimpleStringProperty[]>(1);
+                list.add(arr);
+
+                allReservationsCostTable.setItems( FXCollections.observableList(list));
+            });
+            communicator.execute(task);
         }
     }
 
@@ -336,7 +348,10 @@ public class GUIAdminController implements GUIController{
     public void handleGetUserReservationsAction(ActionEvent actionEvent) throws IOException {
 
         User user = User.newUser();
+        System.out.println("robi to ktos?");
         if(guiAppController.showGetUserReservationsDialog(user)){
+            this.communicator.getUserReservations(user);
+
             this.guiAppController.adminUserReservationsLayout();
             // tu trzeba zrobić dodanie do bazy
         }
@@ -357,6 +372,7 @@ public class GUIAdminController implements GUIController{
     public void handleSumAllReservationsCostAction(ActionEvent actionEvent) throws IOException {
 
         User user = User.newUser();
+        this.communicator.setLastUser(user);
         if(guiAppController.showSumAllReservationsCostDialog(user)){
             this.user = user;
             this.guiAppController.adminAllReservationsCostLayout();
