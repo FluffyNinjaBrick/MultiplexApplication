@@ -238,12 +238,8 @@ public class GUIAdminController implements GUIController{
         }
         if (this.allReservationsCostTable != null) {
             allReservationsCostTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            // tu zrobić podobnie jak wyżej
             userAllID.setCellValueFactory(res -> res.getValue()[0]);
             allCost.setCellValueFactory(res -> res.getValue()[1]);
-            //Task<ObservableList<Screening>> task = this.communicator.showEmptySeats(this.screening);
-            //task.setOnSucceeded(event -> screeningsTable.setItems(task.getValue()));
-            //communicator.execute(task);
             Task<Integer> task = this.communicator.allReservationCost(this.communicator.getLastUser());
             task.setOnSucceeded(event -> {
                 SimpleStringProperty[] arr = new SimpleStringProperty[3];
