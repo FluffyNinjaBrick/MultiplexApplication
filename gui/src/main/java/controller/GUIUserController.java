@@ -17,6 +17,7 @@ import model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GUIUserController implements GUIController{
     private GUIAppController guiAppController;
@@ -119,7 +120,24 @@ public class GUIUserController implements GUIController{
     private TableColumn<SimpleStringProperty[], String> singleScreeningID;
     @FXML
     private TableColumn<SimpleStringProperty[], String> singleCost;
-
+    /* #################### */
+    @FXML
+    private TableView<Map<String, SimpleStringProperty>> userReservationsTable;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationUserID;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationMovieTitle;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationDate;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationCost;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationRoom;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationSeatRow;
+    @FXML
+    private TableColumn<Map<String, SimpleStringProperty>, String> reservationSeatNumber;
+    /* #################### */
 
     @FXML
     private void initialize() {
@@ -202,6 +220,21 @@ public class GUIUserController implements GUIController{
             });
             communicator.execute(task);
         }
+        if (this.userReservationsTable != null) {
+            userReservationsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            reservationUserID.setCellValueFactory(res -> new SimpleStringProperty(String.valueOf(communicator.getLastUser().getId())));
+            reservationMovieTitle.setCellValueFactory(res -> res.getValue().get("title"));
+            reservationDate.setCellValueFactory(res -> res.getValue().get("date"));
+            reservationCost.setCellValueFactory(res -> res.getValue().get("cost"));
+            reservationRoom.setCellValueFactory(res -> res.getValue().get("screeningRoom"));
+            reservationSeatRow.setCellValueFactory(res -> res.getValue().get("seatRow"));
+            reservationSeatNumber.setCellValueFactory(res -> res.getValue().get("seatNumber"));
+            Task<ObservableList<Map<String, SimpleStringProperty>>> task = this.communicator.getUserReservations(this.communicator.getLastUser());
+            task.setOnSucceeded(event -> {
+                userReservationsTable.setItems( task.getValue());
+            });
+            communicator.execute(task);
+        }
     }
 
 
@@ -215,6 +248,8 @@ public class GUIUserController implements GUIController{
     @FXML
     public void handleAddReservationAction(ActionEvent actionEvent) throws IOException {
         Reservation reservation = Reservation.newReservation();
+        reservation.setId(authentication.getUserId());
+
         if(guiAppController.showAddReservationDialog(reservation)){
             Task<Integer> task = communicator.addReservation(reservation);
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
@@ -236,10 +271,12 @@ public class GUIUserController implements GUIController{
     @FXML
     public void handleGetUserReservationsAction(ActionEvent actionEvent) throws IOException {
 
+
         User user = User.newUser();
+        this.communicator.setLastUser(user);
         user.setId(authentication.getUserId());
         if(guiAppController.showGetUserReservationsDialog(user)){
-            // tu trzeba zrobić dodanie do bazy
+            this.guiAppController.adminUserReservationsLayout();
         }
     }
     @FXML
