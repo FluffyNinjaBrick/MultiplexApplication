@@ -276,7 +276,7 @@ public class GUIUserController implements GUIController{
         this.communicator.setLastUser(user);
         user.setId(authentication.getUserId());
         if(guiAppController.showGetUserReservationsDialog(user)){
-            this.guiAppController.adminUserReservationsLayout();
+            this.guiAppController.userReservationsLayout();
         }
     }
     @FXML
