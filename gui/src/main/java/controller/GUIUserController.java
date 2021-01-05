@@ -226,16 +226,18 @@ public class GUIUserController implements GUIController{
     @FXML
     public void handleGetUserByIdAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
+        user.setId(authentication.getUserId());
         if(guiAppController.showGetUserByIdDialog(user)){
             this.user = user;
             this.communicator.setLastUser(user);
-            this.guiAppController.adminUserByIdLayout(); // TODO
+            this.guiAppController.userByIdLayout(); // TODO
         }
     }
     @FXML
     public void handleGetUserReservationsAction(ActionEvent actionEvent) throws IOException {
 
         User user = User.newUser();
+        user.setId(authentication.getUserId());
         if(guiAppController.showGetUserReservationsDialog(user)){
             // tu trzeba zrobić dodanie do bazy
         }
@@ -246,25 +248,27 @@ public class GUIUserController implements GUIController{
         if(guiAppController.showEmptySeatsDialog(screening)){
             this.screening = screening;
             this.communicator.setLastScreening(screening);
-            this.guiAppController.adminSeatsLayout();
+            this.guiAppController.userSeatsLayout();
         }
     }
     @FXML
     public void handleSumAllReservationsCostAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
+        user.setId(authentication.getUserId());
         this.communicator.setLastUser(user);
         if(guiAppController.showSumAllReservationsCostDialog(user)){
             this.user = user;
-            this.guiAppController.adminAllReservationsCostLayout();
+            this.guiAppController.userAllReservationsCostLayout();
         }
     }
     @FXML
     public void handleSumSingleReservationsCostAction(ActionEvent actionEvent) throws IOException {
         Reservation reservation = Reservation.newReservation();
+        reservation.setId(authentication.getUserId());
         this.communicator.setLastReservation(reservation);
         if(guiAppController.showSumSingleReservationsCostDialog(reservation)){
             this.reservation = reservation;
-            this.guiAppController.adminSingleReservationCostLayout();
+            this.guiAppController.userSingleReservationCostLayout();
         }
     }
 
@@ -276,13 +280,14 @@ public class GUIUserController implements GUIController{
     @FXML
     public void handleAddUserAction(ActionEvent actionEvent) throws IOException {
         User user = User.newUser();
+        user.setId(authentication.getUserId());
 
         if(guiAppController.showAddUserDialog(user)){
             Task<Integer> task = communicator.addUser(user.getFirstName(),
                     user.getLastName(),
-                    user.getEmail(),
                     user.getUsername(),
-                    user.getPassword());
+                    user.getPassword(),
+                    user.getEmail());
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
             communicator.execute(task);

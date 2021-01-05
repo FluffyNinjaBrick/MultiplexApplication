@@ -7,10 +7,25 @@ public class Authentication {
     private static String token;
     private boolean isLoggedIn = false;
     private List<String> roles;
+    private long userId;
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 
     public List<String> getRoles() {
         return roles;
     }
+
 
     public boolean hasRole(String role){
         return roles.stream().filter(r -> r.equals(role)).findAny().orElse(null) != null;
@@ -38,5 +53,6 @@ public class Authentication {
         this.isLoggedIn = false;
         this.setToken("");
         this.clearRoles();
+        this.userId = 0;
     }
 }

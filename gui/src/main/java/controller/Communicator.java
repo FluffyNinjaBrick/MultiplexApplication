@@ -212,15 +212,25 @@ public class Communicator {
                 try {
                     ObjectMapper mapper = new ObjectMapper();
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                    Map<String, String> body = mapper.readValue(response.body(), new TypeReference<Map<String, String>>() {});
-                    System.out.println(response.body());
+                    int commaPos = response.body().indexOf(",");
+                    String bodyJWT = response.body().substring(0,commaPos) + "}";
+                    System.out.println(bodyJWT);
+
+                    String bodyUserDetails = "{" + response.body().substring(commaPos+1);
+                    Map<String, String> bodyJwtMap = mapper.readValue(bodyJWT, new TypeReference<Map<String, String>>() {});
+                    Map<String, User> bodyUserMap = mapper.readValue(bodyUserDetails, new TypeReference<Map<String, User>>() {});
                     if(response.statusCode() != 200){
                         throw new ConnectException("response code: " + response.statusCode());
                     }
-                    System.out.println(body.get("jwt"));
-                    authInfo.setToken(body.get("jwt"));
+                    List<String> roles = bodyUserMap.get("userDetails").getRoles().stream()
+                            .map(r -> r.get("authority")).collect(Collectors.toList());
+                    authInfo.setRoles(roles);
+                    System.out.println(authInfo.getRoles().toString());
+                    authInfo.setToken(bodyJwtMap.get("jwt"));
+                    authInfo.setUserId(bodyUserMap.get("userDetails").getId());
                     return  response.statusCode();
                 }catch (Exception e){
+//                    e.printStackTrace();
                     throw e;
                 }
             }

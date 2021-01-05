@@ -130,9 +130,9 @@ public class GUIRawController implements GUIController{
 
             Task<Integer> task = communicator.addUser(user.getFirstName(),
                     user.getLastName(),
-                    user.getEmail(),
                     user.getUsername(),
-                    user.getPassword());
+                    user.getPassword(),
+                    user.getEmail());
             task.setOnSucceeded(e -> System.out.println("code: " + task.getValue()));
             task.setOnFailed(e -> System.out.println("adding error: " + task.getValue()));
             communicator.execute(task);
