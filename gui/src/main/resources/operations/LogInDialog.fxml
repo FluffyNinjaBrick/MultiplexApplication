@@ -50,11 +50,11 @@
 <bottom>
     <HBox alignment="BOTTOM_RIGHT" spacing="5.0" BorderPane.alignment="CENTER">
         <children>
-            <Button onAction="#handleCancelAction" mnemonicParsing="false" prefWidth="60.0" text="Anuluj">
+            <Button wrapText="true" onAction="#handleCancelAction" mnemonicParsing="false" prefWidth="60.0" text="Anuluj">
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin></Button>
-            <Button onAction="#handleOkAction" mnemonicParsing="false" prefWidth="60.0" text="Zaloguj się">
+            <Button wrapText="true" onAction="#handleOkAction" mnemonicParsing="false"  text="Zaloguj się">
                 <HBox.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                 </HBox.margin></Button>
