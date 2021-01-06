@@ -4,6 +4,7 @@ import com.example.multiplex.exceptions.ResourceNotFoundException;
 import com.example.multiplex.model.persistence.*;
 import com.example.multiplex.model.util.AddScreeningHelper;
 import com.example.multiplex.model.util.AddSeatHelper;
+import com.example.multiplex.model.util.AddUserHelper;
 import com.example.multiplex.model.util.ReservationRequest;
 import com.example.multiplex.repository.jpaRepos.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,21 @@ public class MultiplexRepository implements IMultiplexRepository {
     private final SeatRepository seatRepository;
     private final ScreeningRepository screeningRepository;
     private final MovieRepository movieRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public MultiplexRepository(UserRepository userRepository,
                                ScreeningRoomRepository roomRepository,
                                ReservationRepository reservationRepository,
                                SeatRepository seatRepository,
-                               ScreeningRepository screeningRepository, MovieRepository movieRepository) {
+                               ScreeningRepository screeningRepository, MovieRepository movieRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roomRepository = roomRepository;
         this.reservationRepository = reservationRepository;
         this.seatRepository = seatRepository;
         this.screeningRepository = screeningRepository;
         this.movieRepository = movieRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -52,7 +55,22 @@ public class MultiplexRepository implements IMultiplexRepository {
     }
 
     @Override
-    public User addUser(User user) {
+    public User getUserByUsername(String username) throws ResourceNotFoundException {
+        List<User> allUsers = this.getAllUsers();
+        for (User u: allUsers) if (u.getUsername().equals(username)) return u;
+        throw new ResourceNotFoundException("No user exists with username " + username);
+    }
+
+    @Override
+    public User addUser(AddUserHelper helper) {
+        User user = new User(
+                helper.getFirstName(),
+                helper.getLastName(),
+                helper.getEmail(),
+                helper.getUsername(),
+                helper.getPassword()
+        );
+        user.addRole(this.roleRepository.findById("USER").get());
         return this.userRepository.save(user);
     }
 
@@ -117,6 +135,18 @@ public class MultiplexRepository implements IMultiplexRepository {
                 .orElseThrow(() -> new ResourceNotFoundException("No user exists with ID " + userID));
         return user.getReservations();
     }
+
+    @Override
+    public Integer calculateReservation(long screening_id, long user_id) {
+        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
+    }
+
+    @Override
+    public Integer calculateAllReservations(long user_id){
+        return this.reservationRepository.calculateTotalReservationCost(user_id);
+    }
+
+    // guys, what is this?
     public Set<Reservation> getReservationsForUserWithTitle(long userID) throws ResourceNotFoundException {
         User user = this.userRepository.getUserReservationsWithTitle(userID);
 //        user.getReservations().forEach((r) -> {
@@ -142,6 +172,11 @@ public class MultiplexRepository implements IMultiplexRepository {
         ScreeningRoom room = this.getRoomByNumber(helper.getRoomNumber());
         Seat seat = new Seat(helper.getNumber(), helper.getRow(), room);
         return this.seatRepository.save(seat);
+    }
+
+    @Override
+    public List<Seat> showEmptySeatsForScreening(long screening_id){
+        return this.seatRepository.showEmptySeats(screening_id);
     }
 
     private Seat getSeatByNumRowRoom(int number, int row, long roomID) throws ResourceNotFoundException {
@@ -207,25 +242,10 @@ public class MultiplexRepository implements IMultiplexRepository {
         if (movie == null) throw new ResourceNotFoundException("Error: no movie exists with title " + title);
         return movie;
     }
+
     @Override
     public List<Movie> getMoviesOnOffer() {
         return this.movieRepository.getMoviesOnOffer(new Date());
-    }
-    public void myFunction(){
-//        User user = this.userRepository.myFunction("pop");
-//        System.out.println(user.getEmail());
-    }
-
-
-    public Integer calculateReservation(long screening_id, long user_id){
-        return this.reservationRepository.calculateTotalReservationCost(screening_id, user_id);
-    }
-
-    public Integer calculateAllReservations(long user_id){
-        return this.reservationRepository.calculateTotalReservationCost(user_id);
-    }
-    public List<Seat> showEmptySeatsForScreening(long screening_id){
-        return this.seatRepository.showEmptySeats(screening_id);
     }
 
 }

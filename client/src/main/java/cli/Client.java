@@ -2,6 +2,9 @@ package cli;
 
 import Model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.jakewharton.fliptables.FlipTable;
 import com.jakewharton.fliptables.FlipTableConverters;
 import picocli.CommandLine;
@@ -17,17 +20,77 @@ import java.net.http.HttpResponse;
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+
+@Command(
+        name = "login"
+)
+class LoginCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080/api/authenticate";
+    @Inject
+    private Authentication authInfo;
+
+//    public LoginCommand(Authentication authInfo) {
+//        super();
+//        this.authInfo = authInfo;
+//    }
+
+    @Parameters(index = "0", description = "username")
+    private String username;
+
+    @Parameters(index = "1", description = "password")
+    private String password;
+    @Override
+    public void run() {
+
+//        System.out.println("Adding room..." + number+ ", floor: " + floor);
+        String request_body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+            Map<String, String> body = mapper.readValue(response.body(), new TypeReference<Map<String, String>>() {});
+            System.out.println(body.get("jwt"));
+            authInfo.setToken(body.get("jwt"));
+
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        }  catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
 @Command(
         name = "show-users"
 )
 class ShowUsersCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/api/users";
+    private static final String apiURL = "http://localhost:8080/api/admin/users";
+
+    @Inject
+    private Authentication authInfo;
+
+//    public ShowUsersCommand(Authentication authInfo) {
+//        super();
+//        this.authInfo = authInfo;
+//    }
 
     @Override
     public void run() {
@@ -36,6 +99,7 @@ class ShowUsersCommand implements Runnable {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
+                .header("Authorization", "Bearer " + authInfo.getToken())
                 .uri(URI.create(apiURL))
                 .build();
 
@@ -105,7 +169,7 @@ class AddUserCommand implements Runnable {
         name = "add-screening-room"
 )
 class AddScreeningRoomCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/api/rooms";
+    private static final String apiURL = "http://localhost:8080/api/admin/rooms";
 
     @Parameters(index = "0", description = "number")
     private String number;
@@ -143,7 +207,7 @@ class AddScreeningRoomCommand implements Runnable {
         name = "add-movie"
 )
 class AddMovieCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/api/movies";
+    private static final String apiURL = "http://localhost:8080/api/admin/movies";
 
     @Parameters(index = "0", description = "title")
     private String title;
@@ -232,7 +296,7 @@ class AddReservationsCommand implements Runnable{
 )
 
 class AddSeatCommand implements Runnable{
-    private static final String apiURL = "http://localhost:8080/api/seats";
+    private static final String apiURL = "http://localhost:8080/api/admin/seats";
 
     @Parameters(index = "0", description = "roomId")
     private int roomId;
@@ -274,7 +338,7 @@ class AddSeatCommand implements Runnable{
         name = "add-screening"
 )
 class AddScreeningCommand implements Runnable{
-    private static final String apiURL = "http://localhost:8080/api/screenings";
+    private static final String apiURL = "http://localhost:8080/api/admin/screenings";
 
     @Parameters(index = "0", description = "ticketCost")
     private int ticketCost;
@@ -320,7 +384,7 @@ class AddScreeningCommand implements Runnable{
         name = "get-user-by-id"
 )
 class GetUserByIdCommand implements Runnable {
-    private final String apiURL = "http://localhost:8080/api/users/";
+    private final String apiURL = "http://localhost:8080/api/user/users/";
 
     @Parameters(index = "0", description = "userId")
     private long userId;
@@ -364,7 +428,7 @@ class GetUserByIdCommand implements Runnable {
         name = "delete-user"
 )
 class DeleteUserCommand implements Runnable {
-    private final String apiURL = "http://localhost:8080/api/users/";
+    private final String apiURL = "http://localhost:8080/api/admin/users/";
 
     @Parameters(index = "0", description = "userId")
     private long userId;
@@ -399,7 +463,7 @@ class DeleteUserCommand implements Runnable {
         name = "get-user-reservations"
 )
 class GetUserReservationsCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/api";
+    private static final String apiURL = "http://localhost:8080/api/user";
     @Parameters(index = "0", description = "userId")
     private long userId;
     @Override
@@ -468,7 +532,7 @@ class SumSingleReservationCostCommand implements Runnable {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create("http://localhost:8080/api/reservations/forUser/"+this.userId+"/forScreening/"+this.screeningId))
+                .uri(URI.create("http://localhost:8080/api/user/reservations/cost/forUser/"+this.userId+"/forScreening/"+this.screeningId))
                 .build();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -487,7 +551,7 @@ class SumSingleReservationCostCommand implements Runnable {
         }
     }
 }
-/*#####################################################################*/
+
 @Command(
         name = "all-reservations-cost"
 )
@@ -504,7 +568,7 @@ class SumAllReservationsCostCommand implements Runnable {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .header("accept", "application/json")
-                .uri(URI.create("http://localhost:8080/api/reservations/forUser/"+this.userId+"/total"))
+                .uri(URI.create("http://localhost:8080/api//user/reservations/cost/forUser/"+this.userId))
                 .build();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -528,7 +592,7 @@ class SumAllReservationsCostCommand implements Runnable {
         name = "show-empty-seats"
 )
 class ShowEmptySeatsCommand implements Runnable {
-    private static final String apiURL = "http://localhost:8080/api";
+    private static final String apiURL = "http://localhost:8080/api/user";
 
     @Parameters(index = "0", description = "screening id")
     private long screening_id;
@@ -643,6 +707,45 @@ class GetMoviesOfferCommand implements Runnable {
         }
     }
 }
+
+
+/*##########################################################################################*/
+
+@Command(
+        name = "log-in"
+)
+class LogInCommand implements Runnable {
+    private static final String apiURL = "http://localhost:8080/authenticate";
+
+    @Parameters(index = "0", description = "user Name")
+    private String userName;
+    @Parameters(index = "1", description = "password")
+    private String password;
+    @Override
+    public void run() {
+
+        String request_body = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", userName, password);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(request_body))
+                .header("Content-Type", "application/json")
+                .uri(URI.create(apiURL))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        }  catch (java.net.ConnectException e){
+            System.out.println("ERROR: Couldn't connect with server.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+
 /*##########################################################################################*/
 @Command(
         name = "test-api"
@@ -673,6 +776,8 @@ class TestCommand implements Runnable {
 
     }
 }
+
+
 @Command(name = "multiplex-cli", mixinStandardHelpOptions = true, version = "checksum 4.0",
         description = "Multiplex command-line interface")
 
@@ -689,8 +794,14 @@ class MultiplexCli implements Callable<Integer> {
 
 }
 
+
 public class Client {
+    private static Authentication authentication;
+
     public static void main(String... args) {
+        Injector injector = Guice.createInjector(new BasicModule());
+
+//        authentication = new Authentication();
 
         CommandLine cli = new CommandLine(new MultiplexCli());
         cli.addSubcommand(new AddScreeningRoomCommand());
@@ -708,7 +819,8 @@ public class Client {
         cli.addSubcommand(new SumAllReservationsCostCommand());
         cli.addSubcommand(new SumSingleReservationCostCommand());
         cli.addSubcommand(new TestCommand());
-        cli.addSubcommand(new ShowUsersCommand());
+        cli.addSubcommand(injector.getInstance(ShowUsersCommand.class));
+        cli.addSubcommand(injector.getInstance(LoginCommand.class));
 
         Scanner scanner = new Scanner(System.in);
         String cmd;
@@ -724,10 +836,6 @@ public class Client {
         }
     }
 }
-/*
-TODO: HttpClient one instance
-TODO: proper exception handling
- */
 
 /*
 TODO: (funkcje użytkownika) ->
@@ -735,6 +843,7 @@ TODO: (funkcje użytkownika) ->
        wyświetlanie listy seansów od najbardziej zapełnionych do najmniej;
        wyświetlanie listy najbardziej aktywnych klientów;
        wyświetlanie proponowanych filmów dla siebie
-       ### jakieś jeszcze? ###
+       autentykacja/autoryzacja po stronie klienta (obsługa tego)
+       GUI
     }
  */

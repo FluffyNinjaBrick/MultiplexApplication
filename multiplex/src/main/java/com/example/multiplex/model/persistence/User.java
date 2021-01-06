@@ -1,11 +1,16 @@
 package com.example.multiplex.model.persistence;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
 
     // ----------- db fields -----------
     @Id
@@ -21,21 +26,43 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
 
     // ----------- one to many -----------
     @OneToMany(mappedBy = "user")
     private Set<Reservation> reservations;
+
+    // ----------- many to many -----------
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "User_Roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
 
     public User() {
         super();
     }
 
-    public User(String firstName, String lastName, String email) {
+    public User(String firstName, String lastName, String email, String username, String password) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = new HashSet<>();
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     // ------------- GETTERS AND SETTERS ------------- //
@@ -55,4 +82,48 @@ public class User {
 
     public Set<Reservation> getReservations() { return reservations; }
     public void setReservations(Set<Reservation> reservations) { this.reservations = reservations; }
+
+    public Set<Role> getRoles() { return roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }
+
+
+    // ------------- SPRING SECURITY ------------- //
+    // inherited from the UserDetails interface
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    // maybe at some later time we'll actually implement this stuff,
+    // for now all accounts are permanently enabled
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
